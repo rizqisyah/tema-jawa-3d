@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import HeroSection from "./HeroSection.vue";
+import QuoteSection from "./QuoteSection.vue";
 // sections added one at a time: hero → quote → groom → bride → save-the-date → …
 </script>
 
 <template>
   <div class="invite">
     <HeroSection />
+    <QuoteSection />
   </div>
 </template>
 

@@ -3,6 +3,7 @@ import HeroSection from "./HeroSection.vue";
 import QuoteSection from "./QuoteSection.vue";
 import GroomSection from "./GroomSection.vue";
 import BrideSection from "./BrideSection.vue";
+import SaveDateSection from "./SaveDateSection.vue";
 // sections added one at a time: hero → quote → groom → bride → save-the-date → …
 </script>
 
@@ -12,6 +13,7 @@ import BrideSection from "./BrideSection.vue";
     <QuoteSection />
     <GroomSection />
     <BrideSection />
+    <SaveDateSection />
   </div>
 </template>
 

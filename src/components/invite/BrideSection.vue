@@ -2,6 +2,7 @@
 // Per-asset bride section (Allysa). Every element its own layer — nothing baked.
 import bg from "../../assets/invite/bride/parts/bg.png";
 import flor from "../../assets/invite/bride/parts/flor.png";
+import florFront from "../../assets/invite/bride/parts/florFront.png";
 import portrait from "../../assets/invite/bride/parts/portrait.png";
 import amp from "../../assets/invite/bride/parts/amp.png";
 import divider from "../../assets/invite/bride/parts/divider.png";
@@ -15,6 +16,7 @@ const layers = [
   { src: bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
   { src: portrait, cls: "b-portrait" },
+  { src: florFront, cls: "b-florFront" },
 ];
 </script>
 
@@ -71,6 +73,7 @@ const layers = [
 .b-bg { z-index: 0; }
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
+.b-florFront { z-index: 3; }
 
 /* --- ornate "&" ampersand, top-center (the design's calligraphic glyph, no frame) --- */
 .bride__amp {
@@ -131,7 +134,8 @@ const layers = [
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .bride.shown .b-bg { animation: bFade 1.7s ease 0.05s both, bDrift 26s ease-in-out 2s infinite alternate; }
-.bride.shown .b-flor { transform-origin: 50% 100%; animation: bBloom 1.8s cubic-bezier(0.16,1,0.3,1) 0.9s both, bSwayA 9s ease-in-out 3.4s infinite alternate; }
+.bride.shown .b-flor,
+.bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.8s cubic-bezier(0.16,1,0.3,1) 0.9s both, bSwayA 9s ease-in-out 3.4s infinite alternate; }
 .bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both, bFloat 11s ease-in-out 3s infinite alternate; }
 
 .bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both; }

@@ -100,6 +100,19 @@ const sparkles = [
   background: #e8e1ce;
   isolation: isolate;
 }
+/* fade the joglo/landscape tail into the pale backdrop the quote painting continues,
+   so the hero→quote seam reads as one canvas (the original overlaps here) */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16%;
+  z-index: 3;
+  background: linear-gradient(180deg, rgba(222, 215, 194, 0) 0%, #ded7c2 82%);
+  pointer-events: none;
+}
 
 .hero__part,
 .hero__fl {

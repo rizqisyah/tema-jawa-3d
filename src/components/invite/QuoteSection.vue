@@ -57,19 +57,33 @@ const translation =
 .quote {
   position: relative;
   width: 100%;
-  aspect-ratio: 375 / 585;
+  /* bg + trees are re-exported at the taller 375/665 band (rel700-1365) so the
+     top breathing room after hero is filled with real scenery/foliage, not a flat band */
+  aspect-ratio: 375 / 665;
   overflow: hidden;
-  background: #89711f;
+  background: linear-gradient(180deg, #ded7c2 0%, #cdb98f 16%, #b0975f 64%, #b5a279 100%);
   isolation: isolate;
   container-type: inline-size;
+}
+/* blend the painting's hard bottom edge into the gold that the groom section continues */
+.quote::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 15%;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(181, 162, 121, 0) 0%, #b5a279 78%);
+  pointer-events: none;
 }
 
 .quote__layer {
   position: absolute;
-  inset: 0;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto; /* 375×585 art keeps aspect, anchored to bottom; top 63u is spacer */
   max-width: none;
   opacity: 0;
   pointer-events: none;
@@ -77,7 +91,9 @@ const translation =
 }
 
 /* z-order back → front */
-.q-bg { z-index: 0; }
+/* bg + trees are the taller 375/665 crops → fill the whole section (spacer included);
+   every other layer is the 375/585 art anchored to the bottom */
+.q-bg, .q-trees { top: 0; bottom: 0; height: 100%; z-index: 0; }
 .q-trees { z-index: 1; }
 .q-oval { z-index: 2; }
 .q-div { z-index: 3; }
@@ -89,10 +105,10 @@ const translation =
 .quote__text {
   position: absolute;
   z-index: 4;
-  top: 14.5%;
+  top: 24.8%;
   left: 50%;
   transform: translateX(-50%);
-  width: 51%;
+  width: 46%;
   text-align: center;
   color: #905d2a;
 }
@@ -107,14 +123,14 @@ const translation =
 .q-arabic {
   margin: 0 0 2.8cqw;
   font-family: "Amiri", "Scheherazade New", "Traditional Arabic", serif;
-  font-size: 3.1cqw;
+  font-size: 3cqw;
   line-height: 1.8;
 }
 .q-transl {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.75cqw;
-  line-height: 1.5;
+  font-size: 2.5cqw;
+  line-height: 1.45;
 }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */

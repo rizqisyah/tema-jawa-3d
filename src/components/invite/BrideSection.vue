@@ -33,8 +33,7 @@ const layers = [
     />
 
     <div class="bride__amp">
-      <img class="b-amp" :src="amp" alt="" aria-hidden="true" />
-      <span class="b-ampchar">&amp;</span>
+      <img class="b-amp" :src="amp" alt="dan" />
     </div>
 
     <div class="bride__name">
@@ -76,34 +75,19 @@ const layers = [
 .b-florR { z-index: 2; }
 .b-portrait { z-index: 3; }
 
-/* --- "&" diamond ornament, top-center, placed by its Figma bounds --- */
+/* --- ornate "&" ampersand, top-center (the design's calligraphic glyph, no frame) --- */
 .bride__amp {
   position: absolute;
   z-index: 5;
-  top: 0.4%;
-  left: 29.9%;
-  width: 41.9%;
-  aspect-ratio: 157 / 235;
+  top: 6.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22%;
 }
 .b-amp {
-  position: absolute;
-  inset: 0;
+  display: block;
   width: 100%;
-  height: 100%;
-  opacity: 0;
-}
-.b-ampchar {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 4%;
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-size: 15cqw;
-  line-height: 1;
-  color: #9a6a2f;
+  height: auto;
   opacity: 0;
 }
 
@@ -154,8 +138,7 @@ const layers = [
 .bride.shown .b-florR { transform-origin: 100% 45%; animation: bFlyR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.05s both, bSwayB 8.6s ease-in-out 3.5s infinite alternate; }
 .bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both, bFloat 11s ease-in-out 3s infinite alternate; }
 
-.bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
-.bride.shown .b-ampchar { animation: bAmpChar 1s ease 0.7s both; }
+.bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
 
 .bride.shown .b-script { animation: bName 1.3s cubic-bezier(0.16,1,0.3,1) 1.6s both; }
 .bride.shown .b-div { animation: bDiv 0.9s ease 1.95s both; }
@@ -169,8 +152,7 @@ const layers = [
 @keyframes bFloat { from { transform: translateY(0); } to { transform: translateY(-1.2%); } }
 @keyframes bFlyL { 0% { opacity: 0; transform: translateX(-55%) rotate(-12deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes bFlyR { 0% { opacity: 0; transform: translateX(55%) rotate(12deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes bAmp { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
-@keyframes bAmpChar { 0% { opacity: 0; transform: scale(0.4); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes bAmp { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes bName { 0% { opacity: 0; transform: translateY(30%) scale(0.85); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes bDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes bRise { from { opacity: 0; transform: translateY(18%); } to { opacity: 1; transform: translateY(0); } }
@@ -178,7 +160,7 @@ const layers = [
 @keyframes bSwayB { from { transform: rotate(0.7deg); } to { transform: rotate(-0.7deg); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .bride__layer, .b-amp, .b-ampchar, .bride__name > *, .bride__name > :not(.b-div) {
+  .bride__layer, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
   .bride__name { transform: translateX(-50%); }

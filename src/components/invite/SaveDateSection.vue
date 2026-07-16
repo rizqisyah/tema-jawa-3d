@@ -2,7 +2,8 @@
 // Save the Date — sliced backdrop (sepia bg, red ornate frame, florals) + live countdown & calendar.
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import bg from "../../assets/invite/savedate/parts/bg.png";
-import flor from "../../assets/invite/savedate/parts/flor.png";
+import florL from "../../assets/invite/savedate/parts/florL.png";
+import florR from "../../assets/invite/savedate/parts/florR.png";
 import frame from "../../assets/invite/savedate/parts/frame.png";
 import divider from "../../assets/invite/savedate/parts/divider.png";
 import { useReveal } from "../../composables/useReveal";
@@ -52,7 +53,8 @@ const units = [
   <section ref="el" class="sd" :class="{ shown }" aria-label="Save the Date">
     <img class="sd-layer sd-bg" :src="bg" alt="" aria-hidden="true" />
     <img class="sd-layer sd-frame" :src="frame" alt="" aria-hidden="true" />
-    <img class="sd-layer sd-flor" :src="flor" alt="" aria-hidden="true" />
+    <img class="sd-layer sd-florL" :src="florL" alt="" aria-hidden="true" />
+    <img class="sd-layer sd-florR" :src="florR" alt="" aria-hidden="true" />
 
     <div class="sd-card">
       <h2 class="sd-title">Save The Date</h2>
@@ -95,7 +97,7 @@ const units = [
 }
 .sd-bg { z-index: 0; }
 .sd-frame { z-index: 1; }
-.sd-flor { z-index: 2; }
+.sd-florL, .sd-florR { z-index: 2; }
 
 /* --- live content inside the red frame --- */
 .sd-card {
@@ -176,7 +178,8 @@ const units = [
 /* ===== lebay, varied entrances, gated on scroll-in ===== */
 .sd.shown .sd-bg { animation: sdFade 1.6s ease 0.05s both, sdDrift 28s ease-in-out 2s infinite alternate; }
 .sd.shown .sd-frame { transform-origin: 50% 45%; animation: sdFrame 1.5s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
-.sd.shown .sd-flor { transform-origin: 50% 60%; animation: sdBloom 1.8s cubic-bezier(0.16,1,0.3,1) 1.1s both, sdSwayA 8.5s ease-in-out 3.5s infinite alternate; }
+.sd.shown .sd-florL { transform-origin: 0 45%; animation: sdFlyL 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.1s both, sdSwayA 8.5s ease-in-out 3.5s infinite alternate; }
+.sd.shown .sd-florR { transform-origin: 100% 45%; animation: sdFlyR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.25s both, sdSwayB 9s ease-in-out 3.8s infinite alternate; }
 
 .sd.shown .sd-title { animation: sdRise 1.2s cubic-bezier(0.16,1,0.3,1) 0.9s both; }
 .sd.shown .sd-div { animation: sdDiv 0.9s ease 1.2s both; }
@@ -188,7 +191,8 @@ const units = [
 @keyframes sdFade { to { opacity: 1; } }
 @keyframes sdDrift { from { transform: scale(1); } to { transform: scale(1.05); } }
 @keyframes sdFrame { 0% { opacity: 0; transform: scale(0.82) translateY(4%); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-@keyframes sdBloom { 0% { opacity: 0; transform: translateY(5%) scale(1.05); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes sdFlyL { 0% { opacity: 0; transform: translateX(-45%) rotate(-9deg) scale(1.04); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes sdFlyR { 0% { opacity: 0; transform: translateX(45%) rotate(9deg) scale(1.04); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes sdRise { from { opacity: 0; transform: translateY(24%); } to { opacity: 1; transform: translateY(0); } }
 @keyframes sdDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes sdPop { 0% { opacity: 0; transform: translateY(20%) scale(0.7); } 60% { opacity: 1; transform: translateY(0) scale(1.06); } 100% { opacity: 1; transform: scale(1); } }

@@ -159,7 +159,8 @@ const sparkles = [
 @keyframes riseIn { from { opacity: 0; transform: translateY(10%); } to { opacity: 1; transform: translateY(0); } }
 @keyframes growIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 @keyframes bloomIn { from { opacity: 0; transform: scale(0.8) translateY(4%); filter: blur(3px); } to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
-@keyframes popIn { 0% { opacity: 0; transform: scale(0.3); } 60% { opacity: 1; transform: scale(1.35); } 100% { transform: scale(1); } }
+/* opacity MUST be restated at 100% — otherwise it interpolates back to the base opacity:0 */
+@keyframes popIn { 0% { opacity: 0; transform: scale(0.3); } 60% { opacity: 1; transform: scale(1.35); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes swingL { from { opacity: 0; transform: translateY(-14%) rotate(-14deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
 @keyframes swingR { from { opacity: 0; transform: translateY(-14%) rotate(14deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
 @keyframes flTL { from { opacity: 0; transform: translate(-26%,-22%) rotate(-8deg) scale(1.06); } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }

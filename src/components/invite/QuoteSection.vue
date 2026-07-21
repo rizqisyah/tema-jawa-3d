@@ -136,15 +136,15 @@ const translation =
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .quote.shown .q-bg { animation: qFade 1.4s ease 0.05s both; }
-.quote.shown .q-trees { transform-origin: 50% 0; animation: qDropTop 1.5s cubic-bezier(0.16,1,0.3,1) 0.2s both, qSwayA 9s ease-in-out 3s infinite alternate; }
+.quote.shown .q-trees { transform-origin: 50% 0; animation: qDropTop 1.5s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .quote.shown .q-oval { transform-origin: 50% 50%; animation: qOval 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.35s both; }
 .quote.shown .q-seal { transform-origin: 50% 0; animation: qSeal 1.3s cubic-bezier(0.34,1.7,0.5,1) 1.5s both; }
 .quote.shown .q-div { transform-origin: 50% 50%; animation: qDiv 1s ease 1.9s both; }
 
-.quote.shown .q-ivyL { transform-origin: 0 40%; animation: qFlyL 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.9s both, qSwayA 7.5s ease-in-out 3.2s infinite alternate; }
-.quote.shown .q-ivyR { transform-origin: 100% 40%; animation: qFlyR 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.05s both, qSwayB 8s ease-in-out 3.4s infinite alternate; }
-.quote.shown .q-mumL { transform-origin: 20% 100%; animation: qMumL 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.25s both, qSwayB 8.6s ease-in-out 3.8s infinite alternate; }
-.quote.shown .q-mumR { transform-origin: 80% 100%; animation: qMumR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.4s both, qSwayA 9.2s ease-in-out 4.1s infinite alternate; }
+.quote.shown .q-ivyL { transform-origin: 0 40%; animation: qFlyL 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.9s both; }
+.quote.shown .q-ivyR { transform-origin: 100% 40%; animation: qFlyR 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.05s both; }
+.quote.shown .q-mumL { transform-origin: 20% 100%; animation: qMumL 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.25s both; }
+.quote.shown .q-mumR { transform-origin: 80% 100%; animation: qMumR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.4s both; }
 
 .quote.shown .q-title { animation: qTitle 1.3s cubic-bezier(0.16,1,0.3,1) 1.6s both; }
 .quote.shown .q-arabic { animation: qRise 1.3s ease 2s both; }
@@ -163,9 +163,6 @@ const translation =
 @keyframes qMumR { 0% { opacity: 0; transform: translate(30%,40%) scale(0.35) rotate(16deg); } 55% { opacity: 1; transform: translate(0,0) scale(1.16) rotate(-4deg); } 100% { opacity: 1; transform: translate(0,0) scale(1) rotate(0); } }
 @keyframes qTitle { 0% { opacity: 0; transform: translateY(24%) scale(0.9); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes qRise { from { opacity: 0; transform: translateY(14%); } to { opacity: 1; transform: translateY(0); } }
-@keyframes qSwayA { from { transform: rotate(-0.8deg); } to { transform: rotate(0.8deg); } }
-@keyframes qSwayB { from { transform: rotate(0.8deg); } to { transform: rotate(-0.8deg); } }
-
 @media (prefers-reduced-motion: reduce) {
   .quote__layer, .q-seal, .quote__text > * { animation: none !important; opacity: 1; transform: none; filter: none; }
 }

@@ -42,12 +42,6 @@ const florals = [
   { src: bl, cls: "f-bl" },
   { src: br, cls: "f-br" },
 ];
-
-const sparkles = [
-  { x: 22, y: 20, d: 2.8 },
-  { x: 78, y: 24, d: 3.4 },
-  { x: 50, y: 30, d: 3.6 },
-];
 </script>
 
 <template>
@@ -82,12 +76,6 @@ const sparkles = [
       aria-hidden="true"
     />
 
-    <span
-      v-for="(s, i) in sparkles"
-      :key="'s' + i"
-      class="hero__sparkle"
-      :style="{ left: s.x + '%', top: s.y + '%', '--sd': s.d + 's', '--sdelay': 1.4 + i * 0.4 + 's' }"
-    />
   </section>
 </template>
 
@@ -140,22 +128,21 @@ const sparkles = [
 .f-bl, .f-br { z-index: 7; }
 
 /* --- per-asset entrances, gated on scroll-in --- */
-.hero.shown .p-land { animation: fadeIn 1.6s ease 0.1s both, floatY 24s ease-in-out 2s infinite alternate; }
+.hero.shown .p-land { animation: fadeIn 1.6s ease 0.1s both; }
 .hero.shown .p-joglo { animation: riseIn 1.5s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
 .hero.shown .p-frame { transform-origin: 50% 40%; animation: growIn 1.4s cubic-bezier(0.34,1.56,0.64,1) 0.8s both; }
 .hero.shown .p-div { animation: fadeIn 1.2s ease 1s both; }
-.hero.shown .t-l { transform-origin: 42% 13%; animation: swingL 1.4s cubic-bezier(0.34,1.56,0.64,1) 1.15s both, swayA 6s ease-in-out 3s infinite alternate; }
-.hero.shown .t-r { transform-origin: 58% 13%; animation: swingR 1.4s cubic-bezier(0.34,1.56,0.64,1) 1.25s both, swayB 6.4s ease-in-out 3.2s infinite alternate; }
+.hero.shown .t-l { transform-origin: 42% 13%; animation: swingL 1.4s cubic-bezier(0.34,1.56,0.64,1) 1.15s both; }
+.hero.shown .t-r { transform-origin: 58% 13%; animation: swingR 1.4s cubic-bezier(0.34,1.56,0.64,1) 1.25s both; }
 .hero.shown .p-couple { transform-origin: 50% 45%; animation: bloomIn 1.5s cubic-bezier(0.16,1,0.3,1) 1s both; }
 .hero.shown .p-seal { transform-origin: 50% 50%; animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 1.5s both; }
 
-.hero.shown .f-tl { transform-origin: 0% 0%; animation: flTL 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.7s both, swayA 7s ease-in-out 3.4s infinite alternate; }
-.hero.shown .f-tr { transform-origin: 100% 0%; animation: flTR 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.9s both, swayB 7.6s ease-in-out 3.6s infinite alternate; }
-.hero.shown .f-bl { transform-origin: 0% 100%; animation: flBL 1.7s cubic-bezier(0.34,1.56,0.64,1) 2.15s both, swayB 8.4s ease-in-out 3.9s infinite alternate; }
-.hero.shown .f-br { transform-origin: 100% 100%; animation: flBR 1.7s cubic-bezier(0.34,1.56,0.64,1) 2.35s both, swayA 9s ease-in-out 4.2s infinite alternate; }
+.hero.shown .f-tl { transform-origin: 0% 0%; animation: flTL 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.7s both; }
+.hero.shown .f-tr { transform-origin: 100% 0%; animation: flTR 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.9s both; }
+.hero.shown .f-bl { transform-origin: 0% 100%; animation: flBL 1.7s cubic-bezier(0.34,1.56,0.64,1) 2.15s both; }
+.hero.shown .f-br { transform-origin: 100% 100%; animation: flBR 1.7s cubic-bezier(0.34,1.56,0.64,1) 2.35s both; }
 
 @keyframes fadeIn { to { opacity: 1; } }
-@keyframes floatY { from { transform: translateY(0) scale(1); } to { transform: translateY(-1.5%) scale(1.03); } }
 @keyframes riseIn { from { opacity: 0; transform: translateY(10%); } to { opacity: 1; transform: translateY(0); } }
 @keyframes growIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 @keyframes bloomIn { from { opacity: 0; transform: scale(0.8) translateY(4%); filter: blur(3px); } to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
@@ -167,23 +154,7 @@ const sparkles = [
 @keyframes flTR { from { opacity: 0; transform: translate(26%,-22%) rotate(8deg) scale(1.06); } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }
 @keyframes flBL { from { opacity: 0; transform: translate(-24%,26%) rotate(7deg) scale(1.05); } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }
 @keyframes flBR { from { opacity: 0; transform: translate(24%,26%) rotate(-7deg) scale(1.05); } to { opacity: 1; transform: translate(0,0) rotate(0) scale(1); } }
-@keyframes swayA { from { transform: rotate(-0.7deg); } to { transform: rotate(0.7deg); } }
-@keyframes swayB { from { transform: rotate(0.7deg); } to { transform: rotate(-0.7deg); } }
-
-.hero__sparkle {
-  position: absolute;
-  z-index: 8;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff 0%, rgba(255,240,200,.9) 40%, transparent 70%);
-  opacity: 0;
-  pointer-events: none;
-}
-.hero.shown .hero__sparkle { animation: twinkle var(--sd) ease-in-out var(--sdelay) infinite; }
-@keyframes twinkle { 0%,100% { opacity: 0; transform: scale(.4); } 50% { opacity: .9; transform: scale(1.2); } }
-
 @media (prefers-reduced-motion: reduce) {
-  .hero__part, .hero__fl, .hero__sparkle { animation: none !important; opacity: 1; transform: none; filter: none; }
-  .hero__sparkle { display: none; }
+  .hero__part, .hero__fl { animation: none !important; opacity: 1; transform: none; filter: none; }
 }
 </style>

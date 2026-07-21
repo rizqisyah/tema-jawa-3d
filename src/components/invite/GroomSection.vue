@@ -140,11 +140,11 @@ const layers = [
 }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.groom.shown .g-bg { animation: gFade 1.7s ease 0.05s both, gDrift 26s ease-in-out 2s infinite alternate; }
-.groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.9s both, gSwayA 8s ease-in-out 3.2s infinite alternate; }
-.groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.05s both, gSwayB 8.6s ease-in-out 3.5s infinite alternate; }
-.groom.shown .g-portrait { transform-origin: 50% 100%; animation: gRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both, gFloat 11s ease-in-out 3s infinite alternate; }
-.groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.8s cubic-bezier(0.34,1.56,0.64,1) 1.3s both, gSwayB 9.4s ease-in-out 4s infinite alternate; }
+.groom.shown .g-bg { animation: gFade 1.7s ease 0.05s both; }
+.groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.9s both; }
+.groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.05s both; }
+.groom.shown .g-portrait { transform-origin: 50% 100%; animation: gRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
+.groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.8s cubic-bezier(0.34,1.56,0.64,1) 1.3s both; }
 
 .groom.shown .g-header { animation: gHeader 1.5s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
 .groom.shown .g-script { animation: gName 1.3s cubic-bezier(0.16,1,0.3,1) 1.5s both; }
@@ -154,9 +154,7 @@ const layers = [
 .groom__name > :not(.g-div) { opacity: 0; }
 
 @keyframes gFade { to { opacity: 1; } }
-@keyframes gDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.04) translateY(-1%); } }
 @keyframes gRisePortrait { 0% { opacity: 0; transform: translateY(12%) scale(0.94); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes gFloat { from { transform: translateY(0); } to { transform: translateY(-1.2%); } }
 @keyframes gFlyL { 0% { opacity: 0; transform: translateX(-55%) rotate(-12deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes gFlyR { 0% { opacity: 0; transform: translateX(55%) rotate(12deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes gBloom { 0% { opacity: 0; transform: translateY(26%) scale(0.4) rotate(-8deg); } 55% { opacity: 1; transform: translateY(0) scale(1.12) rotate(3deg); } 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
@@ -164,9 +162,6 @@ const layers = [
 @keyframes gName { 0% { opacity: 0; transform: translateY(30%) scale(0.85); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes gDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes gRise { from { opacity: 0; transform: translateY(18%); } to { opacity: 1; transform: translateY(0); } }
-@keyframes gSwayA { from { transform: rotate(-0.7deg); } to { transform: rotate(0.7deg); } }
-@keyframes gSwayB { from { transform: rotate(0.7deg); } to { transform: rotate(-0.7deg); } }
-
 @media (prefers-reduced-motion: reduce) {
   .groom__layer, .g-header, .groom__name > *, .groom__name > :not(.g-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;

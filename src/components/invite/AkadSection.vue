@@ -165,21 +165,20 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
 .a-maps:active { transform: translateY(0) scale(0.98); }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.akad.shown .a-bg { animation: aFade 1.7s ease 0.05s both, aDrift 28s ease-in-out 2s infinite alternate; }
+.akad.shown .a-bg { animation: aFade 1.7s ease 0.05s both; }
 .akad.shown .a-frame { transform-origin: 50% 50%; animation: aFrame 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
-.akad.shown .a-florL { transform-origin: 0 40%; animation: aFlyL 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.85s both, aSwayA 8.4s ease-in-out 3.2s infinite alternate; }
-.akad.shown .a-florR { transform-origin: 100% 40%; animation: aFlyR 1.8s cubic-bezier(0.34,1.56,0.64,1) 1s both, aSwayB 9s ease-in-out 3.6s infinite alternate; }
+.akad.shown .a-florL { transform-origin: 0 40%; animation: aFlyL 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.85s both; }
+.akad.shown .a-florR { transform-origin: 100% 40%; animation: aFlyR 1.8s cubic-bezier(0.34,1.56,0.64,1) 1s both; }
 
 .akad.shown .a-title { animation: aTitle 1.5s cubic-bezier(0.16,1,0.3,1) 1.15s both; }
 .akad.shown .a-date { animation: aRise 1.2s ease 1.5s both; }
 .akad.shown .a-time { animation: aWide 1.3s cubic-bezier(0.16,1,0.3,1) 1.7s both; }
-.akad.shown .a-pin { transform-origin: 50% 100%; animation: aDrop 1.1s cubic-bezier(0.34,1.7,0.5,1) 1.95s both, aPulse 3.4s ease-in-out 3.2s infinite; }
+.akad.shown .a-pin { transform-origin: 50% 100%; animation: aDrop 1.1s cubic-bezier(0.34,1.7,0.5,1) 1.95s both; }
 .akad.shown .a-venue { animation: aRise 1.2s ease 2.1s both; }
 .akad.shown .a-addr { animation: aRise 1.3s ease 2.3s both; }
 .akad.shown .a-maps { animation: aPop 1s cubic-bezier(0.34,1.56,0.64,1) 2.55s both; }
 
 @keyframes aFade { to { opacity: 1; } }
-@keyframes aDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.045) translateY(-1.2%); } }
 @keyframes aFrame { 0% { opacity: 0; transform: scale(0.86) rotate(-1.6deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes aFlyL { 0% { opacity: 0; transform: translateX(-52%) rotate(-11deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes aFlyR { 0% { opacity: 0; transform: translateX(52%) rotate(11deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
@@ -187,11 +186,7 @@ const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
 @keyframes aRise { from { opacity: 0; transform: translateY(16%); } to { opacity: 1; transform: translateY(0); } }
 @keyframes aWide { 0% { opacity: 0; letter-spacing: 0.5em; } 100% { opacity: 1; letter-spacing: normal; } }
 @keyframes aDrop { 0% { opacity: 0; transform: translateY(-160%) scale(0.6); } 65% { opacity: 1; transform: translateY(9%) scale(1.14); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-@keyframes aPulse { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-9%) scale(1.07); } }
 @keyframes aPop { 0% { opacity: 0; transform: scale(0.5) rotate(-5deg); } 60% { opacity: 1; transform: scale(1.12) rotate(2deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-@keyframes aSwayA { from { transform: rotate(-0.7deg); } to { transform: rotate(0.7deg); } }
-@keyframes aSwayB { from { transform: rotate(0.7deg); } to { transform: rotate(-0.7deg); } }
-
 @media (prefers-reduced-motion: reduce) {
   .akad__layer, .akad > :where(h2, p, a, .a-pin) {
     animation: none !important; opacity: 1; transform: none; filter: none;

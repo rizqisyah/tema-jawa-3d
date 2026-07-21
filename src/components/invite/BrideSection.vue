@@ -133,10 +133,10 @@ const layers = [
 }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.bride.shown .b-bg { animation: bFade 1.7s ease 0.05s both, bDrift 26s ease-in-out 2s infinite alternate; }
+.bride.shown .b-bg { animation: bFade 1.7s ease 0.05s both; }
 .bride.shown .b-flor,
-.bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.8s cubic-bezier(0.16,1,0.3,1) 0.9s both, bSwayA 9s ease-in-out 3.4s infinite alternate; }
-.bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both, bFloat 11s ease-in-out 3s infinite alternate; }
+.bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.8s cubic-bezier(0.16,1,0.3,1) 0.9s both; }
+.bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
 
 .bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
 
@@ -147,17 +147,12 @@ const layers = [
 .bride__name > :not(.b-div) { opacity: 0; }
 
 @keyframes bFade { to { opacity: 1; } }
-@keyframes bDrift { from { transform: scale(1) translateY(0); } to { transform: scale(1.04) translateY(-1%); } }
 @keyframes bRisePortrait { 0% { opacity: 0; transform: translateY(12%) scale(0.94); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes bFloat { from { transform: translateY(0); } to { transform: translateY(-1.2%); } }
 @keyframes bBloom { 0% { opacity: 0; transform: translateY(6%) scale(1.06); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes bAmp { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes bName { 0% { opacity: 0; transform: translateY(30%) scale(0.85); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes bDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes bRise { from { opacity: 0; transform: translateY(18%); } to { opacity: 1; transform: translateY(0); } }
-@keyframes bSwayA { from { transform: rotate(-0.7deg); } to { transform: rotate(0.7deg); } }
-@keyframes bSwayB { from { transform: rotate(0.7deg); } to { transform: rotate(-0.7deg); } }
-
 @media (prefers-reduced-motion: reduce) {
   .bride__layer, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;

@@ -24,7 +24,6 @@ const layers = [
   { src: ivyR, cls: "q-ivyR" },
   { src: mumL, cls: "q-mumL" },
   { src: mumR, cls: "q-mumR" },
-  { src: seal, cls: "q-seal" },
 ];
 
 const arabic =
@@ -44,6 +43,8 @@ const translation =
       alt=""
       aria-hidden="true"
     />
+    <!-- wax seal exported per-node (the band crop clipped its top) -->
+    <img class="q-seal" :src="seal" alt="" aria-hidden="true" />
 
     <div class="quote__text">
       <h2 class="q-title">QS Ar-Rum 21</h2>
@@ -64,18 +65,6 @@ const translation =
   background: linear-gradient(180deg, #ded7c2 0%, #cdb98f 16%, #b0975f 64%, #b5a279 100%);
   isolation: isolate;
   container-type: inline-size;
-}
-/* blend the painting's hard bottom edge into the gold that the groom section continues */
-.quote::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 15%;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(181, 162, 121, 0) 0%, #b5a279 78%);
-  pointer-events: none;
 }
 
 .quote__layer {
@@ -99,7 +88,19 @@ const translation =
 .q-div { z-index: 3; }
 .q-ivyL, .q-ivyR { z-index: 5; }
 .q-mumL, .q-mumR { z-index: 6; }
-.q-seal { z-index: 7; }
+/* per-node export, placed by its Figma bounds (x164 y772 47×47 in the rel700–1365 band) */
+.q-seal {
+  position: absolute;
+  z-index: 7;
+  left: 43.733%;
+  top: 10.827%;
+  width: 12.533%;
+  height: auto;
+  max-width: none;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
 
 /* --- live text overlay, sits inside the oval --- */
 .quote__text {
@@ -166,6 +167,6 @@ const translation =
 @keyframes qSwayB { from { transform: rotate(0.8deg); } to { transform: rotate(-0.8deg); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .quote__layer, .quote__text > * { animation: none !important; opacity: 1; transform: none; filter: none; }
+  .quote__layer, .q-seal, .quote__text > * { animation: none !important; opacity: 1; transform: none; filter: none; }
 }
 </style>

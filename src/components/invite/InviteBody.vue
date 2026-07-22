@@ -9,6 +9,7 @@ import GiftSection from "./GiftSection.vue";
 import GallerySection from "./GallerySection.vue";
 import RsvpSection from "./RsvpSection.vue";
 import ClosingPortraitSection from "./ClosingPortraitSection.vue";
+import WishSection from "./WishSection.vue";
 import akadBg from "../../assets/invite/akad/parts/bg.png";
 import akadFrame from "../../assets/invite/akad/parts/frame.png";
 import akadFlorL from "../../assets/invite/akad/parts/florL.png";
@@ -19,7 +20,7 @@ import resFrame from "../../assets/invite/resepsi/parts/frame.png";
 import resFlorL from "../../assets/invite/resepsi/parts/florL.png";
 import resFlorR from "../../assets/invite/resepsi/parts/florR.png";
 import resPin from "../../assets/invite/resepsi/parts/pin.png";
-// sections added one at a time: hero → quote → groom → bride → save-the-date → akad → resepsi → gift → gallery → rsvp → closing portrait → …
+// sections added one at a time: hero → quote → groom → bride → save-the-date → akad → resepsi → gift → gallery → rsvp → closing portrait → wedding wish → …
 
 // the Figma template repeats the akad copy verbatim in the resepsi band (placeholder),
 // so both blocks carry the same date/time/venue until the real resepsi details land
@@ -67,6 +68,7 @@ const address =
     <GallerySection />
     <RsvpSection />
     <ClosingPortraitSection />
+    <WishSection />
   </div>
 </template>
 

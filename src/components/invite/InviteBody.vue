@@ -6,6 +6,7 @@ import BrideSection from "./BrideSection.vue";
 import SaveDateSection from "./SaveDateSection.vue";
 import EventSection from "./EventSection.vue";
 import GiftSection from "./GiftSection.vue";
+import GallerySection from "./GallerySection.vue";
 import akadBg from "../../assets/invite/akad/parts/bg.png";
 import akadFrame from "../../assets/invite/akad/parts/frame.png";
 import akadFlorL from "../../assets/invite/akad/parts/florL.png";
@@ -16,7 +17,7 @@ import resFrame from "../../assets/invite/resepsi/parts/frame.png";
 import resFlorL from "../../assets/invite/resepsi/parts/florL.png";
 import resFlorR from "../../assets/invite/resepsi/parts/florR.png";
 import resPin from "../../assets/invite/resepsi/parts/pin.png";
-// sections added one at a time: hero → quote → groom → bride → save-the-date → akad → resepsi → gift → …
+// sections added one at a time: hero → quote → groom → bride → save-the-date → akad → resepsi → gift → gallery → …
 
 // the Figma template repeats the akad copy verbatim in the resepsi band (placeholder),
 // so both blocks carry the same date/time/venue until the real resepsi details land
@@ -61,6 +62,7 @@ const address =
       offset-x="1.333%"
     />
     <GiftSection />
+    <GallerySection />
   </div>
 </template>
 

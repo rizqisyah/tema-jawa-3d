@@ -179,7 +179,13 @@ function submit() {
 }
 .r-iname { left: 14.67%; top: 49.38%; width: 69.6%; }
 .r-iphone { left: 14.4%; top: 60.88%; width: 69.6%; }
-.r-iatt { left: 14.67%; top: 72.04%; width: 68.8%; transition: width 320ms cubic-bezier(0.16, 1, 0.3, 1); }
+/* restates the shared input transition — a bare `transition: width` here would drop the focus states */
+.r-iatt {
+  left: 14.67%;
+  top: 72.04%;
+  width: 68.8%;
+  transition: width 320ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms ease, transform 200ms ease;
+}
 /* attending → select yields the right third to the guest-count field, same row, band height unchanged */
 .r-iatt--split { width: 44%; }
 .r-iguest {
@@ -237,7 +243,7 @@ function submit() {
 @keyframes rsRise { from { opacity: 0; transform: translateY(14%); } to { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .rsvp__layer, .r-title, .r-intro, .r-form {
+  .rsvp__layer, .r-title, .r-intro, .r-form, .r-iguest {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
 }

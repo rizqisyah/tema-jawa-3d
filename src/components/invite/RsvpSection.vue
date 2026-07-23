@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Per-asset RSVP section. Arch + landscape are art; the reservation form is live DOM.
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import bg from "../../assets/invite/rsvp/parts/bg.png";
 import florL from "../../assets/invite/rsvp/parts/florL.png";
 import florR from "../../assets/invite/rsvp/parts/florR.png";
@@ -19,7 +19,9 @@ const layers = [
 const name = ref("");
 const phone = ref("");
 const attendance = ref("");
+const guests = ref(1);
 const sent = ref(false);
+const attending = computed(() => attendance.value === "hadir");
 
 function submit() {
   // no backend yet — confirm locally so the form still closes the loop for the guest
@@ -53,11 +55,30 @@ function submit() {
       <input id="rsvp-phone" v-model="phone" class="r-input r-iphone" type="tel" required />
 
       <label class="r-label r-latt" for="rsvp-att">Kehadiran</label>
-      <select id="rsvp-att" v-model="attendance" class="r-input r-iatt" required>
+      <select
+        id="rsvp-att"
+        v-model="attendance"
+        class="r-input r-iatt"
+        :class="{ 'r-iatt--split': attending }"
+        required
+      >
         <option value="" disabled>Pilih…</option>
         <option value="hadir">Hadir</option>
         <option value="tidak">Tidak hadir</option>
       </select>
+
+      <template v-if="attending">
+        <label class="r-label r-lguest" for="rsvp-guest">Tamu</label>
+        <input
+          id="rsvp-guest"
+          v-model.number="guests"
+          class="r-input r-iguest"
+          type="number"
+          min="1"
+          max="10"
+          required
+        />
+      </template>
 
       <button class="r-send" type="submit">{{ sent ? "Terkirim ✓" : "Send" }}</button>
     </form>
@@ -136,6 +157,7 @@ function submit() {
 .r-lname { left: 14.4%; top: 46.2%; }
 .r-lphone { left: 14.4%; top: 57.8%; }
 .r-latt { left: 14.93%; top: 68.9%; }
+.r-lguest { left: 60.8%; top: 68.9%; }
 
 .r-input {
   position: absolute;
@@ -157,7 +179,21 @@ function submit() {
 }
 .r-iname { left: 14.67%; top: 49.38%; width: 69.6%; }
 .r-iphone { left: 14.4%; top: 60.88%; width: 69.6%; }
-.r-iatt { left: 14.67%; top: 72.04%; width: 68.8%; }
+.r-iatt { left: 14.67%; top: 72.04%; width: 68.8%; transition: width 320ms cubic-bezier(0.16, 1, 0.3, 1); }
+/* attending → select yields the right third to the guest-count field, same row, band height unchanged */
+.r-iatt--split { width: 44%; }
+.r-iguest {
+  left: 60.8%;
+  top: 72.04%;
+  width: 22.67%;
+  padding: 0 1.2cqw;
+  text-align: center;
+  animation: rsGuestIn 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes rsGuestIn {
+  from { opacity: 0; transform: translateX(-18%) scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
 
 .r-send {
   position: absolute;
@@ -184,17 +220,19 @@ function submit() {
 }
 .r-send:active { transform: translateY(0) scale(0.97); }
 
-/* ===== per-asset entrances, gated on scroll-in ===== */
-.rsvp.shown .r-bg { animation: rsFade 1.7s ease 0.05s both; }
-.rsvp.shown .r-florL { transform-origin: 0 70%; animation: rsFlyL 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.6s both; }
-.rsvp.shown .r-florR { transform-origin: 100% 70%; animation: rsFlyR 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.75s both; }
-.rsvp.shown .r-title { animation: rsTitle 1.4s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
-.rsvp.shown .r-intro { animation: rsRise 1.2s ease 1.2s both; }
-.rsvp.shown .r-form { animation: rsRise 1.3s ease 1.5s both; }
+/* ===== entrances =====
+   The band's painted base never animates — a fading bg made each exported band
+   read as a separate rectangle popping in. Only ornaments and copy move, and
+   they travel short so the composite never visibly comes apart mid-flight. */
+.r-bg { opacity: 1; }
+.rsvp.shown .r-florL { transform-origin: 0 70%; animation: rsFlyL 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.05s both; }
+.rsvp.shown .r-florR { transform-origin: 100% 70%; animation: rsFlyR 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.12s both; }
+.rsvp.shown .r-title { animation: rsTitle 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+.rsvp.shown .r-intro { animation: rsRise 0.7s ease 0.28s both; }
+.rsvp.shown .r-form { animation: rsRise 0.7s ease 0.4s both; }
 
-@keyframes rsFade { to { opacity: 1; } }
-@keyframes rsFlyL { 0% { opacity: 0; transform: translateX(-42%) rotate(-8deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
-@keyframes rsFlyR { 0% { opacity: 0; transform: translateX(42%) rotate(8deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes rsFlyL { 0% { opacity: 0; transform: translateX(-14%) rotate(-3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes rsFlyR { 0% { opacity: 0; transform: translateX(14%) rotate(3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
 @keyframes rsTitle { 0% { opacity: 0; transform: translateY(30%) scale(0.88); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes rsRise { from { opacity: 0; transform: translateY(14%); } to { opacity: 1; transform: translateY(0); } }
 

@@ -284,19 +284,18 @@ onBeforeUnmount(() => {
 .gl-thumb.on { box-shadow: 0 0 0 0.8cqw #d9c666; }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.gallery.shown .gl-bg { animation: glFade 1.7s ease 0.05s both; }
-.gallery.shown .gl-florL { transform-origin: 0 20%; animation: glFlyL 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
-.gallery.shown .gl-florR { transform-origin: 100% 20%; animation: glFlyR 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.65s both; }
+.gl-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.gallery.shown .gl-florL { transform-origin: 0 20%; animation: glFlyL 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
+.gallery.shown .gl-florR { transform-origin: 100% 20%; animation: glFlyR 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.26s both; }
 
-.gallery.shown .gl-title { animation: glTitle 1.4s cubic-bezier(0.16,1,0.3,1) 0.95s both; }
-.gallery.shown .gl-main { transform-origin: 50% 50%; animation: glFrame 1.5s cubic-bezier(0.34,1.56,0.64,1) 1.2s both; }
-.gallery.shown .gl-prev { animation: glDiscL 1.1s cubic-bezier(0.34,1.7,0.5,1) 1.75s both; }
-.gallery.shown .gl-next { animation: glDiscR 1.1s cubic-bezier(0.34,1.7,0.5,1) 1.85s both; }
-.gallery.shown .gl-thumbs { animation: glRise 1.2s cubic-bezier(0.16,1,0.3,1) 1.65s both; }
+.gallery.shown .gl-title { animation: glTitle 0.87s cubic-bezier(0.16,1,0.3,1) 0.38s both; }
+.gallery.shown .gl-main { transform-origin: 50% 50%; animation: glFrame 0.93s cubic-bezier(0.34,1.56,0.64,1) 0.48s both; }
+.gallery.shown .gl-prev { animation: glDiscL 0.68s cubic-bezier(0.34,1.7,0.5,1) 0.7s both; }
+.gallery.shown .gl-next { animation: glDiscR 0.68s cubic-bezier(0.34,1.7,0.5,1) 0.74s both; }
+.gallery.shown .gl-thumbs { animation: glRise 0.74s cubic-bezier(0.16,1,0.3,1) 0.66s both; }
 
-@keyframes glFade { to { opacity: 1; } }
-@keyframes glFlyL { 0% { opacity: 0; transform: translate(-40%,-16%) rotate(-8deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
-@keyframes glFlyR { 0% { opacity: 0; transform: translate(40%,-16%) rotate(8deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes glFlyL { 0% { opacity: 0; transform: translate(-18%,-16%) rotate(-5deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes glFlyR { 0% { opacity: 0; transform: translate(18%,-16%) rotate(5deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes glTitle { 0% { opacity: 0; transform: translateY(28%) scale(0.9); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes glFrame { 0% { opacity: 0; transform: scale(0.82) rotate(-2deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes glDiscL { 0% { opacity: 0; transform: translateX(-140%) scale(0.5); } 100% { opacity: 1; transform: translateX(0) scale(1); } }

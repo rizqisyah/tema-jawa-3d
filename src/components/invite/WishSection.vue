@@ -243,15 +243,14 @@ function submit() {
 }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.wish.shown .w-bg { animation: wFade 1.6s ease 0.05s both; }
-.wish.shown .w-florL { transform-origin: 0 0; animation: wDropL 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
-.wish.shown .w-florR { transform-origin: 100% 0; animation: wDropR 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.55s both; }
-.wish.shown .w-title { animation: wTitle 1.4s cubic-bezier(0.16,1,0.3,1) 0.8s both; }
-.wish.shown .w-intro { animation: wRise 1.2s ease 1.1s both; }
-.wish.shown .w-form { animation: wRise 1.3s ease 1.35s both; }
-.wish.shown .w-list { animation: wCard 1.3s cubic-bezier(0.16,1,0.3,1) 1.6s both; }
+.w-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.wish.shown .w-florL { transform-origin: 0 0; animation: wDropL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.16s both; }
+.wish.shown .w-florR { transform-origin: 100% 0; animation: wDropR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.22s both; }
+.wish.shown .w-title { animation: wTitle 0.87s cubic-bezier(0.16,1,0.3,1) 0.32s both; }
+.wish.shown .w-intro { animation: wRise 0.74s ease 0.44s both; }
+.wish.shown .w-form { animation: wRise 0.81s ease 0.54s both; }
+.wish.shown .w-list { animation: wCard 0.81s cubic-bezier(0.16,1,0.3,1) 0.64s both; }
 
-@keyframes wFade { to { opacity: 1; } }
 @keyframes wDropL { 0% { opacity: 0; transform: translate(-12%,-30%) rotate(-6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes wDropR { 0% { opacity: 0; transform: translate(12%,-30%) rotate(6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes wTitle { 0% { opacity: 0; transform: translateY(30%) scale(0.88); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }

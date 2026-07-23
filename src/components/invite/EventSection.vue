@@ -183,23 +183,22 @@ const mapsUrl = () =>
 .e-maps:active { transform: translateY(0) scale(0.98); }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.event.shown .e-bg { animation: eFade 1.7s ease 0.05s both; }
-.event.shown .e-frame { transform-origin: 50% 50%; animation: eFrame 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
-.event.shown .e-florL { transform-origin: 0 40%; animation: eFlyL 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.85s both; }
-.event.shown .e-florR { transform-origin: 100% 40%; animation: eFlyR 1.8s cubic-bezier(0.34,1.56,0.64,1) 1s both; }
+.e-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.event.shown .e-frame { transform-origin: 50% 50%; animation: eFrame 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.12s both; }
+.event.shown .e-florL { transform-origin: 0 40%; animation: eFlyL 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.34s both; }
+.event.shown .e-florR { transform-origin: 100% 40%; animation: eFlyR 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
 
-.event.shown .e-title { animation: eTitle 1.5s cubic-bezier(0.16,1,0.3,1) 1.15s both; }
-.event.shown .e-date { animation: eRise 1.2s ease 1.5s both; }
-.event.shown .e-time { animation: eWide 1.3s cubic-bezier(0.16,1,0.3,1) 1.7s both; }
-.event.shown .e-pin { transform-origin: 50% 100%; animation: eDrop 1.1s cubic-bezier(0.34,1.7,0.5,1) 1.95s both; }
-.event.shown .e-venue { animation: eRise 1.2s ease 2.1s both; }
-.event.shown .e-addr { animation: eRise 1.3s ease 2.3s both; }
-.event.shown .e-maps { animation: ePop 1s cubic-bezier(0.34,1.56,0.64,1) 2.55s both; }
+.event.shown .e-title { animation: eTitle 0.93s cubic-bezier(0.16,1,0.3,1) 0.46s both; }
+.event.shown .e-date { animation: eRise 0.74s ease 0.6s both; }
+.event.shown .e-time { animation: eWide 0.81s cubic-bezier(0.16,1,0.3,1) 0.68s both; }
+.event.shown .e-pin { transform-origin: 50% 100%; animation: eDrop 0.68s cubic-bezier(0.34,1.7,0.5,1) 0.78s both; }
+.event.shown .e-venue { animation: eRise 0.74s ease 0.84s both; }
+.event.shown .e-addr { animation: eRise 0.81s ease 0.92s both; }
+.event.shown .e-maps { animation: ePop 0.62s cubic-bezier(0.34,1.56,0.64,1) 1.02s both; }
 
-@keyframes eFade { to { opacity: 1; } }
 @keyframes eFrame { 0% { opacity: 0; transform: scale(0.86) rotate(-1.6deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-@keyframes eFlyL { 0% { opacity: 0; transform: translateX(-52%) rotate(-11deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes eFlyR { 0% { opacity: 0; transform: translateX(52%) rotate(11deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes eFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes eFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes eTitle { 0% { opacity: 0; transform: translateY(30%) scale(0.88); filter: blur(7px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes eRise { from { opacity: 0; transform: translateY(16%); } to { opacity: 1; transform: translateY(0); } }
 @keyframes eWide { 0% { opacity: 0; letter-spacing: 0.5em; } 100% { opacity: 1; letter-spacing: normal; } }

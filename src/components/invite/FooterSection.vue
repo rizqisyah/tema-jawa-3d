@@ -195,19 +195,18 @@ function goTo(selector: string) {
 }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.foot.shown .f-bg { animation: ftFade 1.6s ease 0.05s both; }
-.foot.shown .f-florL { transform-origin: 0 0; animation: ftDropL 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.35s both; }
-.foot.shown .f-florR { transform-origin: 100% 0; animation: ftDropR 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
-.foot.shown .f-div { transform-origin: 50% 50%; animation: ftDiv 1s ease 0.8s both; }
-.foot.shown .f-thanks { animation: ftRise 1.3s cubic-bezier(0.16,1,0.3,1) 1s both; }
-.foot.shown .f-credit { animation: ftRise 1.2s ease 1.35s both; }
-.foot.shown .f-by { animation: ftRise 1.2s ease 1.5s both; }
-.foot.shown .f-ig { animation: ftPop 0.9s cubic-bezier(0.34,1.56,0.64,1) 1.7s both; }
-.foot.shown .f-wa { animation: ftPop 0.9s cubic-bezier(0.34,1.56,0.64,1) 1.8s both; }
-.foot.shown .f-rule { animation: ftDiv 0.9s ease 1.9s both; }
-.foot.shown .f-nav { animation: ftRise 1.2s cubic-bezier(0.16,1,0.3,1) 2s both; }
+.f-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.foot.shown .f-florL { transform-origin: 0 0; animation: ftDropL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.14s both; }
+.foot.shown .f-florR { transform-origin: 100% 0; animation: ftDropR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
+.foot.shown .f-div { transform-origin: 50% 50%; animation: ftDiv 0.62s ease 0.32s both; }
+.foot.shown .f-thanks { animation: ftRise 0.81s cubic-bezier(0.16,1,0.3,1) 0.4s both; }
+.foot.shown .f-credit { animation: ftRise 0.74s ease 0.54s both; }
+.foot.shown .f-by { animation: ftRise 0.74s ease 0.6s both; }
+.foot.shown .f-ig { animation: ftPop 0.56s cubic-bezier(0.34,1.56,0.64,1) 0.68s both; }
+.foot.shown .f-wa { animation: ftPop 0.56s cubic-bezier(0.34,1.56,0.64,1) 0.72s both; }
+.foot.shown .f-rule { animation: ftDiv 0.56s ease 0.76s both; }
+.foot.shown .f-nav { animation: ftRise 0.74s cubic-bezier(0.16,1,0.3,1) 0.8s both; }
 
-@keyframes ftFade { to { opacity: 1; } }
 @keyframes ftDropL { 0% { opacity: 0; transform: translate(-14%,-26%) rotate(-6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes ftDropR { 0% { opacity: 0; transform: translate(14%,-26%) rotate(6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes ftDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }

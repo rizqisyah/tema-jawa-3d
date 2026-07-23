@@ -77,16 +77,15 @@ const layers = [
 }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.closing.shown .c-bg { animation: clFade 1.6s ease 0.05s both; }
-.closing.shown .c-portrait { transform-origin: 50% 40%; animation: clPortrait 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
-.closing.shown .c-florL { transform-origin: 0 60%; animation: clFlyL 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.85s both; }
-.closing.shown .c-florR { transform-origin: 100% 60%; animation: clFlyR 1.8s cubic-bezier(0.34,1.56,0.64,1) 1s both; }
-.closing.shown .c-seal { transform-origin: 50% 0; animation: clSeal 1.2s cubic-bezier(0.34,1.7,0.5,1) 1.4s both; }
+.c-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.closing.shown .c-portrait { transform-origin: 50% 40%; animation: clPortrait 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.16s both; }
+.closing.shown .c-florL { transform-origin: 0 60%; animation: clFlyL 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.34s both; }
+.closing.shown .c-florR { transform-origin: 100% 60%; animation: clFlyR 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
+.closing.shown .c-seal { transform-origin: 50% 0; animation: clSeal 0.74s cubic-bezier(0.34,1.7,0.5,1) 0.56s both; }
 
-@keyframes clFade { to { opacity: 1; } }
 @keyframes clPortrait { 0% { opacity: 0; transform: scale(0.8) rotate(-2deg); filter: blur(4px); } 100% { opacity: 1; transform: scale(1) rotate(0); filter: blur(0); } }
-@keyframes clFlyL { 0% { opacity: 0; transform: translateX(-48%) rotate(-10deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes clFlyR { 0% { opacity: 0; transform: translateX(48%) rotate(10deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes clFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes clFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes clSeal { 0% { opacity: 0; transform: translateY(-150%) rotate(-16deg) scale(0.6); } 62% { opacity: 1; transform: translateY(8%) rotate(4deg) scale(1.1); } 100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
 
 @media (prefers-reduced-motion: reduce) {

@@ -135,30 +135,29 @@ const translation =
 }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.quote.shown .q-bg { animation: qFade 1.4s ease 0.05s both; }
-.quote.shown .q-trees { transform-origin: 50% 0; animation: qDropTop 1.5s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
-.quote.shown .q-oval { transform-origin: 50% 50%; animation: qOval 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.35s both; }
-.quote.shown .q-seal { transform-origin: 50% 0; animation: qSeal 1.3s cubic-bezier(0.34,1.7,0.5,1) 1.5s both; }
-.quote.shown .q-div { transform-origin: 50% 50%; animation: qDiv 1s ease 1.9s both; }
+.q-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.quote.shown .q-trees { transform-origin: 50% 0; animation: qDropTop 0.93s cubic-bezier(0.16,1,0.3,1) 0.08s both; }
+.quote.shown .q-oval { transform-origin: 50% 50%; animation: qOval 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.14s both; }
+.quote.shown .q-seal { transform-origin: 50% 0; animation: qSeal 0.81s cubic-bezier(0.34,1.7,0.5,1) 0.6s both; }
+.quote.shown .q-div { transform-origin: 50% 50%; animation: qDiv 0.62s ease 0.76s both; }
 
-.quote.shown .q-ivyL { transform-origin: 0 40%; animation: qFlyL 1.6s cubic-bezier(0.34,1.56,0.64,1) 0.9s both; }
-.quote.shown .q-ivyR { transform-origin: 100% 40%; animation: qFlyR 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.05s both; }
-.quote.shown .q-mumL { transform-origin: 20% 100%; animation: qMumL 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.25s both; }
-.quote.shown .q-mumR { transform-origin: 80% 100%; animation: qMumR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.4s both; }
+.quote.shown .q-ivyL { transform-origin: 0 40%; animation: qFlyL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.36s both; }
+.quote.shown .q-ivyR { transform-origin: 100% 40%; animation: qFlyR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.42s both; }
+.quote.shown .q-mumL { transform-origin: 20% 100%; animation: qMumL 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
+.quote.shown .q-mumR { transform-origin: 80% 100%; animation: qMumR 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.56s both; }
 
-.quote.shown .q-title { animation: qTitle 1.3s cubic-bezier(0.16,1,0.3,1) 1.6s both; }
-.quote.shown .q-arabic { animation: qRise 1.3s ease 2s both; }
-.quote.shown .q-transl { animation: qRise 1.4s ease 2.3s both; }
+.quote.shown .q-title { animation: qTitle 0.81s cubic-bezier(0.16,1,0.3,1) 0.64s both; }
+.quote.shown .q-arabic { animation: qRise 0.81s ease 0.8s both; }
+.quote.shown .q-transl { animation: qRise 0.87s ease 0.92s both; }
 .quote__text > * { opacity: 0; }
 .quote.shown .quote__text > * { will-change: transform, opacity; }
 
-@keyframes qFade { to { opacity: 1; } }
 @keyframes qDropTop { from { opacity: 0; transform: translateY(-30%) scale(1.04); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes qOval { 0% { opacity: 0; transform: scale(0.72) rotate(-6deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes qSeal { 0% { opacity: 0; transform: translateY(-140%) rotate(-18deg) scale(0.7); } 60% { opacity: 1; transform: translateY(8%) rotate(4deg) scale(1.08); } 100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
 @keyframes qDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes qFlyL { 0% { opacity: 0; transform: translateX(-55%) rotate(-14deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes qFlyR { 0% { opacity: 0; transform: translateX(55%) rotate(14deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes qFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes qFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes qMumL { 0% { opacity: 0; transform: translate(-30%,40%) scale(0.35) rotate(-16deg); } 55% { opacity: 1; transform: translate(0,0) scale(1.16) rotate(4deg); } 100% { opacity: 1; transform: translate(0,0) scale(1) rotate(0); } }
 @keyframes qMumR { 0% { opacity: 0; transform: translate(30%,40%) scale(0.35) rotate(16deg); } 55% { opacity: 1; transform: translate(0,0) scale(1.16) rotate(-4deg); } 100% { opacity: 1; transform: translate(0,0) scale(1) rotate(0); } }
 @keyframes qTitle { 0% { opacity: 0; transform: translateY(24%) scale(0.9); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }

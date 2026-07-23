@@ -140,23 +140,22 @@ const layers = [
 }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.groom.shown .g-bg { animation: gFade 1.7s ease 0.05s both; }
-.groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.7s cubic-bezier(0.34,1.56,0.64,1) 0.9s both; }
-.groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.7s cubic-bezier(0.34,1.56,0.64,1) 1.05s both; }
-.groom.shown .g-portrait { transform-origin: 50% 100%; animation: gRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
-.groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.8s cubic-bezier(0.34,1.56,0.64,1) 1.3s both; }
+.g-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.36s both; }
+.groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.42s both; }
+.groom.shown .g-portrait { transform-origin: 50% 100%; animation: gRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.52s both; }
 
-.groom.shown .g-header { animation: gHeader 1.5s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
-.groom.shown .g-script { animation: gName 1.3s cubic-bezier(0.16,1,0.3,1) 1.5s both; }
-.groom.shown .g-div { animation: gDiv 0.9s ease 1.85s both; }
-.groom.shown .g-full { animation: gRise 1.2s ease 2s both; }
-.groom.shown .g-parents { animation: gRise 1.3s ease 2.2s both; }
+.groom.shown .g-header { animation: gHeader 0.93s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
+.groom.shown .g-script { animation: gName 0.81s cubic-bezier(0.16,1,0.3,1) 0.6s both; }
+.groom.shown .g-div { animation: gDiv 0.56s ease 0.74s both; }
+.groom.shown .g-full { animation: gRise 0.74s ease 0.8s both; }
+.groom.shown .g-parents { animation: gRise 0.81s ease 0.88s both; }
 .groom__name > :not(.g-div) { opacity: 0; }
 
-@keyframes gFade { to { opacity: 1; } }
 @keyframes gRisePortrait { 0% { opacity: 0; transform: translateY(12%) scale(0.94); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes gFlyL { 0% { opacity: 0; transform: translateX(-55%) rotate(-12deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes gFlyR { 0% { opacity: 0; transform: translateX(55%) rotate(12deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes gBloom { 0% { opacity: 0; transform: translateY(26%) scale(0.4) rotate(-8deg); } 55% { opacity: 1; transform: translateY(0) scale(1.12) rotate(3deg); } 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
 @keyframes gHeader { 0% { opacity: 0; transform: translate(-50%, 40%) scale(0.9); filter: blur(7px); } 100% { opacity: 1; transform: translate(-50%, 0) scale(1); filter: blur(0); } }
 @keyframes gName { 0% { opacity: 0; transform: translateY(30%) scale(0.85); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }

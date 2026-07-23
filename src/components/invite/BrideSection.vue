@@ -133,20 +133,19 @@ const layers = [
 }
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
-.bride.shown .b-bg { animation: bFade 1.7s ease 0.05s both; }
+.b-bg { opacity: 1; } /* base stays painted — no rectangle pop */
 .bride.shown .b-flor,
-.bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.8s cubic-bezier(0.16,1,0.3,1) 0.9s both; }
-.bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 1.6s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
+.bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.12s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
+.bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 
-.bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
+.bride.shown .b-amp { animation: bAmp 0.74s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
 
-.bride.shown .b-script { animation: bName 1.3s cubic-bezier(0.16,1,0.3,1) 1.6s both; }
-.bride.shown .b-div { animation: bDiv 0.9s ease 1.95s both; }
-.bride.shown .b-full { animation: bRise 1.2s ease 2.1s both; }
-.bride.shown .b-parents { animation: bRise 1.3s ease 2.3s both; }
+.bride.shown .b-script { animation: bName 0.81s cubic-bezier(0.16,1,0.3,1) 0.64s both; }
+.bride.shown .b-div { animation: bDiv 0.56s ease 0.78s both; }
+.bride.shown .b-full { animation: bRise 0.74s ease 0.84s both; }
+.bride.shown .b-parents { animation: bRise 0.81s ease 0.92s both; }
 .bride__name > :not(.b-div) { opacity: 0; }
 
-@keyframes bFade { to { opacity: 1; } }
 @keyframes bRisePortrait { 0% { opacity: 0; transform: translateY(12%) scale(0.94); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes bBloom { 0% { opacity: 0; transform: translateY(6%) scale(1.06); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes bAmp { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }

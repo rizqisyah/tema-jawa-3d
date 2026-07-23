@@ -128,19 +128,19 @@ const florals = [
 .f-bl, .f-br { z-index: 7; }
 
 /* --- per-asset entrances, gated on scroll-in --- */
-.hero.shown .p-land { animation: fadeIn 1.6s ease 0.1s both; }
-.hero.shown .p-joglo { animation: riseIn 1.5s cubic-bezier(0.16,1,0.3,1) 0.5s both; }
-.hero.shown .p-frame { transform-origin: 50% 40%; animation: growIn 1.4s cubic-bezier(0.34,1.56,0.64,1) 0.8s both; }
-.hero.shown .p-div { animation: fadeIn 1.2s ease 1s both; }
-.hero.shown .t-l { transform-origin: 42% 13%; animation: swingL 1.4s cubic-bezier(0.34,1.56,0.64,1) 1.15s both; }
-.hero.shown .t-r { transform-origin: 58% 13%; animation: swingR 1.4s cubic-bezier(0.34,1.56,0.64,1) 1.25s both; }
-.hero.shown .p-couple { transform-origin: 50% 45%; animation: bloomIn 1.5s cubic-bezier(0.16,1,0.3,1) 1s both; }
-.hero.shown .p-seal { transform-origin: 50% 50%; animation: popIn 1s cubic-bezier(0.34,1.56,0.64,1) 1.5s both; }
+.p-land { opacity: 1; } /* base stays painted — no rectangle pop */
+.hero.shown .p-joglo { animation: riseIn 0.93s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.hero.shown .p-frame { transform-origin: 50% 40%; animation: growIn 0.87s cubic-bezier(0.34,1.56,0.64,1) 0.32s both; }
+.hero.shown .p-div { animation: fadeIn 0.74s ease 0.4s both; }
+.hero.shown .t-l { transform-origin: 42% 13%; animation: swingL 0.87s cubic-bezier(0.34,1.56,0.64,1) 0.46s both; }
+.hero.shown .t-r { transform-origin: 58% 13%; animation: swingR 0.87s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
+.hero.shown .p-couple { transform-origin: 50% 45%; animation: bloomIn 0.93s cubic-bezier(0.16,1,0.3,1) 0.4s both; }
+.hero.shown .p-seal { transform-origin: 50% 50%; animation: popIn 0.62s cubic-bezier(0.34,1.56,0.64,1) 0.6s both; }
 
-.hero.shown .f-tl { transform-origin: 0% 0%; animation: flTL 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.7s both; }
-.hero.shown .f-tr { transform-origin: 100% 0%; animation: flTR 1.6s cubic-bezier(0.34,1.56,0.64,1) 1.9s both; }
-.hero.shown .f-bl { transform-origin: 0% 100%; animation: flBL 1.7s cubic-bezier(0.34,1.56,0.64,1) 2.15s both; }
-.hero.shown .f-br { transform-origin: 100% 100%; animation: flBR 1.7s cubic-bezier(0.34,1.56,0.64,1) 2.35s both; }
+.hero.shown .f-tl { transform-origin: 0% 0%; animation: flTL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.68s both; }
+.hero.shown .f-tr { transform-origin: 100% 0%; animation: flTR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.76s both; }
+.hero.shown .f-bl { transform-origin: 0% 100%; animation: flBL 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.86s both; }
+.hero.shown .f-br { transform-origin: 100% 100%; animation: flBR 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.94s both; }
 
 @keyframes fadeIn { to { opacity: 1; } }
 @keyframes riseIn { from { opacity: 0; transform: translateY(10%); } to { opacity: 1; transform: translateY(0); } }

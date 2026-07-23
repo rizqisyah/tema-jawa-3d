@@ -206,19 +206,18 @@ async function copy(index: number) {
 .g-copy:active { transform: translateY(0) scale(0.97); }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.gift.shown .g-bg { animation: gfFade 1.7s ease 0.05s both; }
-.gift.shown .g-florL { transform-origin: 0 45%; animation: gfFlyL 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.6s both; }
-.gift.shown .g-florR { transform-origin: 100% 45%; animation: gfFlyR 1.8s cubic-bezier(0.34,1.56,0.64,1) 0.75s both; }
+.g-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.gift.shown .g-florL { transform-origin: 0 45%; animation: gfFlyL 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.24s both; }
+.gift.shown .g-florR { transform-origin: 100% 45%; animation: gfFlyR 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
 
-.gift.shown .g-div { transform-origin: 50% 50%; animation: gfDiv 1s ease 0.9s both; }
-.gift.shown .g-title { animation: gfTitle 1.4s cubic-bezier(0.16,1,0.3,1) 1.05s both; }
-.gift.shown .g-desc { animation: gfRise 1.2s ease 1.4s both; }
-.gift.shown .g-acct0 { animation: gfCard 1.2s cubic-bezier(0.34,1.56,0.64,1) 1.7s both; }
-.gift.shown .g-acct1 { animation: gfCard 1.2s cubic-bezier(0.34,1.56,0.64,1) 1.95s both; }
+.gift.shown .g-div { transform-origin: 50% 50%; animation: gfDiv 0.62s ease 0.36s both; }
+.gift.shown .g-title { animation: gfTitle 0.87s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
+.gift.shown .g-desc { animation: gfRise 0.74s ease 0.56s both; }
+.gift.shown .g-acct0 { animation: gfCard 0.74s cubic-bezier(0.34,1.56,0.64,1) 0.68s both; }
+.gift.shown .g-acct1 { animation: gfCard 0.74s cubic-bezier(0.34,1.56,0.64,1) 0.78s both; }
 
-@keyframes gfFade { to { opacity: 1; } }
-@keyframes gfFlyL { 0% { opacity: 0; transform: translateX(-46%) rotate(-9deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes gfFlyR { 0% { opacity: 0; transform: translateX(46%) rotate(9deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gfFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gfFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
 @keyframes gfDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes gfTitle { 0% { opacity: 0; transform: translateY(26%) scale(0.9); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes gfRise { from { opacity: 0; transform: translateY(16%); } to { opacity: 1; transform: translateY(0); } }

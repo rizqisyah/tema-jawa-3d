@@ -84,10 +84,12 @@ const translation =
    every other layer is the 375/585 art anchored to the bottom */
 .q-bg, .q-trees { top: 0; bottom: 0; height: 100%; z-index: 0; }
 .q-trees { z-index: 1; }
-.q-oval { z-index: 2; }
-.q-div { z-index: 3; }
-.q-ivyL, .q-ivyR { z-index: 5; }
-.q-mumL, .q-mumR { z-index: 6; }
+/* foliage sits BEHIND the oval — it reads through the frame's translucent fill,
+   as in the original. In front it crops the gold ring and looks pasted on. */
+.q-ivyL, .q-ivyR { z-index: 2; }
+.q-mumL, .q-mumR { z-index: 3; }
+.q-oval { z-index: 4; }
+.q-div { z-index: 5; }
 /* per-node export, placed by its Figma bounds (x164 y772 47×47 in the rel700–1365 band) */
 .q-seal {
   position: absolute;
@@ -105,7 +107,7 @@ const translation =
 /* --- live text overlay, sits inside the oval --- */
 .quote__text {
   position: absolute;
-  z-index: 4;
+  z-index: 6;
   top: 24.8%;
   left: 50%;
   transform: translateX(-50%);

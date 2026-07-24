@@ -17,6 +17,9 @@ const layers = [
   { src: florL, cls: "g-florL" },
   { src: florR, cls: "g-florR" },
   { src: portrait, cls: "g-portrait" },
+  // florL again, clipped to just its rose cluster — in the original those roses lie ON the
+  // jacket while the palm fronds from the same export stay behind him
+  { src: florL, cls: "g-florL2" },
   { src: florC, cls: "g-florC" },
 ];
 </script>
@@ -79,12 +82,19 @@ const layers = [
 .g-florL { z-index: 1; }
 .g-florR { z-index: 2; }
 .g-portrait { z-index: 3; }
-.g-florC { z-index: 4; }
+/* soft ellipse over the rose cluster only — a hard clip box sliced the palm frond
+   that shares this export and left a visible rectangle on his collar */
+.g-florL2 {
+  z-index: 4;
+  -webkit-mask-image: radial-gradient(ellipse 14% 12% at 10% 68.5%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 14% 12% at 10% 68.5%, #000 62%, transparent 100%);
+}
+.g-florC { z-index: 5; }
 
 /* --- live text --- */
 .g-header {
   position: absolute;
-  z-index: 5;
+  z-index: 6;
   top: 0.6%;
   left: 50%;
   transform: translateX(-50%);
@@ -101,7 +111,7 @@ const layers = [
 
 .groom__name {
   position: absolute;
-  z-index: 5;
+  z-index: 6;
   top: 75.5%;
   left: 50%;
   transform: translateX(-50%);
@@ -141,7 +151,8 @@ const layers = [
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .g-bg { opacity: 1; } /* base stays painted — no rectangle pop */
-.groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.36s both; }
+.groom.shown .g-florL,
+.groom.shown .g-florL2 { transform-origin: 0 45%; animation: gFlyL 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.36s both; }
 .groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.05s cubic-bezier(0.34,1.56,0.64,1) 0.42s both; }
 .groom.shown .g-portrait { transform-origin: 50% 100%; animation: gRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.52s both; }

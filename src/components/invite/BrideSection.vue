@@ -16,6 +16,10 @@ const layers = [
   { src: bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
   { src: portrait, cls: "b-portrait" },
+  // flor/florFront are one wreath split by an alpha ramp; across the ramp the front half
+  // is only ~30% opaque, so over the kebaya it read as a washed-out box. A second, fully
+  // opaque pass of `flor` masked to that band restores the roses lying on her shoulder.
+  { src: flor, cls: "b-florMid" },
   { src: florFront, cls: "b-florFront" },
 ];
 </script>
@@ -69,11 +73,17 @@ const layers = [
   will-change: transform, opacity;
 }
 
-/* z-order back → front — one cohesive floral wreath behind the portrait (never cut/torn) */
+/* z-order back → front — the wreath sits OVER the kebaya in the original; behind the
+   portrait it got clipped at her shoulder and left a visible rectangular seam */
 .b-bg { z-index: 0; }
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
-.b-florFront { z-index: 3; }
+.b-florMid {
+  z-index: 3;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 59%, #000 64%, #000 71%, transparent 77%);
+  mask-image: linear-gradient(to bottom, transparent 59%, #000 64%, #000 71%, transparent 77%);
+}
+.b-florFront { z-index: 4; }
 
 /* --- ornate "&" ampersand, top-center (the design's calligraphic glyph, no frame) --- */
 .bride__amp {
@@ -135,6 +145,7 @@ const layers = [
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .b-bg { opacity: 1; } /* base stays painted — no rectangle pop */
 .bride.shown .b-flor,
+.bride.shown .b-florMid,
 .bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.12s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
 .bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 

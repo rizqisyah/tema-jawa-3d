@@ -84,6 +84,23 @@ const units = [
   background: linear-gradient(180deg, #e6dfcb 0%, #e9e2cf 100%);
 }
 
+/* bg.png butts the orange canopy straight onto the lake scene at ~42% — that hard line
+   is baked into the export, so soften it in place rather than re-cutting the asset */
+.sd::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38.5%;
+  height: 7%;
+  z-index: 1;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+  pointer-events: none;
+}
+
 .sd-layer {
   position: absolute;
   inset: 0;
@@ -128,23 +145,23 @@ const units = [
 .sd-count {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3.2cqw;
+  gap: 2.6cqw;
   margin: 0 auto;
-  width: 82%;
+  width: 63%;
 }
 .sd-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2.4cqw 0 1.8cqw;
+  padding: 1.9cqw 0 1.4cqw;
   border: 1px solid #732222;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #ffffff94;
 }
 .sd-num {
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 8.4cqw;
+  font-size: 5.6cqw;
   font-weight: 500;
   line-height: 1;
   color: #732222;
@@ -153,7 +170,7 @@ const units = [
 .sd-lbl {
   font-family: "Cormorant Garamond", Georgia, serif;
   font-style: italic;
-  font-size: 3.4cqw;
+  font-size: 2.7cqw;
   line-height: 1;
   color: #732222;
 }

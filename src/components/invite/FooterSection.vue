@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Per-asset closing footer: thank-you note, credits, socials and the bottom nav bar.
 import bg from "../../assets/invite/footer/parts/bg.png";
+import panel from "../../assets/invite/footer/parts/panel.png";
 import florL from "../../assets/invite/footer/parts/florL.png";
 import florR from "../../assets/invite/footer/parts/florR.png";
 import divider from "../../assets/invite/footer/parts/divider.png";
@@ -17,6 +18,9 @@ const layers = [
   { src: bg, cls: "f-bg" },
   { src: florL, cls: "f-florL" },
   { src: florR, cls: "f-florR" },
+  // the crimson panel lifted out of bg.png: it curves OVER the shrubs in the original,
+  // while the olive field below them stays behind — one flat bg can't be on both sides
+  { src: panel, cls: "f-panel" },
 ];
 
 // the nav art is one exported pill; transparent hit areas sit over its four slots
@@ -98,6 +102,16 @@ function goTo(selector: string) {
 /* z-order back → front */
 .f-bg { z-index: 0; }
 .f-florL, .f-florR { z-index: 1; }
+/* panel.png is only the top 420px of the 1132px band — anchor it, don't stretch it */
+.f-panel {
+  z-index: 2;
+  height: auto;
+  bottom: auto;
+  object-fit: fill;
+  /* corners cut out: the coral sprays there belong in FRONT of the crimson, and bg.png
+     still paints the same red underneath them, so nothing is lost */
+  clip-path: polygon(21% 0, 79% 0, 79% 60%, 100% 60%, 100% 100%, 0 100%, 0 60%, 21% 60%);
+}
 
 /* --- live content, placed by Figma bounds within the 375×566 band --- */
 .f-div,
@@ -109,7 +123,7 @@ function goTo(selector: string) {
 .f-rule,
 .f-nav {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   margin: 0;
   opacity: 0;
 }
@@ -195,7 +209,8 @@ function goTo(selector: string) {
 }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.f-bg { opacity: 1; } /* base stays painted — no rectangle pop */
+.f-bg,
+.f-panel { opacity: 1; } /* base stays painted — no rectangle pop */
 .foot.shown .f-florL { transform-origin: 0 0; animation: ftDropL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.14s both; }
 .foot.shown .f-florR { transform-origin: 100% 0; animation: ftDropR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
 .foot.shown .f-div { transform-origin: 50% 50%; animation: ftDiv 0.62s ease 0.32s both; }

@@ -36,7 +36,9 @@ const address =
     <QuoteSection />
     <GroomSection />
     <BrideSection />
+    <div class="seam" aria-hidden="true" />
     <SaveDateSection />
+    <div class="seam" aria-hidden="true" />
     <EventSection
       :bg="akadBg"
       :frame="akadFrame"
@@ -51,6 +53,7 @@ const address =
       :address="address"
       overlap="-6.933%"
     />
+    <div class="seam" aria-hidden="true" />
     <EventSection
       :bg="resBg"
       :frame="resFrame"
@@ -65,6 +68,7 @@ const address =
       :address="address"
       offset-x="1.333%"
     />
+    <div class="seam" aria-hidden="true" />
     <GiftSection />
     <GallerySection />
     <RsvpSection />
@@ -79,5 +83,29 @@ const address =
   width: min(100vw, 480px);
   margin: 0 auto;
   background: #efe6d3;
+  container-type: inline-size;
+}
+
+/* Each band is its own fixed-ratio crop with overflow:hidden, so where two exports meet
+   the join reads as a hard line. This zero-height marker straddles the boundary and
+   blurs the backdrop across it, which is all the client asked for ("dibuat lebih smooth").
+   It has to live outside the sections — neither one can paint past its own clip. */
+.seam {
+  position: relative;
+  height: 0;
+  z-index: 4;
+}
+.seam::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -3.2cqw;
+  height: 6.4cqw;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+  pointer-events: none;
 }
 </style>

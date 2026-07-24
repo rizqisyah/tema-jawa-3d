@@ -73,6 +73,7 @@ const sparkles = [
       <p class="cover__prefix">The Wedding Of</p>
       <h1 class="cover__names">{{ bride }}<br />&amp; {{ groom }}</h1>
 
+      <span class="cover__plate" aria-hidden="true" />
       <p class="cover__dear">Dear Mr / Mrs / Ms</p>
       <p class="cover__guest">{{ guestName }}</p>
 
@@ -225,7 +226,7 @@ const sparkles = [
 
 @keyframes inMist {
   from { opacity: 0; filter: blur(12px); transform: scale(1.08); }
-  to { opacity: 1; filter: blur(0); transform: scale(1); }
+  to { opacity: 0.62; filter: blur(0); transform: scale(1); }
 }
 @keyframes inTL {
   from { opacity: 0; transform: translate(-16%, -14%) rotate(-6deg) scale(1.05); }
@@ -266,8 +267,8 @@ const sparkles = [
 
 /* ambient sways — each slightly different so nothing moves in lockstep */
 @keyframes ambMist {
-  from { transform: translateX(-1.5%) scale(1.02); opacity: 0.9; }
-  to { transform: translateX(2%) scale(1.05); opacity: 1; }
+  from { transform: translateX(-1.5%) scale(1.02); opacity: 0.55; }
+  to { transform: translateX(2%) scale(1.05); opacity: 0.68; }
 }
 @keyframes ambTL {
   from { transform: rotate(-0.9deg); } to { transform: rotate(0.5deg); }
@@ -346,6 +347,27 @@ const sparkles = [
     nameBloom 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) 2.35s both,
     nameGlow 4s ease-in-out 4.2s infinite alternate;
 }
+/* the drifting mist alone left the greeting sitting on the dark joglo interior; a defined
+   light plate behind just this block is what makes the guest name legible */
+.cover__plate {
+  position: absolute;
+  left: 50%;
+  top: 65.4%;
+  transform: translateX(-50%);
+  width: 78%;
+  height: 11%;
+  z-index: 39;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 252, 244, 0.92) 0%,
+    rgba(255, 252, 244, 0.72) 45%,
+    rgba(255, 252, 244, 0) 72%
+  );
+  pointer-events: none;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 2.7s both;
+}
+
 .cover__dear {
   top: 67%;
   font-family: var(--font-hand);

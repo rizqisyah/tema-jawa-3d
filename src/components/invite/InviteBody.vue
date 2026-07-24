@@ -70,8 +70,10 @@ const address =
     />
     <div class="seam" aria-hidden="true" />
     <GiftSection />
+    <div class="seam" aria-hidden="true" />
     <GallerySection />
     <RsvpSection />
+    <div class="seam" aria-hidden="true" />
     <ClosingPortraitSection />
     <WishSection />
     <FooterSection />

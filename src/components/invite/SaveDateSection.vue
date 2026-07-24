@@ -52,6 +52,9 @@ const units = [
 <template>
   <section ref="el" class="sd" :class="{ shown }" aria-label="Save the Date">
     <img class="sd-layer sd-bg" :src="bg" alt="" aria-hidden="true" />
+    <!-- the lake half of bg.png exported washed out against the original; a filtered
+         second pass, masked to that half, puts the olive back without touching the canopy -->
+    <img class="sd-layer sd-bg2" :src="bg" alt="" aria-hidden="true" />
     <img class="sd-layer sd-frame" :src="frame" alt="" aria-hidden="true" />
     <img class="sd-layer sd-florL" :src="florL" alt="" aria-hidden="true" />
     <img class="sd-layer sd-florR" :src="florR" alt="" aria-hidden="true" />
@@ -113,6 +116,13 @@ const units = [
   will-change: transform, opacity;
 }
 .sd-bg { z-index: 0; }
+.sd-bg2 {
+  z-index: 0;
+  opacity: 1;
+  filter: saturate(1.75) brightness(0.85);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 40%, #000 52%);
+  mask-image: linear-gradient(to bottom, transparent 40%, #000 52%);
+}
 .sd-frame { z-index: 1; }
 .sd-florL, .sd-florR { z-index: 2; }
 

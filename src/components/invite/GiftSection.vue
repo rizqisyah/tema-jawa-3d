@@ -2,6 +2,7 @@
 // Per-asset wedding gift section. Carved frame + gold panel are art; every account row is live DOM.
 import { ref } from "vue";
 import bg from "../../assets/invite/gift/parts/bg.png";
+import base from "../../assets/invite/gift/parts/base.png";
 import florL from "../../assets/invite/gift/parts/florL.png";
 import florR from "../../assets/invite/gift/parts/florR.png";
 import divider from "../../assets/invite/gift/parts/divider.png";
@@ -17,6 +18,11 @@ const layers = [
   { src: florL, cls: "g-florL" },
   { src: florR, cls: "g-florR" },
 ];
+
+// bg.png stops at flat olive where the design still carries the carved frame's lower half —
+// the mirrored crown, its finial and the fountain's top tier all live below y 5845 and were
+// lost when the band was cut. This strip restores that region verbatim from the design.
+
 
 // the template ships two identical BCA rows; each keeps its own copy state
 const accounts = [
@@ -60,6 +66,7 @@ async function copy(index: number) {
       alt=""
       aria-hidden="true"
     />
+    <img class="g-base" :src="base" alt="" aria-hidden="true" />
 
     <img class="g-div" :src="divider" alt="" aria-hidden="true" />
     <h2 id="gift-title" class="g-title">Wedding Gift</h2>
@@ -114,6 +121,24 @@ async function copy(index: number) {
 /* z-order back → front */
 .g-bg { z-index: 0; }
 .g-florL, .g-florR { z-index: 3; }
+
+/* The strip already contains this region's florals, so it rides ABOVE g-florL/R rather than
+   under them — that way the fly-in happens behind it and no duplicate blooms show through.
+   Its top 20% dissolves into what bg.png paints there; the two agree to ~6/255 across that
+   band, so the join is invisible. */
+.g-base {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: 73.98%;
+  width: 100%;
+  height: 26.02%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 20%);
+}
 
 /* --- live content, placed by Figma bounds within the 375×861 band --- */
 .gift > :where(img.g-div, h2, p),

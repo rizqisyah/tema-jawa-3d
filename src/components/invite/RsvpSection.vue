@@ -2,6 +2,7 @@
 // Per-asset RSVP section. Arch + landscape are art; the reservation form is live DOM.
 import { computed, ref } from "vue";
 import bg from "../../assets/invite/rsvp/parts/bg.png";
+import base from "../../assets/invite/rsvp/parts/base.png";
 import florL from "../../assets/invite/rsvp/parts/florL.png";
 import florR from "../../assets/invite/rsvp/parts/florR.png";
 import { useReveal } from "../../composables/useReveal";
@@ -15,6 +16,10 @@ const layers = [
   { src: florL, cls: "r-florL" },
   { src: florR, cls: "r-florR" },
 ];
+
+// the closing band's olive oval starts 31px above this band's floor, so its cream apex was
+// sheared off by the cut — this strip carries it back into the last 54px of the rsvp band
+
 
 const name = ref("");
 const phone = ref("");
@@ -40,6 +45,7 @@ function submit() {
       alt=""
       aria-hidden="true"
     />
+    <img class="r-base" :src="base" alt="" aria-hidden="true" />
 
     <h2 id="rsvp-title" class="r-title">Rsvp</h2>
     <p class="r-intro">
@@ -111,6 +117,22 @@ function submit() {
 /* z-order back → front */
 .r-bg { z-index: 0; }
 .r-florL, .r-florR { z-index: 3; }
+
+/* same treatment as the gift band: the strip owns this region's florals, so it sits above
+   them and the top edge dissolves into what bg.png already paints */
+.r-base {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+  top: 90.44%;
+  width: 100%;
+  height: 9.56%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 46%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 46%);
+}
 
 /* --- live content, placed by Figma bounds within the 375×565 band --- */
 .r-title,

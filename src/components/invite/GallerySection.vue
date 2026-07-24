@@ -2,6 +2,7 @@
 // Per-asset gallery section. Backdrop/florals are art; the photo carousel is live DOM.
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 import bg from "../../assets/invite/gallery/parts/bg.png";
+import base from "../../assets/invite/gallery/parts/base.png";
 import florL from "../../assets/invite/gallery/parts/florL.png";
 import florR from "../../assets/invite/gallery/parts/florR.png";
 import main from "../../assets/invite/gallery/parts/main.png";
@@ -20,6 +21,10 @@ const layers = [
   { src: florL, cls: "gl-florL" },
   { src: florR, cls: "gl-florR" },
 ];
+
+// the band was cut through the carved frame: its top 241px lost the vine sprays and the
+// upper wood tone. This strip restores them, continuing the gift band's g-base downward.
+
 
 // the template ships the same shot in every slot; swap these for the real set
 const photos = [main, t1, t2, t3, t4];
@@ -62,6 +67,7 @@ onBeforeUnmount(() => {
       alt=""
       aria-hidden="true"
     />
+    <img class="gl-base" :src="base" alt="" aria-hidden="true" />
 
     <h2 id="gallery-title" class="gl-title">Gallery</h2>
 
@@ -164,6 +170,22 @@ onBeforeUnmount(() => {
 /* z-order back → front */
 .gl-bg { z-index: 0; }
 .gl-florL, .gl-florR { z-index: 4; }
+
+/* rides above gl-florL/R for the same reason g-base does: it already contains this
+   region's blooms, so covering the fly-in avoids doubling them */
+.gl-base {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 28.86%;
+  max-width: none;
+  object-fit: fill;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
 
 /* --- live content, placed by Figma bounds within the 375×835 band --- */
 .gl-title,

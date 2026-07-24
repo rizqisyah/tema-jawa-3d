@@ -70,10 +70,10 @@ const address =
     />
     <div class="seam" aria-hidden="true" />
     <GiftSection />
-    <div class="seam" aria-hidden="true" />
+    <!-- no seam blur past this point: both bands now carry the design's own art across the
+         join (see g-base / r-base), and blurring it would only smear real detail -->
     <GallerySection />
     <RsvpSection />
-    <div class="seam" aria-hidden="true" />
     <ClosingPortraitSection />
     <WishSection />
     <FooterSection />

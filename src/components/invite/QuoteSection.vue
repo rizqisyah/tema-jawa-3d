@@ -49,6 +49,9 @@ const translation =
          the trees' edge columns down from the hero join (feathered into ours below), closing
          the gap. Edges only — the oval, seal and text stay live. -->
     <img class="q-seam" :src="seambridge" alt="" aria-hidden="true" />
+    <!-- hero's flat cream bottom meets this band's cloudier scene at the join, leaving a faint
+         horizontal step; this cream fade lifts the cloud back to the cream and melts the line -->
+    <span class="q-seamblend" aria-hidden="true" />
 
     <!-- wax seal exported per-node (the band crop clipped its top) -->
     <img class="q-seal" :src="seal" alt="" aria-hidden="true" />
@@ -91,6 +94,17 @@ const translation =
    every other layer is the 375/585 art anchored to the bottom */
 .q-bg, .q-trees { top: 0; bottom: 0; height: 100%; z-index: 0; }
 .q-trees { z-index: 1; }
+/* cream fade over the band-top cloud, melts the horizontal tone step at the hero join */
+.q-seamblend {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7%;
+  pointer-events: none;
+  background: linear-gradient(180deg, #ded7c2 0%, rgba(222, 215, 194, 0.5) 35%, transparent 100%);
+}
 /* coral-tree seam bridge — edge columns only, at the hero join (band-local top) */
 .q-seam {
   position: absolute;

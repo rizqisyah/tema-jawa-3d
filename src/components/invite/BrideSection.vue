@@ -85,7 +85,7 @@ const layers = [
   left: 0;
   top: 58.05%;
   width: 100%;
-  height: 12.54%;
+  height: 17.08%;
   object-fit: fill;
 }
 

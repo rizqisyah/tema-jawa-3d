@@ -23,9 +23,10 @@ type Part = { src: string; cls: string; l: number; t: number; w: number };
 const parts: Part[] = [
   { src: landscape1, cls: "p-land", l: -5.07, t: 2.18, w: 110.4 },
   { src: landscape2, cls: "p-land", l: -5.07, t: 84.1, w: 110.4 },
-  // 157.3% blew the pavilion up until only its roof cleared the foliage — the original
-  // sits at ~108%, which is what puts the pillars, chairs and fountain back in frame
-  { src: joglo, cls: "p-joglo", l: -4.0, t: 61.4, w: 108.0 },
+  // 157.3% blew the pavilion up until only its roof cleared the foliage; 108% still spilled
+  // past the band and cropped the right wing. 100% (fit against the design) frames the whole
+  // symmetric pavilion — both wings, chairs and the fountain in front
+  { src: joglo, cls: "p-joglo", l: 0.4, t: 61.15, w: 100.0 },
   { src: frame, cls: "p-frame", l: 9.07, t: 10.0, w: 82.1 },
   { src: divider, cls: "p-div", l: 4.0, t: 83.7, w: 96.0 },
   { src: couple, cls: "p-couple", l: 15.2, t: 24.6, w: 69.6 },

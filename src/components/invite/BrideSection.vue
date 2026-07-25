@@ -3,6 +3,7 @@
 import bg from "../../assets/invite/bride/parts/bg.png";
 import flor from "../../assets/invite/bride/parts/flor.png";
 import florFront from "../../assets/invite/bride/parts/florFront.png";
+import front from "../../assets/invite/bride/parts/front.png";
 import portrait from "../../assets/invite/bride/parts/portrait.png";
 import amp from "../../assets/invite/bride/parts/amp.png";
 import divider from "../../assets/invite/bride/parts/divider.png";
@@ -16,10 +17,6 @@ const layers = [
   { src: bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
   { src: portrait, cls: "b-portrait" },
-  // flor/florFront are one wreath split by an alpha ramp; across the ramp the front half
-  // is only ~30% opaque, so over the kebaya it read as a washed-out box. A second, fully
-  // opaque pass of `flor` masked to that band restores the roses lying on her shoulder.
-  { src: flor, cls: "b-florMid" },
   { src: florFront, cls: "b-florFront" },
 ];
 </script>
@@ -35,6 +32,11 @@ const layers = [
       alt=""
       aria-hidden="true"
     />
+    <!-- florFront's export baked the front roses down to ~40% alpha (and left junk RGB in the
+         faded band), so over the black kebaya they read washed out. This is the same rose
+         cluster lifted opaque from the design, dropped straight in front by z-index — no mask,
+         no opacity trick. Its edges land on the kebaya and foliage, so the join is invisible. -->
+    <img class="bride__layer b-front" :src="front" alt="" aria-hidden="true" />
 
     <div class="bride__amp">
       <img class="b-amp" :src="amp" alt="dan" />
@@ -78,12 +80,17 @@ const layers = [
 .b-bg { z-index: 0; }
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
-.b-florMid {
-  z-index: 3;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 59%, #000 64%, #000 71%, transparent 77%);
-  mask-image: linear-gradient(to bottom, transparent 59%, #000 64%, #000 71%, transparent 77%);
+.b-florFront { z-index: 3; }
+/* opaque front rose cluster, placed by its design bounds (not full-frame like the others) */
+.b-front {
+  z-index: 4;
+  inset: auto;
+  left: 42%;
+  top: 53.3%;
+  width: 44%;
+  height: auto;
+  object-fit: fill;
 }
-.b-florFront { z-index: 4; }
 
 /* --- ornate "&" ampersand, top-center (the design's calligraphic glyph, no frame) --- */
 .bride__amp {
@@ -145,7 +152,7 @@ const layers = [
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .b-bg { opacity: 1; } /* base stays painted — no rectangle pop */
 .bride.shown .b-flor,
-.bride.shown .b-florMid,
+.bride.shown .b-front,
 .bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.12s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
 .bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 

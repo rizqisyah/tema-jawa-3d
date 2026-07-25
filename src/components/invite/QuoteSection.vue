@@ -112,7 +112,7 @@ const translation =
   top: 0;
   left: 0;
   width: 100%;
-  height: 18.8%;
+  height: 6.02%;
   max-width: none;
   object-fit: fill;
   opacity: 1;

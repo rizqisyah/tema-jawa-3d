@@ -2,7 +2,6 @@
 // Per-asset bride section (Allysa). Every element its own layer — nothing baked.
 import bg from "../../assets/invite/bride/parts/bg.png";
 import flor from "../../assets/invite/bride/parts/flor.png";
-import florFront from "../../assets/invite/bride/parts/florFront.png";
 import front from "../../assets/invite/bride/parts/front.png";
 import portrait from "../../assets/invite/bride/parts/portrait.png";
 import amp from "../../assets/invite/bride/parts/amp.png";
@@ -17,7 +16,6 @@ const layers = [
   { src: bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
   { src: portrait, cls: "b-portrait" },
-  { src: florFront, cls: "b-florFront" },
 ];
 </script>
 
@@ -32,10 +30,10 @@ const layers = [
       alt=""
       aria-hidden="true"
     />
-    <!-- florFront's export baked the front roses down to ~40% alpha (and left junk RGB in the
-         faded band), so over the black kebaya they read washed out. This is the same rose
-         cluster lifted opaque from the design, dropped straight in front by z-index — no mask,
-         no opacity trick. Its edges land on the kebaya and foliage, so the join is invisible. -->
+    <!-- florFront's export baked the front garland down to ~40% alpha (with junk RGB in the
+         faded band), so over the black kebaya the roses read washed out. It's replaced by the
+         same garland lifted opaque from the design and keyed to its flowers only (the neutral
+         kebaya and cream drop out), so it drops straight in front by z-index — no wash, no box. -->
     <img class="bride__layer b-front" :src="front" alt="" aria-hidden="true" />
 
     <div class="bride__amp">
@@ -80,15 +78,14 @@ const layers = [
 .b-bg { z-index: 0; }
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
-.b-florFront { z-index: 3; }
-/* opaque front rose cluster, placed by its design bounds (not full-frame like the others) */
+/* opaque front garland, placed by its design bounds (not full-frame like the others) */
 .b-front {
-  z-index: 4;
+  z-index: 3;
   inset: auto;
-  left: 42%;
-  top: 53.3%;
-  width: 44%;
-  height: auto;
+  left: 0;
+  top: 58.05%;
+  width: 100%;
+  height: 16.22%;
   object-fit: fill;
 }
 
@@ -152,8 +149,7 @@ const layers = [
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .b-bg { opacity: 1; } /* base stays painted — no rectangle pop */
 .bride.shown .b-flor,
-.bride.shown .b-front,
-.bride.shown .b-florFront { transform-origin: 50% 100%; animation: bBloom 1.12s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
+.bride.shown .b-front { transform-origin: 50% 100%; animation: bBloom 1.12s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
 .bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 
 .bride.shown .b-amp { animation: bAmp 0.74s cubic-bezier(0.16,1,0.3,1) 0.12s both; }

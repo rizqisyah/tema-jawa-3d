@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VideoSection from "../sections/VideoSection.vue";
 import HeroSection from "./HeroSection.vue";
 import QuoteSection from "./QuoteSection.vue";
 import GroomSection from "./GroomSection.vue";
@@ -21,17 +22,14 @@ import resFrame from "../../assets/invite/resepsi/parts/frame.png";
 import resFlorL from "../../assets/invite/resepsi/parts/florL.png";
 import resFlorR from "../../assets/invite/resepsi/parts/florR.png";
 import resPin from "../../assets/invite/resepsi/parts/pin.png";
-// sections added one at a time: hero → quote → groom → bride → save-the-date → akad → resepsi → gift → gallery → rsvp → closing portrait → wedding wish → footer (complete)
 
-// the Figma template repeats the akad copy verbatim in the resepsi band (placeholder),
-// so both blocks carry the same date/time/venue until the real resepsi details land
 const venue = "Rumah mempelai wanita";
-const address =
-  "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330";
+const address = "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330";
 </script>
 
 <template>
   <div class="invite">
+    <VideoSection />
     <HeroSection />
     <QuoteSection />
     <GroomSection />
@@ -70,8 +68,6 @@ const address =
     />
     <div class="seam" aria-hidden="true" />
     <GiftSection />
-    <!-- no seam blur past this point: both bands now carry the design's own art across the
-         join (see g-base / r-base), and blurring it would only smear real detail -->
     <GallerySection />
     <RsvpSection />
     <ClosingPortraitSection />
@@ -82,16 +78,13 @@ const address =
 
 <style scoped>
 .invite {
-  width: min(100vw, 480px);
+  width: 100%;
+  max-width: 480px;
   margin: 0 auto;
   background: #efe6d3;
   container-type: inline-size;
 }
 
-/* Each band is its own fixed-ratio crop with overflow:hidden, so where two exports meet
-   the join reads as a hard line. This zero-height marker straddles the boundary and
-   blurs the backdrop across it, which is all the client asked for ("dibuat lebih smooth").
-   It has to live outside the sections — neither one can paint past its own clip. */
 .seam {
   position: relative;
   height: 0;

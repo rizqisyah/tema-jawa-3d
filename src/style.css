@@ -7,18 +7,20 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
+  padding: 0;
 }
 
 html,
 body {
+  width: 100%;
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 body {
   background: #efe7dc;
-  display: grid;
-  place-items: start center;
   font-family: system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 img {

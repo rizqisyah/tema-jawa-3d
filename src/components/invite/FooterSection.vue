@@ -7,33 +7,17 @@ import florR from "../../assets/invite/footer/parts/florR.png";
 import divider from "../../assets/invite/footer/parts/divider.png";
 import ig from "../../assets/invite/footer/parts/ig.png";
 import wa from "../../assets/invite/footer/parts/wa.png";
-import menu from "../../assets/invite/footer/parts/menu.png";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-// full-frame layers (band 375×566, Figma rel 9010–9576) — inset:0, pixel-exact by construction
 const layers = [
   { src: bg, cls: "f-bg" },
   { src: florL, cls: "f-florL" },
   { src: florR, cls: "f-florR" },
-  // the crimson panel lifted out of bg.png: it curves OVER the shrubs in the original,
-  // while the olive field below them stays behind — one flat bg can't be on both sides
   { src: panel, cls: "f-panel" },
 ];
-
-// the nav art is one exported pill; transparent hit areas sit over its four slots
-const navItems = [
-  { label: "Home", target: ".hero" },
-  { label: "Mempelai", target: ".groom" },
-  { label: "Acara", target: ".event" },
-  { label: "Gallery", target: ".gallery" },
-];
-
-function goTo(selector: string) {
-  document.querySelector(selector)?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 </script>
 
 <template>
@@ -60,19 +44,6 @@ function goTo(selector: string) {
     <img class="f-wa" :src="wa" alt="WhatsApp" />
 
     <span class="f-rule" aria-hidden="true" />
-
-    <nav class="f-nav" aria-label="Navigasi undangan">
-      <img class="f-nav__art" :src="menu" alt="" aria-hidden="true" />
-      <button
-        v-for="n in navItems"
-        :key="n.label"
-        class="f-nav__hit"
-        type="button"
-        @click="goTo(n.target)"
-      >
-        <span class="sr-only">{{ n.label }}</span>
-      </button>
-    </nav>
   </footer>
 </template>
 
@@ -211,22 +182,20 @@ function goTo(selector: string) {
 /* ===== per-asset entrances, gated on scroll-in ===== */
 .f-bg,
 .f-panel { opacity: 1; } /* base stays painted — no rectangle pop */
-.foot.shown .f-florL { transform-origin: 0 0; animation: ftDropL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.14s both; }
-.foot.shown .f-florR { transform-origin: 100% 0; animation: ftDropR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
-.foot.shown .f-div { transform-origin: 50% 50%; animation: ftDiv 0.62s ease 0.32s both; }
-.foot.shown .f-thanks { animation: ftRise 0.81s cubic-bezier(0.16,1,0.3,1) 0.4s both; }
-.foot.shown .f-credit { animation: ftRise 0.74s ease 0.54s both; }
-.foot.shown .f-by { animation: ftRise 0.74s ease 0.6s both; }
-.foot.shown .f-ig { animation: ftPop 0.56s cubic-bezier(0.34,1.56,0.64,1) 0.68s both; }
-.foot.shown .f-wa { animation: ftPop 0.56s cubic-bezier(0.34,1.56,0.64,1) 0.72s both; }
-.foot.shown .f-rule { animation: ftDiv 0.56s ease 0.76s both; }
-.foot.shown .f-nav { animation: ftRise 0.74s cubic-bezier(0.16,1,0.3,1) 0.8s both; }
+.foot.shown .f-florL { transform-origin: 0 0; animation: ftDropL 1.25s cubic-bezier(0.16,1,0.3,1) 0.14s both; }
+.foot.shown .f-florR { transform-origin: 100% 0; animation: ftDropR 1.25s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.foot.shown .f-div { transform-origin: 50% 50%; animation: ftDiv 0.62s ease 0.2s both; }
+.foot.shown .f-thanks { animation: ftRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
+.foot.shown .f-credit { animation: ftRiseText 1.45s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
+.foot.shown .f-by { animation: ftRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.6s both; }
+.foot.shown .f-ig { animation: ftRiseText 1.55s cubic-bezier(0.16,1,0.3,1) 0.75s both; }
+.foot.shown .f-wa { animation: ftRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
+.foot.shown .f-rule { animation: ftDiv 0.7s ease 0.9s both; }
 
-@keyframes ftDropL { 0% { opacity: 0; transform: translate(-14%,-26%) rotate(-6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
-@keyframes ftDropR { 0% { opacity: 0; transform: translate(14%,-26%) rotate(6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes ftDropL { 0% { opacity: 0; filter: blur(3px); transform: translate(-8%,-12%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
+@keyframes ftDropR { 0% { opacity: 0; filter: blur(3px); transform: translate(8%,-12%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
 @keyframes ftDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes ftRise { from { opacity: 0; transform: translateY(18%); } to { opacity: 1; transform: translateY(0); } }
-@keyframes ftPop { 0% { opacity: 0; transform: scale(0.4); } 60% { opacity: 1; transform: scale(1.16); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes ftRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
 @media (prefers-reduced-motion: reduce) {
   .foot__layer, .f-div, .f-thanks, .f-credit, .f-by, .f-ig, .f-wa, .f-rule, .f-nav {

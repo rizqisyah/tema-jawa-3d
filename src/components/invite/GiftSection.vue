@@ -232,21 +232,19 @@ async function copy(index: number) {
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
 .g-bg { opacity: 1; } /* base stays painted — no rectangle pop */
-.gift.shown .g-florL { transform-origin: 0 45%; animation: gfFlyL 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.24s both; }
-.gift.shown .g-florR { transform-origin: 100% 45%; animation: gfFlyR 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.3s both; }
+.gift.shown .g-florL { transform-origin: 0 45%; animation: gfFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.24s both; }
+.gift.shown .g-florR { transform-origin: 100% 45%; animation: gfFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
 
-.gift.shown .g-div { transform-origin: 50% 50%; animation: gfDiv 0.62s ease 0.36s both; }
-.gift.shown .g-title { animation: gfTitle 0.87s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
-.gift.shown .g-desc { animation: gfRise 0.74s ease 0.56s both; }
-.gift.shown .g-acct0 { animation: gfCard 0.74s cubic-bezier(0.34,1.56,0.64,1) 0.68s both; }
-.gift.shown .g-acct1 { animation: gfCard 0.74s cubic-bezier(0.34,1.56,0.64,1) 0.78s both; }
+.gift.shown .g-div { transform-origin: 50% 50%; animation: gfDiv 0.7s ease 0.2s both; }
+.gift.shown .g-title { animation: gfRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.gift.shown .g-desc { animation: gfRiseText 1.45s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
+.gift.shown .g-acct0 { animation: gfRiseText 1.55s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
+.gift.shown .g-acct1 { animation: gfRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.8s both; }
 
-@keyframes gfFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes gfFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.05); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gfFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
+@keyframes gfFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
 @keyframes gfDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes gfTitle { 0% { opacity: 0; transform: translateY(26%) scale(0.9); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes gfRise { from { opacity: 0; transform: translateY(16%); } to { opacity: 1; transform: translateY(0); } }
-@keyframes gfCard { 0% { opacity: 0; transform: translateY(24%) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes gfRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
 @media (prefers-reduced-motion: reduce) {
   .gift__layer, .gift > :where(img.g-div, h2, p), .g-acct {

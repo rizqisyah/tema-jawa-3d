@@ -1,36 +1,51 @@
 <script setup lang="ts">
-// Per-asset RSVP section. Arch + landscape are art; the reservation form is live DOM.
 import { computed, ref } from "vue";
 import bg from "../../assets/invite/rsvp/parts/bg.png";
 import base from "../../assets/invite/rsvp/parts/base.png";
 import florL from "../../assets/invite/rsvp/parts/florL.png";
 import florR from "../../assets/invite/rsvp/parts/florR.png";
 import { useReveal } from "../../composables/useReveal";
+import { useWedding } from "../../composables/useWedding";
+import { submitRsvp } from "../../lib/api";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-// full-frame layers (band 375×565, Figma rel 6905–7470) — inset:0, pixel-exact by construction
+const { slug } = useWedding();
+
 const layers = [
   { src: bg, cls: "r-bg" },
   { src: florL, cls: "r-florL" },
   { src: florR, cls: "r-florR" },
 ];
 
-// the closing band's olive oval starts 31px above this band's floor, so its cream apex was
-// sheared off by the cut — this strip carries it back into the last 54px of the rsvp band
-
-
 const name = ref("");
 const phone = ref("");
-const attendance = ref("");
+const attendance = ref("hadir");
 const guests = ref(1);
 const sent = ref(false);
+const submitting = ref(false);
+const errorMsg = ref("");
+
 const attending = computed(() => attendance.value === "hadir");
 
-function submit() {
-  // no backend yet — confirm locally so the form still closes the loop for the guest
-  sent.value = true;
+async function submit() {
+  if (!name.value.trim()) return;
+  submitting.value = true;
+  errorMsg.value = "";
+  try {
+    await submitRsvp(slug.value, {
+      guest_name: name.value.trim(),
+      phone: phone.value.trim(),
+      attendance_status: attendance.value,
+      guest_count: Number(guests.value),
+    });
+    sent.value = true;
+  } catch (err: any) {
+    errorMsg.value = err.message || "Gagal mengirim RSVP";
+  } finally {
+    submitting.value = false;
+  }
 }
 </script>
 
@@ -47,47 +62,64 @@ function submit() {
     />
     <img class="r-base" :src="base" alt="" aria-hidden="true" />
 
-    <h2 id="rsvp-title" class="r-title">Rsvp</h2>
-    <p class="r-intro">
-      Kehadiran Bapak/Ibu/Saudara/i akan menjadi kehormatan besar bagi kami dan keluarga. Mohon
-      konfirmasi kehadiran Anda melalui formulir reservasi di bawah:
-    </p>
+    <div class="r-content">
+      <div class="r-header-block">
+        <h2 id="rsvp-title" class="r-title">Rsvp</h2>
+        <p class="r-intro">
+          Kehadiran Bapak/Ibu/Saudara/i akan menjadi kehormatan besar bagi kami dan keluarga. Mohon
+          konfirmasi kehadiran Anda melalui formulir reservasi di bawah:
+        </p>
+      </div>
 
-    <form class="r-form" @submit.prevent="submit">
-      <label class="r-label r-lname" for="rsvp-name">Nama:</label>
-      <input id="rsvp-name" v-model="name" class="r-input r-iname" type="text" required />
+      <form class="r-form" @submit.prevent="submit">
+        <div class="r-field">
+          <label class="r-label" for="rsvp-name">Nama:</label>
+          <input
+            id="rsvp-name"
+            v-model="name"
+            class="r-input"
+            type="text"
+            placeholder="Nama lengkap Anda"
+            required
+          />
+        </div>
 
-      <label class="r-label r-lphone" for="rsvp-phone">No Hp:</label>
-      <input id="rsvp-phone" v-model="phone" class="r-input r-iphone" type="tel" required />
+        <div class="r-field">
+          <label class="r-label" for="rsvp-phone">No HP / WhatsApp:</label>
+          <input
+            id="rsvp-phone"
+            v-model="phone"
+            class="r-input"
+            type="tel"
+            placeholder="0812xxxxxxx"
+          />
+        </div>
 
-      <label class="r-label r-latt" for="rsvp-att">Kehadiran</label>
-      <select
-        id="rsvp-att"
-        v-model="attendance"
-        class="r-input r-iatt"
-        :class="{ 'r-iatt--split': attending }"
-        required
-      >
-        <option value="" disabled>Pilih…</option>
-        <option value="hadir">Hadir</option>
-        <option value="tidak">Tidak hadir</option>
-      </select>
+        <div class="r-field">
+          <label class="r-label" for="rsvp-attend">Konfirmasi Kehadiran:</label>
+          <select id="rsvp-attend" v-model="attendance" class="r-input r-select">
+            <option value="hadir">Hadir</option>
+            <option value="tidak_hadir">Maaf Tidak Bisa Hadir</option>
+          </select>
+        </div>
 
-      <template v-if="attending">
-        <label class="r-label r-lguest" for="rsvp-guest">Tamu</label>
-        <input
-          id="rsvp-guest"
-          v-model.number="guests"
-          class="r-input r-iguest"
-          type="number"
-          min="1"
-          max="10"
-          required
-        />
-      </template>
+        <div v-if="attending" class="r-field">
+          <label class="r-label" for="rsvp-guests">Jumlah Tamu:</label>
+          <select id="rsvp-guests" v-model="guests" class="r-input r-select">
+            <option :value="1">1 Orang</option>
+            <option :value="2">2 Orang</option>
+            <option :value="3">3 Orang</option>
+            <option :value="4">4 Orang</option>
+          </select>
+        </div>
 
-      <button class="r-send" type="submit">{{ sent ? "Terkirim ✓" : "Send" }}</button>
-    </form>
+        <p v-if="errorMsg" class="r-error">{{ errorMsg }}</p>
+
+        <button class="r-submit" type="submit" :disabled="submitting || sent">
+          {{ sent ? 'Konfirmasi Terkirim ✓' : submitting ? 'Mengirim...' : 'Kirim Reservasi' }}
+        </button>
+      </form>
+    </div>
   </section>
 </template>
 
@@ -95,11 +127,11 @@ function submit() {
 .rsvp {
   position: relative;
   width: 100%;
-  aspect-ratio: 375 / 565;
+  aspect-ratio: 375 / 610;
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;
-  background: linear-gradient(180deg, #c9c39e 0%, #b9b183 60%, #8e7f4e 100%);
+  background: #2b1810;
 }
 
 .rsvp__layer {
@@ -114,159 +146,148 @@ function submit() {
   will-change: transform, opacity;
 }
 
-/* z-order back → front */
 .r-bg { z-index: 0; }
-.r-florL, .r-florR { z-index: 3; }
-
-/* same treatment as the gift band: the strip owns this region's florals, so it sits above
-   them and the top edge dissolves into what bg.png already paints */
+.r-florL { z-index: 1; }
+.r-florR { z-index: 2; }
 .r-base {
   position: absolute;
-  z-index: 4;
-  left: 0;
-  top: 90.44%;
+  z-index: 3;
+  inset: auto 0 0 0;
   width: 100%;
-  height: 9.56%;
-  max-width: none;
-  object-fit: fill;
+  height: auto;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 46%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 46%);
 }
 
-/* --- live content, placed by Figma bounds within the 375×565 band --- */
-.r-title,
-.r-intro,
-.r-form {
+.r-content {
   position: absolute;
-  z-index: 2;
-  margin: 0;
-  opacity: 0;
+  z-index: 6;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
+
+.r-header-block {
+  text-align: center;
+  width: 100%;
+}
+
 .r-title {
-  left: 9.33%;
-  top: 11.5%;
-  width: 81.33%;
-  text-align: center;
-  font-family: "Pinyon Script", cursive;
-  font-weight: 400;
-  font-size: 9.6cqw;
-  line-height: 1;
-  color: #fff;
-  text-shadow: 0 0.4cqw 1.4cqw rgba(50, 35, 10, 0.5);
-}
-.r-intro {
-  left: 19.2%;
-  top: 21.6%;
-  width: 61.6%;
-  text-align: center;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-size: 3.5cqw;
-  line-height: 1.45;
-  color: #fff;
-  text-shadow: 0 0.3cqw 1cqw rgba(50, 35, 10, 0.55);
+  margin: 0 0 4px 0;
+  font-family: var(--font-script, "Pinyon Script"), cursive;
+  font-size: 11cqw;
+  line-height: 1.1;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.r-form { left: 0; top: 0; width: 100%; height: 100%; }
-.r-label {
-  position: absolute;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-size: 3.9cqw;
-  line-height: 1;
-  color: #fff;
-  text-shadow: 0 0.3cqw 1cqw rgba(50, 35, 10, 0.55);
+.r-intro {
+  margin: 0 auto;
+  width: 96%;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.3cqw;
+  line-height: 1.4;
+  color: #ffffff;
 }
-.r-lname { left: 14.4%; top: 46.2%; }
-.r-lphone { left: 14.4%; top: 57.8%; }
-.r-latt { left: 14.93%; top: 68.9%; }
-.r-lguest { left: 60.8%; top: 68.9%; }
+
+.r-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.r-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+}
+
+.r-label {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.2cqw;
+  color: #ffffff;
+  font-weight: 600;
+}
 
 .r-input {
-  position: absolute;
-  height: 6.37%;
-  padding: 0 2.4cqw;
-  border: 0;
-  border-radius: 0.8cqw;
-  background: #fff;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-size: 3.6cqw;
-  color: #4a3113;
-  box-shadow: 0 0.5cqw 1.4cqw rgba(40, 28, 8, 0.28);
-  transition: box-shadow 200ms ease, transform 200ms ease;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(217, 191, 157, 0.35);
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  font-size: 3.4cqw;
+  font-family: Georgia, "Times New Roman", serif;
+  box-sizing: border-box;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.2s, background 0.2s;
 }
+
+.r-input::placeholder {
+  color: rgba(238, 216, 197, 0.5);
+}
+
 .r-input:focus {
   outline: none;
-  transform: translateY(-4%);
-  box-shadow: 0 0 0 0.6cqw rgba(255, 255, 255, 0.55), 0 0.9cqw 2cqw rgba(40, 28, 8, 0.34);
-}
-.r-iname { left: 14.67%; top: 49.38%; width: 69.6%; }
-.r-iphone { left: 14.4%; top: 60.88%; width: 69.6%; }
-/* restates the shared input transition — a bare `transition: width` here would drop the focus states */
-.r-iatt {
-  left: 14.67%;
-  top: 72.04%;
-  width: 68.8%;
-  transition: width 320ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms ease, transform 200ms ease;
-}
-/* attending → select yields the right third to the guest-count field, same row, band height unchanged */
-.r-iatt--split { width: 44%; }
-.r-iguest {
-  left: 60.8%;
-  top: 72.04%;
-  width: 22.67%;
-  padding: 0 1.2cqw;
-  text-align: center;
-  animation: rsGuestIn 360ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-@keyframes rsGuestIn {
-  from { opacity: 0; transform: translateX(-18%) scale(0.9); }
-  to { opacity: 1; transform: none; }
+  border-color: var(--gold, #d9bf9d);
+  background: rgba(0, 0, 0, 0.65);
 }
 
-.r-send {
-  position: absolute;
-  left: 33.6%;
-  top: 84.07%;
-  width: 30.67%;
-  height: 5.66%;
-  border: 0;
-  border-radius: 0.8cqw;
-  background: #fff;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-size: 3.7cqw;
-  color: #4a3113;
+.r-select option {
+  background: #2b1810;
+  color: #ffffff;
+}
+
+.r-submit {
+  margin-top: 8px;
+  padding: 10px 16px;
+  background: var(--gold, #d9bf9d);
+  color: #2b1810;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.6cqw;
   cursor: pointer;
-  box-shadow: 0 0.5cqw 1.4cqw rgba(40, 28, 8, 0.3);
-  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), background 200ms ease,
-    box-shadow 200ms ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s, background 0.2s, opacity 0.2s;
 }
-.r-send:hover,
-.r-send:focus-visible {
-  background: #fff6dd;
-  transform: translateY(-9%) scale(1.05);
-  box-shadow: 0 1cqw 2.2cqw rgba(40, 28, 8, 0.38);
-}
-.r-send:active { transform: translateY(0) scale(0.97); }
 
-/* ===== entrances =====
-   The band's painted base never animates — a fading bg made each exported band
-   read as a separate rectangle popping in. Only ornaments and copy move, and
-   they travel short so the composite never visibly comes apart mid-flight. */
+.r-submit:hover {
+  background: #e6cead;
+  transform: translateY(-1px);
+}
+
+.r-submit:active {
+  transform: translateY(0);
+}
+
+.r-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.r-error {
+  color: #ff8888;
+  font-size: 3cqw;
+  margin: 0;
+  text-align: center;
+}
+
 .r-bg { opacity: 1; }
-.rsvp.shown .r-florL { transform-origin: 0 70%; animation: rsFlyL 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.05s both; }
-.rsvp.shown .r-florR { transform-origin: 100% 70%; animation: rsFlyR 0.9s cubic-bezier(0.34,1.56,0.64,1) 0.12s both; }
-.rsvp.shown .r-title { animation: rsTitle 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
-.rsvp.shown .r-intro { animation: rsRise 0.7s ease 0.28s both; }
-.rsvp.shown .r-form { animation: rsRise 0.7s ease 0.4s both; }
+.rsvp.shown .r-florL { transform-origin: 0 0; animation: rFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.rsvp.shown .r-florR { transform-origin: 100% 0; animation: rFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
+.rsvp.shown .r-header-block { animation: rRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.rsvp.shown .r-form { animation: rRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
 
-@keyframes rsFlyL { 0% { opacity: 0; transform: translateX(-14%) rotate(-3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
-@keyframes rsFlyR { 0% { opacity: 0; transform: translateX(14%) rotate(3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
-@keyframes rsTitle { 0% { opacity: 0; transform: translateY(30%) scale(0.88); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes rsRise { from { opacity: 0; transform: translateY(14%); } to { opacity: 1; transform: translateY(0); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .rsvp__layer, .r-title, .r-intro, .r-form, .r-iguest {
-    animation: none !important; opacity: 1; transform: none; filter: none;
-  }
-}
+@keyframes rFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
+@keyframes rFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
+@keyframes rRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 </style>

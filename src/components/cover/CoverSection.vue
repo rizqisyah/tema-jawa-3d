@@ -11,14 +11,22 @@ import bl from "../../assets/cover/cl/bl.png";
 import br from "../../assets/cover/cl/br.png";
 import bc from "../../assets/cover/cl/bc.png";
 
-withDefaults(
+import { computed } from "vue";
+import { useWedding } from "../../composables/useWedding";
+
+const props = withDefaults(
   defineProps<{
     bride?: string;
     groom?: string;
     guestName?: string;
   }>(),
-  { bride: "Anna", groom: "Tono", guestName: "Nama Tamu" }
+  { guestName: "Nama Tamu" }
 );
+
+const { bride: brideData, groom: groomData } = useWedding();
+
+const brideName = computed(() => props.bride || brideData.value?.name?.split(' ')[0] || "Allysa");
+const groomName = computed(() => props.groom || groomData.value?.name?.split(' ')[0] || "Antonio");
 
 defineEmits<{ open: [] }>();
 
@@ -71,7 +79,7 @@ const sparkles = [
       />
 
       <p class="cover__prefix">The Wedding Of</p>
-      <h1 class="cover__names">{{ bride }}<br />&amp; {{ groom }}</h1>
+      <h1 class="cover__names">{{ brideName }}<br />&amp; {{ groomName }}</h1>
 
       <span class="cover__plate" aria-hidden="true" />
       <p class="cover__dear">Dear Mr / Mrs / Ms</p>
@@ -86,8 +94,9 @@ const sparkles = [
 
 <style scoped>
 .cover-viewport {
-  width: 100vw;
-  min-height: 100dvh;
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -96,8 +105,9 @@ const sparkles = [
 
 .cover {
   position: relative;
-  height: 100dvh;
-  aspect-ratio: 375 / 725;
+  width: 100%;
+  height: 100%;
+  max-width: 480px;
   container-type: inline-size;
   color: var(--maroon-title);
   text-align: center;
@@ -140,8 +150,8 @@ const sparkles = [
   z-index: 1;
   transform-origin: 50% 40%;
   animation-name: inMist, ambMist;
-  animation-duration: 2.6s, 15s;
-  animation-timing-function: ease, ease-in-out;
+  animation-duration: 2.2s, 22s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
@@ -149,17 +159,17 @@ const sparkles = [
   z-index: 2;
   transform-origin: 0% 0%;
   animation-name: inTL, ambTL;
-  animation-duration: 1.6s, 7s;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1), ease-in-out;
+  animation-duration: 1.3s, 18s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
 .tr {
   z-index: 3;
   transform-origin: 100% 0%;
-  animation-name: inPop, ambTR;
-  animation-duration: 1.5s, 7.6s;
-  animation-timing-function: ease-out, ease-in-out;
+  animation-name: inTR, ambTR;
+  animation-duration: 1.35s, 19s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
@@ -167,17 +177,17 @@ const sparkles = [
   z-index: 4;
   transform-origin: 0% 50%;
   animation-name: inML, ambML;
-  animation-duration: 1.7s, 8s;
-  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1), ease-in-out;
+  animation-duration: 1.4s, 20s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
 .mr {
   z-index: 5;
   transform-origin: 100% 50%;
-  animation-name: inPop, ambMR;
-  animation-duration: 1.6s, 8.6s;
-  animation-timing-function: ease-out, ease-in-out;
+  animation-name: inMR, ambMR;
+  animation-duration: 1.4s, 21s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
@@ -185,17 +195,17 @@ const sparkles = [
   z-index: 6;
   transform-origin: 0% 100%;
   animation-name: inBL, ambBL;
-  animation-duration: 1.8s, 9s;
-  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1), ease-in-out;
+  animation-duration: 1.45s, 22s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
 .br {
   z-index: 7;
   transform-origin: 100% 100%;
-  animation-name: inPop, ambBR;
-  animation-duration: 1.7s, 9.6s;
-  animation-timing-function: ease-out, ease-in-out;
+  animation-name: inBR, ambBR;
+  animation-duration: 1.45s, 23s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
@@ -203,20 +213,20 @@ const sparkles = [
   z-index: 8;
   transform-origin: 50% 100%;
   animation-name: inBC, ambBC;
-  animation-duration: 1.9s, 7.4s;
-  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1), ease-in-out;
+  animation-duration: 1.5s, 24s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
-/* ambient loops start after the entrance settles (delay = entrance delay + duration) */
-.mist { animation-delay: 0.2s, 2.8s; }
-.tl   { animation-delay: 0.5s, 2.1s; }
-.tr   { animation-delay: 0.68s, 2.3s; }
-.ml   { animation-delay: 0.9s, 2.6s; }
-.mr   { animation-delay: 1.08s, 2.8s; }
-.bl   { animation-delay: 1.32s, 3.1s; }
-.br   { animation-delay: 1.5s, 3.3s; }
-.bc   { animation-delay: 1.72s, 3.6s; }
+/* ambient loops start after the entrance settles */
+.mist { animation-delay: 0.2s, 2.4s; }
+.tl   { animation-delay: 0.5s, 1.8s; }
+.tr   { animation-delay: 0.68s, 2.0s; }
+.ml   { animation-delay: 0.9s, 2.3s; }
+.mr   { animation-delay: 1.08s, 2.5s; }
+.bl   { animation-delay: 1.32s, 2.8s; }
+.br   { animation-delay: 1.5s, 3.0s; }
+.bc   { animation-delay: 1.72s, 3.2s; }
 
 @keyframes sceneIn { to { opacity: 1; } }
 @keyframes kenBurns {
@@ -225,76 +235,70 @@ const sparkles = [
 }
 
 @keyframes inMist {
-  from { opacity: 0; filter: blur(12px); transform: scale(1.08); }
+  from { opacity: 0; filter: blur(10px); transform: scale(1.04); }
   to { opacity: 0.62; filter: blur(0); transform: scale(1); }
 }
 @keyframes inTL {
-  from { opacity: 0; transform: translate(-16%, -14%) rotate(-6deg) scale(1.05); }
-  to { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
+  from { opacity: 0; filter: blur(4px); transform: translate(-8%, -8%) rotate(-3deg) scale(1.02); }
+  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0) scale(1); }
 }
 @keyframes inTR {
-  from { opacity: 0; transform: translate(16%, -14%) rotate(6deg) scale(1.05); }
-  to { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
+  from { opacity: 0; filter: blur(4px); transform: translate(8%, -8%) rotate(3deg) scale(1.02); }
+  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0) scale(1); }
 }
 @keyframes inML {
-  from { opacity: 0; transform: translateX(-22%) rotate(-4deg); }
-  to { opacity: 1; transform: translateX(0) rotate(0); }
+  from { opacity: 0; filter: blur(4px); transform: translateX(-10%) rotate(-2deg); }
+  to { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); }
 }
 @keyframes inMR {
-  from { opacity: 0; transform: translateX(22%) rotate(4deg); }
-  to { opacity: 1; transform: translateX(0) rotate(0); }
+  from { opacity: 0; filter: blur(4px); transform: translateX(10%) rotate(2deg); }
+  to { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); }
 }
 @keyframes inBL {
-  from { opacity: 0; transform: translate(-14%, 20%) rotate(5deg); }
-  to { opacity: 1; transform: translate(0, 0) rotate(0); }
+  from { opacity: 0; filter: blur(4px); transform: translate(-8%, 10%) rotate(2deg); }
+  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0); }
 }
 @keyframes inBR {
-  from { opacity: 0; transform: translate(14%, 20%) rotate(-5deg); }
-  to { opacity: 1; transform: translate(0, 0) rotate(0); }
+  from { opacity: 0; filter: blur(4px); transform: translate(8%, 10%) rotate(-2deg); }
+  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0); }
 }
 @keyframes inBC {
-  from { opacity: 0; transform: translateY(24%) scale(1.03); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-/* bounce-scale pop (right side): small → grow big (2.0) + tilt inward → settle to normal.
-   origin sits on the right edge so it blooms toward the centre. */
-@keyframes inPop {
-  0% { opacity: 0; transform: scale(0.3) rotate(0deg); }
-  55% { opacity: 1; transform: scale(2) rotate(-10deg); }
-  78% { transform: scale(0.92) rotate(3deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  from { opacity: 0; filter: blur(4px); transform: translateY(12%) scale(1.02); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
 }
 
-/* ambient sways — each slightly different so nothing moves in lockstep */
+/* ambient wind floating */
 @keyframes ambMist {
-  from { transform: translateX(-1.5%) scale(1.02); opacity: 0.55; }
-  to { transform: translateX(2%) scale(1.05); opacity: 0.68; }
+  from { transform: translateX(-1%) scale(1.01); opacity: 0.55; }
+  to { transform: translateX(1%) scale(1.03); opacity: 0.65; }
 }
 @keyframes ambTL {
-  from { transform: rotate(-0.9deg); } to { transform: rotate(0.5deg); }
+  from { transform: rotate(-0.5deg) translate(0, 0); }
+  to { transform: rotate(0.4deg) translate(1px, -1px); }
 }
 @keyframes ambTR {
-  from { transform: rotate(0.9deg); } to { transform: rotate(-0.5deg); }
+  from { transform: rotate(0.5deg) translate(0, 0); }
+  to { transform: rotate(-0.4deg) translate(-1px, -1px); }
 }
 @keyframes ambML {
-  from { transform: translateX(-0.6%) rotate(-0.5deg); }
-  to { transform: translateX(0.6%) rotate(0.5deg); }
+  from { transform: translateX(-0.4%) rotate(-0.3deg); }
+  to { transform: translateX(0.4%) rotate(0.3deg); }
 }
 @keyframes ambMR {
-  from { transform: translateX(0.6%) rotate(0.5deg); }
-  to { transform: translateX(-0.6%) rotate(-0.5deg); }
+  from { transform: translateX(0.4%) rotate(0.3deg); }
+  to { transform: translateX(-0.4%) rotate(-0.3deg); }
 }
 @keyframes ambBL {
-  from { transform: rotate(0.7deg) translateY(0.3%); }
-  to { transform: rotate(-0.4deg) translateY(-0.3%); }
+  from { transform: rotate(0.4deg) translateY(0.2%); }
+  to { transform: rotate(-0.3deg) translateY(-0.2%); }
 }
 @keyframes ambBR {
-  from { transform: rotate(-0.7deg) translateY(0.3%); }
-  to { transform: rotate(0.4deg) translateY(-0.3%); }
+  from { transform: rotate(-0.4deg) translateY(0.2%); }
+  to { transform: rotate(0.3deg) translateY(-0.2%); }
 }
 @keyframes ambBC {
-  from { transform: translateY(0.4%) scale(1); }
-  to { transform: translateY(-0.4%) scale(1.01); }
+  from { transform: translateY(0.3%) scale(1); }
+  to { transform: translateY(-0.3%) scale(1.01); }
 }
 
 /* sparkles */

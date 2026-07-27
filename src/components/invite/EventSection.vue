@@ -184,23 +184,22 @@ const mapsUrl = () =>
 
 /* ===== lebay, varied per-asset entrances, gated on scroll-in ===== */
 .e-bg { opacity: 1; } /* base stays painted — no rectangle pop */
-.event.shown .e-frame { transform-origin: 50% 50%; animation: eFrame 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.12s both; }
-.event.shown .e-florL { transform-origin: 0 40%; animation: eFlyL 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.34s both; }
-.event.shown .e-florR { transform-origin: 100% 40%; animation: eFlyR 1.12s cubic-bezier(0.34,1.56,0.64,1) 0.4s both; }
+.event.shown .e-frame { transform-origin: 50% 50%; animation: eFrame 1.12s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
+.event.shown .e-florL { transform-origin: 0 40%; animation: eFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.3s both; }
+.event.shown .e-florR { transform-origin: 100% 40%; animation: eFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
 
-.event.shown .e-title { animation: eTitle 0.93s cubic-bezier(0.16,1,0.3,1) 0.46s both; }
-.event.shown .e-date { animation: eRise 0.74s ease 0.6s both; }
-.event.shown .e-time { animation: eWide 0.81s cubic-bezier(0.16,1,0.3,1) 0.68s both; }
-.event.shown .e-pin { transform-origin: 50% 100%; animation: eDrop 0.68s cubic-bezier(0.34,1.7,0.5,1) 0.78s both; }
-.event.shown .e-venue { animation: eRise 0.74s ease 0.84s both; }
-.event.shown .e-addr { animation: eRise 0.81s ease 0.92s both; }
-.event.shown .e-maps { animation: ePop 0.62s cubic-bezier(0.34,1.56,0.64,1) 1.02s both; }
+.event.shown .e-title { animation: eRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.event.shown .e-date { animation: eRiseText 1.45s cubic-bezier(0.16,1,0.3,1) 0.4s both; }
+.event.shown .e-time { animation: eRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.55s both; }
+.event.shown .e-pin { transform-origin: 50% 100%; animation: eRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
+.event.shown .e-venue { animation: eRiseText 1.55s cubic-bezier(0.16,1,0.3,1) 0.75s both; }
+.event.shown .e-addr { animation: eRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
+.event.shown .e-maps { animation: eRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.95s both; }
 
-@keyframes eFrame { 0% { opacity: 0; transform: scale(0.86) rotate(-1.6deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
-@keyframes eFlyL { 0% { opacity: 0; transform: translateX(-18%) rotate(-5deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes eFlyR { 0% { opacity: 0; transform: translateX(18%) rotate(5deg) scale(1.06); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
-@keyframes eTitle { 0% { opacity: 0; transform: translateY(30%) scale(0.88); filter: blur(7px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes eRise { from { opacity: 0; transform: translateY(16%); } to { opacity: 1; transform: translateY(0); } }
+@keyframes eFrame { 0% { opacity: 0; transform: scale(0.94) rotate(-1deg); filter: blur(6px); } 100% { opacity: 1; transform: scale(1) rotate(0); filter: blur(0); } }
+@keyframes eFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
+@keyframes eFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
+@keyframes eRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @keyframes eWide { 0% { opacity: 0; letter-spacing: 0.5em; } 100% { opacity: 1; letter-spacing: normal; } }
 @keyframes eDrop { 0% { opacity: 0; transform: translateY(-160%) scale(0.6); } 65% { opacity: 1; transform: translateY(9%) scale(1.14); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes ePop { 0% { opacity: 0; transform: scale(0.5) rotate(-5deg); } 60% { opacity: 1; transform: scale(1.12) rotate(2deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }

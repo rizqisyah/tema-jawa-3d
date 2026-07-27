@@ -1,46 +1,77 @@
 <script setup lang="ts">
-// Per-asset wedding wish section. Red panel + trailing florals are art; the guestbook is live DOM.
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import bg from "../../assets/invite/wish/parts/bg.png";
 import florL from "../../assets/invite/wish/parts/florL.png";
 import florR from "../../assets/invite/wish/parts/florR.png";
 import { useReveal } from "../../composables/useReveal";
+import { useWedding } from "../../composables/useWedding";
+import { submitUcapan } from "../../lib/api";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-// full-frame layers (band 375×900, Figma rel 8110–9010) — inset:0, pixel-exact by construction
+const { slug, wishes: apiWishes, refetch } = useWedding();
+
 const layers = [
   { src: bg, cls: "w-bg" },
   { src: florL, cls: "w-florL" },
   { src: florR, cls: "w-florR" },
 ];
 
-type Wish = { name: string; when: string; text: string };
-
-// seeded from the template's mock guestbook; new entries land on top
-const wishes = ref<Wish[]>([
-  {
-    name: "Anggun",
-    when: "2 hari lalu",
-    text: "Happy wedding 🎉 Semoga keluarga kecil kalian senantiasa diberahi kebahagiaan, kecukupan, dan kesehatan✨ Selamat beribadah bersama sampai jannah ya🙏",
-  },
-  { name: "Amri", when: "3 hari lalu", text: "Happy wedding yaaa, semoga samawa, bahagia dunia akhirat ❤️" },
-  { name: "Amanda", when: "3 hari lalu", text: "Alhamdulillah, terharu banget, samawa yak" },
-  { name: "Gilang", when: "3 hari lalu", text: "Happy wedding broo..." },
-]);
-
 const name = ref("");
 const message = ref("");
+const submitting = ref(false);
+const errorMsg = ref("");
 
-function submit() {
-  if (!name.value.trim() || !message.value.trim()) return;
-  wishes.value = [
-    { name: name.value.trim(), when: "Baru saja", text: message.value.trim() },
-    ...wishes.value,
+const wishes = computed(() => {
+  if (apiWishes.value && apiWishes.value.length > 0) {
+    return apiWishes.value.map((w: any) => ({
+      name: w.guest_name || 'Tamu',
+      when: w.created_at ? new Date(w.created_at).toLocaleDateString('id-ID') : 'Baru saja',
+      text: w.message || '',
+    }));
+  }
+  return [
+    {
+      name: "Anggun",
+      when: "2 hari lalu",
+      text: "Happy wedding 🎉 Semoga keluarga kecil kalian senantiasa diberahi kebahagiaan, kecukupan, dan kesehatan✨ Selamat beribadah bersama sampai jannah ya🙏",
+    },
+    {
+      name: "Amri",
+      when: "3 hari lalu",
+      text: "Happy wedding yaaa, semoga samawa, bahagia dunia akhirat ❤️",
+    },
+    {
+      name: "Amanda",
+      when: "3 hari lalu",
+      text: "Alhamdulillah, terharu banget, samawa yak",
+    },
+    {
+      name: "Gilang",
+      when: "3 hari lalu",
+      text: "Happy wedding broo...",
+    },
   ];
-  name.value = "";
-  message.value = "";
+});
+
+async function submit() {
+  if (!name.value.trim() || !message.value.trim()) return;
+  submitting.value = true;
+  errorMsg.value = "";
+  try {
+    await submitUcapan(slug.value, {
+      guest_name: name.value.trim(),
+      message: message.value.trim(),
+    });
+    name.value = "";
+    message.value = "";
+    await refetch();
+  } catch (err: any) {
+    errorMsg.value = err.message || "Gagal mengirim ucapan";
+  } finally {
+    submitting.value = false;
+  }
 }
 </script>
 
@@ -56,30 +87,50 @@ function submit() {
       aria-hidden="true"
     />
 
-    <h2 id="wish-title" class="w-title">Wedding Wish</h2>
-    <p class="w-intro">Silakan kirimkan doa dan ucapan yang tulus untuk kami:</p>
+    <div class="w-content">
+      <!-- Header Title & Intro -->
+      <div class="w-header-block">
+        <h2 id="wish-title" class="w-title">Wedding Wish</h2>
+        <p class="w-intro">Silakan kirimkan doa dan ucapan yang tulus untuk kami:</p>
+      </div>
 
-    <form class="w-form" @submit.prevent="submit">
-      <input
-        v-model="name"
-        class="w-name"
-        type="text"
-        required
-        aria-label="Nama"
-        placeholder="Nama"
-      />
-      <label class="w-label" for="wish-msg">Sampaikan ucapan selamat untuk<br />pernikahan kami:</label>
-      <textarea id="wish-msg" v-model="message" class="w-msg" required></textarea>
-      <button class="w-send" type="submit">Kirim</button>
-    </form>
+      <!-- Form Inputs -->
+      <form class="w-form" @submit.prevent="submit">
+        <input
+          v-model="name"
+          class="w-input"
+          type="text"
+          placeholder="Nama"
+          required
+        />
 
-    <ul class="w-list">
-      <li v-for="(w, i) in wishes" :key="i" class="w-item">
-        <p class="w-name-out">{{ w.name }}</p>
-        <p class="w-when">{{ w.when }}</p>
-        <p class="w-text">{{ w.text }}</p>
-      </li>
-    </ul>
+        <p class="w-form-label">Sampaikan ucapan selamat untuk pernikahan kami:</p>
+
+        <textarea
+          v-model="message"
+          class="w-textarea"
+          rows="4"
+          required
+        ></textarea>
+
+        <p v-if="errorMsg" class="w-error">{{ errorMsg }}</p>
+
+        <button class="w-submit" type="submit" :disabled="submitting">
+          {{ submitting ? 'Mengirim...' : 'Kirim' }}
+        </button>
+      </form>
+
+      <!-- White Wishes Card List -->
+      <div class="w-card">
+        <div class="w-list">
+          <div v-for="(w, i) in wishes" :key="i" class="w-item">
+            <span class="w-author">{{ w.name }}</span>
+            <span class="w-when">{{ w.when }}</span>
+            <p class="w-text">{{ w.text }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -87,11 +138,11 @@ function submit() {
 .wish {
   position: relative;
   width: 100%;
-  aspect-ratio: 375 / 900;
+  aspect-ratio: 375 / 890;
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;
-  background: #8f0f0f;
+  background: #880000;
 }
 
 .wish__layer {
@@ -106,160 +157,207 @@ function submit() {
   will-change: transform, opacity;
 }
 
-/* z-order back → front — the red panel sits OVER the trailing greenery, exactly as in the
-   original: only the sliver above the ellipse's curved top stays visible */
-.w-florL, .w-florR { z-index: 0; }
-.w-bg { z-index: 1; }
+.w-bg { z-index: 0; }
+.w-florL { z-index: 1; }
+.w-florR { z-index: 2; }
 
-/* --- live content, placed by Figma bounds within the 375×900 band --- */
-.w-title,
-.w-intro,
-.w-form,
-.w-list {
+.w-content {
   position: absolute;
-  z-index: 2;
-  margin: 0;
-  opacity: 0;
+  z-index: 6;
+  top: 21.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 86%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
 }
+
+.w-header-block {
+  text-align: center;
+  width: 100%;
+}
+
 .w-title {
-  left: 18.13%;
-  top: 5.4%;
-  width: 63.6%;
-  text-align: center;
-  font-family: "Pinyon Script", cursive;
-  font-weight: 400;
-  font-size: 9.6cqw;
-  line-height: 1.1;
-  color: #fff7ee;
-}
-.w-intro {
-  left: 9.33%;
-  top: 11.33%;
-  width: 80.72%;
-  text-align: center;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-weight: 600;
-  font-size: 3.9cqw;
-  line-height: 1.4;
-  color: #e8eced;
+  margin: 0 0 6px 0;
+  font-family: var(--font-script, "Pinyon Script"), cursive;
+  font-size: 11cqw;
+  line-height: 1;
+  color: #ffffff;
+  font-weight: normal;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
 
-.w-form { left: 0; top: 0; width: 100%; height: 100%; }
-.w-name,
-.w-msg {
-  position: absolute;
-  padding: 2.2cqw 3cqw;
-  border: 0;
-  border-radius: 2.7cqw;
-  background: #fff;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+.w-intro {
+  margin: 0 auto;
+  width: 90%;
+  text-align: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.8cqw;
+  font-weight: bold;
+  line-height: 1.35;
+  color: #ffffff;
+}
+
+.w-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.w-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #d4c5b9;
+  background: #ffffff;
+  color: #333333;
   font-size: 3.6cqw;
-  color: #4a1d1d;
-  transition: box-shadow 200ms ease, transform 200ms ease;
+  font-family: Georgia, "Times New Roman", serif;
+  box-sizing: border-box;
 }
-.w-name::placeholder { color: #b09a9a; }
-.w-name:focus,
-.w-msg:focus {
-  outline: none;
-  transform: translateY(-3%);
-  box-shadow: 0 0 0 0.6cqw rgba(255, 255, 255, 0.42);
+
+.w-input::placeholder {
+  color: #a39589;
 }
-.w-name { left: 10.19%; top: 24.44%; width: 76.08%; height: 4%; }
-.w-msg {
-  left: 9.91%;
-  top: 36.33%;
-  width: 76.3%;
-  height: 9.33%;
-  resize: none;
-  line-height: 1.4;
+
+.w-form-label {
+  margin: 14px 0 6px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.8cqw;
+  font-weight: bold;
+  line-height: 1.35;
+  color: #ffffff;
+  text-align: left;
 }
-.w-label {
-  position: absolute;
-  left: 9.91%;
-  top: 30.67%;
-  width: 62%;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-weight: 700;
-  font-size: 3.5cqw;
-  line-height: 1.4;
-  color: #e8eced;
-}
-/* the design has no submit control — the guestbook needs one to work */
-.w-send {
-  position: absolute;
-  left: 35%;
-  top: 47.2%;
-  width: 30%;
-  height: 4%;
-  border: 0;
-  border-radius: 999px;
-  background: #fff7ee;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+
+.w-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid #d4c5b9;
+  background: #ffffff;
+  color: #333333;
   font-size: 3.6cqw;
-  color: #8f0f0f;
+  font-family: Georgia, "Times New Roman", serif;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.w-submit {
+  margin: 16px auto 0;
+  padding: 8px 36px;
+  background: #faf4ea;
+  color: #880000;
+  border: none;
+  border-radius: 24px;
+  font-weight: bold;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 4cqw;
   cursor: pointer;
-  box-shadow: 0 0.5cqw 1.4cqw rgba(40, 4, 4, 0.35);
-  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), background 200ms ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, background 0.2s;
 }
-.w-send:hover,
-.w-send:focus-visible { background: #fff; transform: translateY(-9%) scale(1.05); }
-.w-send:active { transform: translateY(0) scale(0.97); }
+
+.w-submit:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.w-submit:active {
+  transform: translateY(0);
+}
+
+.w-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.w-error {
+  color: #ff9999;
+  font-size: 3cqw;
+  margin: 6px 0 0 0;
+  text-align: center;
+}
+
+/* White Card Container for Wishes */
+.w-card {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  margin-top: 4px;
+}
 
 .w-list {
-  left: 8.53%;
-  top: 52.33%;
-  width: 82.67%;
-  height: 47.56%;
-  padding: 0;
+  width: 100%;
+  max-height: 320px;
   overflow-y: auto;
-  list-style: none;
-  border-radius: 2.7cqw;
-  background: #fff;
-  box-shadow: 0 1.2cqw 3cqw rgba(40, 4, 4, 0.35);
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
-.w-item { padding: 3.2cqw 4cqw; border-bottom: 1px solid #ecdcdc; }
-.w-item:last-child { border-bottom: 0; }
-.w-name-out {
-  margin: 0 0 1cqw;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-weight: 700;
-  font-size: 3.9cqw;
-  line-height: 1;
-  color: #2f2320;
+
+.w-list::-webkit-scrollbar {
+  width: 4px;
 }
+.w-list::-webkit-scrollbar-track {
+  background: #f5f0eb;
+  border-radius: 4px;
+}
+.w-list::-webkit-scrollbar-thumb {
+  background: #c2b2a3;
+  border-radius: 4px;
+}
+
+.w-item {
+  border-bottom: 1px solid #f0e6df;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.w-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.w-author {
+  display: block;
+  font-weight: bold;
+  color: #222222;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.8cqw;
+  line-height: 1.2;
+}
+
 .w-when {
-  margin: 0 0 1.6cqw;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
-  font-size: 3.2cqw;
-  line-height: 1;
-  color: #a89b98;
+  display: block;
+  font-size: 3cqw;
+  color: #8c827a;
+  font-family: Georgia, "Times New Roman", serif;
+  margin-top: 2px;
+  margin-bottom: 6px;
 }
+
 .w-text {
   margin: 0;
-  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+  color: #38302a;
+  font-family: Georgia, "Times New Roman", serif;
   font-size: 3.4cqw;
-  line-height: 1.5;
-  color: #4a3a36;
+  line-height: 1.45;
 }
 
-/* ===== per-asset entrances, gated on scroll-in ===== */
-.w-bg { opacity: 1; } /* base stays painted — no rectangle pop */
-.wish.shown .w-florL { transform-origin: 0 0; animation: wDropL 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.16s both; }
-.wish.shown .w-florR { transform-origin: 100% 0; animation: wDropR 0.99s cubic-bezier(0.34,1.56,0.64,1) 0.22s both; }
-.wish.shown .w-title { animation: wTitle 0.87s cubic-bezier(0.16,1,0.3,1) 0.32s both; }
-.wish.shown .w-intro { animation: wRise 0.74s ease 0.44s both; }
-.wish.shown .w-form { animation: wRise 0.81s ease 0.54s both; }
-.wish.shown .w-list { animation: wCard 0.81s cubic-bezier(0.16,1,0.3,1) 0.64s both; }
+.w-bg { opacity: 1; }
+.wish.shown .w-florL { animation: wFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.wish.shown .w-florR { animation: wFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
+.wish.shown .w-header-block { animation: wRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.wish.shown .w-form { animation: wRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
+.wish.shown .w-card { animation: wRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.7s both; }
 
-@keyframes wDropL { 0% { opacity: 0; transform: translate(-12%,-30%) rotate(-6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
-@keyframes wDropR { 0% { opacity: 0; transform: translate(12%,-30%) rotate(6deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
-@keyframes wTitle { 0% { opacity: 0; transform: translateY(30%) scale(0.88); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes wRise { from { opacity: 0; transform: translateY(14%); } to { opacity: 1; transform: translateY(0); } }
-@keyframes wCard { 0% { opacity: 0; transform: translateY(22%) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .wish__layer, .w-title, .w-intro, .w-form, .w-list {
-    animation: none !important; opacity: 1; transform: none; filter: none;
-  }
-}
+@keyframes wFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
+@keyframes wFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
+@keyframes wRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 </style>

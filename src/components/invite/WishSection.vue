@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import bg from "../../assets/invite/wish/parts/bg.png";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 import { submitUcapan } from "../../lib/api";
@@ -9,11 +8,6 @@ const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
 const { slug, wishes: apiWishes, refetch } = useWedding();
-
-const layers = [
-  { src: bg, cls: "w-bg" },
-
-];
 
 const name = ref("");
 const message = ref("");
@@ -74,15 +68,7 @@ async function submit() {
 
 <template>
   <section ref="el" class="wish" :class="{ shown }" aria-labelledby="wish-title">
-    <img
-      v-for="l in layers"
-      :key="l.cls"
-      class="wish__layer"
-      :class="l.cls"
-      :src="l.src"
-      alt=""
-      aria-hidden="true"
-    />
+    <div class="w-arch" aria-hidden="true" />
 
     <div class="w-content">
       <!-- Header Title & Intro -->
@@ -132,36 +118,39 @@ async function submit() {
 </template>
 
 <style scoped>
+/* Figma "Arif & Dita" frame is 375 wide; the wish band runs y 8101 → 8992
+   (Ellipse 7 apex → Ellipse 8), so the section is 375 x 891. */
 .wish {
   position: relative;
+  z-index: 3;
   width: 100%;
-  aspect-ratio: 375 / 890;
+  aspect-ratio: 375 / 891;
+  /* the dome's shoulders sit 13.77% of the width below its apex — overlap the
+     flower band above by that much so no cream sliver shows at the edges */
+  margin-top: -14%;
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;
-  background: #880000;
 }
 
-.wish__layer {
+/* Ellipse 7: 876 x 1067 at x -250, flat #900202. Drawn rather than sliced —
+   the exported raster's curve was flatter than the design's. */
+.w-arch {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  max-width: none;
-  opacity: 0;
+  z-index: 0;
+  top: 0;
+  left: -66.667%;   /* -250 / 375 */
+  width: 233.6%;    /*  876 / 375 */
+  height: 119.75%;  /* 1067 / 891 */
+  border-radius: 50%;
+  background: #900202;
   pointer-events: none;
-  will-change: transform, opacity;
 }
-
-.w-bg { z-index: 0; }
-.w-florL { z-index: 1; }
-.w-florR { z-index: 2; }
 
 .w-content {
   position: absolute;
   z-index: 6;
-  top: 21.5%;
+  top: 17.33cqw; /* Figma: title at apex + 65 */
   left: 50%;
   transform: translateX(-50%);
   width: 86%;
@@ -347,14 +336,9 @@ async function submit() {
   line-height: 1.45;
 }
 
-.w-bg { opacity: 1; }
-.wish.shown .w-florL { animation: wFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
-.wish.shown .w-florR { animation: wFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.28s both; }
 .wish.shown .w-header-block { animation: wRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .wish.shown .w-form { animation: wRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
 .wish.shown .w-card { animation: wRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.7s both; }
 
-@keyframes wFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
-@keyframes wFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
 @keyframes wRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 </style>

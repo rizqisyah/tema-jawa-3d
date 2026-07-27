@@ -130,7 +130,7 @@ const units = [
 .sd-card {
   position: absolute;
   z-index: 4;
-  top: 12.5%;
+  top: calc(12.5% + 20px);
   left: 50%;
   transform: translateX(-50%);
   width: 62%;

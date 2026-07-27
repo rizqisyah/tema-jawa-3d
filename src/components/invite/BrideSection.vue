@@ -12,25 +12,35 @@ import { useWedding } from "../../composables/useWedding";
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
+const props = defineProps<{
+  nickname?: string;
+  fullName?: string;
+  fatherName?: string;
+  motherName?: string;
+}>();
+
 const { bride } = useWedding();
 
 const nickname = computed(() => {
+  if (props.nickname) return props.nickname;
+  if (bride.value?.nickname) return bride.value.nickname;
   if (bride.value?.name) return bride.value.name.split(' ')[0];
   return 'Allysa';
 });
 
 const fullName = computed(() => {
+  if (props.fullName) return props.fullName;
   return bride.value?.name || 'Ayu Shella Pratni';
 });
 
-const fatherName = computed(() => bride.value?.father_name || 'Heri');
-const motherName = computed(() => bride.value?.mother_name || 'Sofie');
+const fatherName = computed(() => props.fatherName || bride.value?.father_name || 'Heri');
+const motherName = computed(() => props.motherName || bride.value?.mother_name || 'Sofie');
 
-const layers = [
+const layers = computed(() => [
   { src: bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
   { src: bride.value?.photo_url || portrait, cls: "b-portrait" },
-];
+]);
 </script>
 
 <template>

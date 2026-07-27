@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 // Every element is its own asset — nothing baked into a flat bg.
 import bg from "../../assets/invite/groom/parts/bg.png";
 import florL from "../../assets/invite/groom/parts/florL.png";
@@ -7,25 +8,43 @@ import portrait from "../../assets/invite/groom/parts/portrait.png";
 import florC from "../../assets/invite/groom/parts/florC.png";
 import divider from "../../assets/invite/groom/parts/divider.png";
 import { useReveal } from "../../composables/useReveal";
+import { useWedding } from "../../composables/useWedding";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-defineProps<{
+const props = defineProps<{
   nickname?: string;
   fullName?: string;
   fatherName?: string;
   motherName?: string;
 }>();
 
+const { groom } = useWedding();
+
+const nickname = computed(() => {
+  if (props.nickname) return props.nickname;
+  if (groom.value?.nickname) return groom.value.nickname;
+  if (groom.value?.name) return groom.value.name.split(' ')[0];
+  return 'Antonio';
+});
+
+const fullName = computed(() => {
+  if (props.fullName) return props.fullName;
+  return groom.value?.name || 'Antonio Josua Setiyadi';
+});
+
+const fatherName = computed(() => props.fatherName || groom.value?.father_name || 'Tono');
+const motherName = computed(() => props.motherName || groom.value?.mother_name || 'Ratna');
+
 // full-frame layers (band 375×730) — placed at inset:0, pixel-exact by construction
-const layers = [
+const layers = computed(() => [
   { src: bg, cls: "g-bg" },
   { src: florL, cls: "g-florL" },
   { src: florR, cls: "g-florR" },
-  { src: portrait, cls: "g-portrait" },
+  { src: groom.value?.photo_url || portrait, cls: "g-portrait" },
   { src: florC, cls: "g-florC" },
-];
+]);
 </script>
 
 <template>

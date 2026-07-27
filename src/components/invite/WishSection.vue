@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import bg from "../../assets/invite/wish/parts/bg.png";
-import florL from "../../assets/invite/wish/parts/florL.png";
-import florR from "../../assets/invite/wish/parts/florR.png";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 import { submitUcapan } from "../../lib/api";
@@ -14,8 +12,7 @@ const { slug, wishes: apiWishes, refetch } = useWedding();
 
 const layers = [
   { src: bg, cls: "w-bg" },
-  { src: florL, cls: "w-florL" },
-  { src: florR, cls: "w-florR" },
+
 ];
 
 const name = ref("");

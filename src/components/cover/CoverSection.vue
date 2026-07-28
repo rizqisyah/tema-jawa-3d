@@ -119,6 +119,8 @@ const sparkles = [
 .cover__layer {
   position: absolute;
   max-width: none;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 
 /* scenery: fade + perpetual ken-burns */
@@ -131,7 +133,7 @@ const sparkles = [
   z-index: 0;
   transform-origin: 50% 30%;
   opacity: 0;
-  animation: sceneIn 2s ease both, kenBurns 26s ease-in-out 2s infinite alternate;
+  animation: sceneIn 0.8s ease both, kenBurns 26s ease-in-out 0.8s infinite alternate;
 }
 
 .cover__layer {
@@ -150,7 +152,7 @@ const sparkles = [
   z-index: 1;
   transform-origin: 50% 40%;
   animation-name: inMist, ambMist;
-  animation-duration: 2.2s, 22s;
+  animation-duration: 1.2s, 22s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -159,7 +161,7 @@ const sparkles = [
   z-index: 2;
   transform-origin: 0% 0%;
   animation-name: inTL, ambTL;
-  animation-duration: 1.3s, 18s;
+  animation-duration: 0.8s, 18s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -168,7 +170,7 @@ const sparkles = [
   z-index: 3;
   transform-origin: 100% 0%;
   animation-name: inTR, ambTR;
-  animation-duration: 1.35s, 19s;
+  animation-duration: 0.85s, 19s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -177,7 +179,7 @@ const sparkles = [
   z-index: 4;
   transform-origin: 0% 50%;
   animation-name: inML, ambML;
-  animation-duration: 1.4s, 20s;
+  animation-duration: 0.85s, 20s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -186,7 +188,7 @@ const sparkles = [
   z-index: 5;
   transform-origin: 100% 50%;
   animation-name: inMR, ambMR;
-  animation-duration: 1.4s, 21s;
+  animation-duration: 0.9s, 21s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -195,7 +197,7 @@ const sparkles = [
   z-index: 6;
   transform-origin: 0% 100%;
   animation-name: inBL, ambBL;
-  animation-duration: 1.45s, 22s;
+  animation-duration: 0.9s, 22s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -204,7 +206,7 @@ const sparkles = [
   z-index: 7;
   transform-origin: 100% 100%;
   animation-name: inBR, ambBR;
-  animation-duration: 1.45s, 23s;
+  animation-duration: 0.95s, 23s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
@@ -213,20 +215,20 @@ const sparkles = [
   z-index: 8;
   transform-origin: 50% 100%;
   animation-name: inBC, ambBC;
-  animation-duration: 1.5s, 24s;
+  animation-duration: 0.95s, 24s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
 }
 /* ambient loops start after the entrance settles */
-.mist { animation-delay: 0.2s, 2.4s; }
-.tl   { animation-delay: 0.5s, 1.8s; }
-.tr   { animation-delay: 0.68s, 2.0s; }
-.ml   { animation-delay: 0.9s, 2.3s; }
-.mr   { animation-delay: 1.08s, 2.5s; }
-.bl   { animation-delay: 1.32s, 2.8s; }
-.br   { animation-delay: 1.5s, 3.0s; }
-.bc   { animation-delay: 1.72s, 3.2s; }
+.mist { animation-delay: 0.05s, 1.2s; }
+.tl   { animation-delay: 0.1s, 0.9s; }
+.tr   { animation-delay: 0.15s, 1.0s; }
+.ml   { animation-delay: 0.2s, 1.1s; }
+.mr   { animation-delay: 0.25s, 1.15s; }
+.bl   { animation-delay: 0.3s, 1.2s; }
+.br   { animation-delay: 0.35s, 1.25s; }
+.bc   { animation-delay: 0.4s, 1.3s; }
 
 @keyframes sceneIn { to { opacity: 1; } }
 @keyframes kenBurns {
@@ -338,7 +340,7 @@ const sparkles = [
   font-size: 5.33cqw;
   line-height: 10.13cqw;
   opacity: 0;
-  animation: swoopUp 1.3s cubic-bezier(0.16, 1, 0.3, 1) 2.1s both;
+  animation: swoopUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
 }
 .cover__names {
   top: 22.9%;
@@ -348,8 +350,8 @@ const sparkles = [
   line-height: 13.87cqw;
   opacity: 0;
   animation:
-    nameBloom 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) 2.35s both,
-    nameGlow 4s ease-in-out 4.2s infinite alternate;
+    nameBloom 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both,
+    nameGlow 4s ease-in-out 1.5s infinite alternate;
 }
 /* the drifting mist alone left the greeting sitting on the dark joglo interior; a defined
    light plate behind just this block is what makes the guest name legible */
@@ -369,7 +371,7 @@ const sparkles = [
   );
   pointer-events: none;
   opacity: 0;
-  animation: fadeUp 1.2s ease 2.7s both;
+  animation: fadeUp 0.7s ease 0.55s both;
 }
 
 .cover__dear {
@@ -378,7 +380,7 @@ const sparkles = [
   font-size: 3.73cqw;
   color: var(--maroon-text);
   opacity: 0;
-  animation: fadeUp 1.2s ease 2.8s both;
+  animation: fadeUp 0.7s ease 0.6s both;
 }
 .cover__guest {
   top: 70.3%;
@@ -386,7 +388,7 @@ const sparkles = [
   font-size: 5.33cqw;
   color: var(--maroon-text);
   opacity: 0;
-  animation: fadeUp 1.2s ease 3s both;
+  animation: fadeUp 0.7s ease 0.7s both;
 }
 
 @keyframes swoopUp {
@@ -419,7 +421,7 @@ const sparkles = [
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
-  animation: fadeUp 1.2s ease 3.25s both, pulse 2.8s ease-in-out 4.6s infinite;
+  animation: fadeUp 0.7s ease 0.8s both, pulse 2.8s ease-in-out 1.8s infinite;
   transition: box-shadow 0.15s ease;
 }
 .cover__open::after {
@@ -428,7 +430,7 @@ const sparkles = [
   inset: 0;
   background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.6) 50%, transparent 70%);
   transform: translateX(-120%);
-  animation: shimmer 3.4s ease-in-out 4.6s infinite;
+  animation: shimmer 3.4s ease-in-out 1.8s infinite;
 }
 .cover__open:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); }
 @keyframes pulse {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onMounted } from 'vue'
 import { useWedding } from './composables/useWedding'
+import { usePreloadAssets } from './composables/usePreloadAssets'
 import CoverSection from './components/cover/CoverSection.vue'
 import InviteBody from './components/invite/InviteBody.vue'
 import BottomNav from './components/sections/BottomNav.vue'
@@ -9,6 +10,12 @@ const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
 const { wedding, coupleNickname, quoteText, quoteVerse } = useWedding()
+const { preloadCover, preloadInviteBody } = usePreloadAssets()
+
+onMounted(async () => {
+  await preloadCover()
+  preloadInviteBody()
+})
 
 const guestName = computed(() => {
   const urlParam = new URLSearchParams(location.search).get('to')

@@ -1,15 +1,15 @@
 <script setup lang="ts">
 // Per-asset gallery section. Backdrop/florals are art; the photo carousel is live DOM.
 import { computed, onBeforeUnmount, ref, watch } from "vue";
-import bg from "../../assets/invite/gallery/parts/bg.png";
-import base from "../../assets/invite/gallery/parts/base.png";
-import florL from "../../assets/invite/gallery/parts/florL.png";
-import florR from "../../assets/invite/gallery/parts/florR.png";
-import main from "../../assets/invite/gallery/parts/main.png";
-import t1 from "../../assets/invite/gallery/parts/t1.png";
-import t2 from "../../assets/invite/gallery/parts/t2.png";
-import t3 from "../../assets/invite/gallery/parts/t3.png";
-import t4 from "../../assets/invite/gallery/parts/t4.png";
+import bg from "../../assets/invite/gallery/parts/bg.webp";
+import base from "../../assets/invite/gallery/parts/base.webp";
+import florL from "../../assets/invite/gallery/parts/florL.webp";
+import florR from "../../assets/invite/gallery/parts/florR.webp";
+import main from "../../assets/invite/gallery/parts/main.webp";
+import t1 from "../../assets/invite/gallery/parts/t1.webp";
+import t2 from "../../assets/invite/gallery/parts/t2.webp";
+import t3 from "../../assets/invite/gallery/parts/t3.webp";
+import t4 from "../../assets/invite/gallery/parts/t4.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import bg from "../../assets/invite/rsvp/parts/bg.png";
-import base from "../../assets/invite/rsvp/parts/base.png";
-import florL from "../../assets/invite/rsvp/parts/florL.png";
-import florR from "../../assets/invite/rsvp/parts/florR.png";
+import bg from "../../assets/invite/rsvp/parts/bg.webp";
+import base from "../../assets/invite/rsvp/parts/base.webp";
+import florL from "../../assets/invite/rsvp/parts/florL.webp";
+import florR from "../../assets/invite/rsvp/parts/florR.webp";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 import { submitRsvp } from "../../lib/api";

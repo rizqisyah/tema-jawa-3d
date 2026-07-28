@@ -1,10 +1,10 @@
 <script setup lang="ts">
 // Per-asset closing portrait band: oval couple frame, wax seal, wayang figures, flower bed.
-import bg from "../../assets/invite/closing/parts/bg.png";
-import portrait from "../../assets/invite/closing/parts/portrait.png";
-import florL from "../../assets/invite/closing/parts/florL.png";
-import florR from "../../assets/invite/closing/parts/florR.png";
-import seal from "../../assets/invite/closing/parts/seal.png";
+import bg from "../../assets/invite/closing/parts/bg.webp";
+import portrait from "../../assets/invite/closing/parts/portrait.webp";
+import florL from "../../assets/invite/closing/parts/florL.webp";
+import florR from "../../assets/invite/closing/parts/florR.webp";
+import seal from "../../assets/invite/closing/parts/seal.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);

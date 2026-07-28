@@ -1,15 +1,15 @@
 <script setup lang="ts">
 // Per-asset quote section (QS Ar-Rum 21). Every element its own layer — nothing baked.
-import bg from "../../assets/invite/quote/parts/bg.png";
-import seambridge from "../../assets/invite/quote/parts/seambridge.png";
-import trees from "../../assets/invite/quote/parts/trees.png";
-import oval from "../../assets/invite/quote/parts/oval.png";
-import ivyL from "../../assets/invite/quote/parts/ivyL.png";
-import ivyR from "../../assets/invite/quote/parts/ivyR.png";
-import mumL from "../../assets/invite/quote/parts/mumL.png";
-import mumR from "../../assets/invite/quote/parts/mumR.png";
-import seal from "../../assets/invite/quote/parts/seal.png";
-import divider from "../../assets/invite/quote/parts/divider.png";
+import bg from "../../assets/invite/quote/parts/bg.webp";
+import seambridge from "../../assets/invite/quote/parts/seambridge.webp";
+import trees from "../../assets/invite/quote/parts/trees.webp";
+import oval from "../../assets/invite/quote/parts/oval.webp";
+import ivyL from "../../assets/invite/quote/parts/ivyL.webp";
+import ivyR from "../../assets/invite/quote/parts/ivyR.webp";
+import mumL from "../../assets/invite/quote/parts/mumL.webp";
+import mumR from "../../assets/invite/quote/parts/mumR.webp";
+import seal from "../../assets/invite/quote/parts/seal.webp";
+import divider from "../../assets/invite/quote/parts/divider.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);

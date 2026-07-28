@@ -1,18 +1,18 @@
 <script setup lang="ts">
 // Every element is its own asset — nothing baked into a flat bg.
-import landscape1 from "../../assets/invite/hero/parts/landscape1.png";
-import landscape2 from "../../assets/invite/hero/parts/landscape2.png";
-import joglo from "../../assets/invite/hero/parts/joglo.png";
-import frame from "../../assets/invite/hero/parts/frame.png";
-import divider from "../../assets/invite/hero/parts/divider.png";
-import tasselL from "../../assets/invite/hero/parts/tasselL.png";
-import tasselR from "../../assets/invite/hero/parts/tasselR.png";
-import couple from "../../assets/invite/hero/parts/couple.png";
-import sealTop from "../../assets/invite/hero/parts/seal_top.png";
-import tl from "../../assets/invite/hero/tl.png";
-import tr from "../../assets/invite/hero/tr.png";
-import bl from "../../assets/invite/hero/bl.png";
-import br from "../../assets/invite/hero/br.png";
+import landscape1 from "../../assets/invite/hero/parts/landscape1.webp";
+import landscape2 from "../../assets/invite/hero/parts/landscape2.webp";
+import joglo from "../../assets/invite/hero/parts/joglo.webp";
+import frame from "../../assets/invite/hero/parts/frame.webp";
+import divider from "../../assets/invite/hero/parts/divider.webp";
+import tasselL from "../../assets/invite/hero/parts/tasselL.webp";
+import tasselR from "../../assets/invite/hero/parts/tasselR.webp";
+import couple from "../../assets/invite/hero/parts/couple.webp";
+import sealTop from "../../assets/invite/hero/parts/seal_top.webp";
+import tl from "../../assets/invite/hero/tl.webp";
+import tr from "../../assets/invite/hero/tr.webp";
+import bl from "../../assets/invite/hero/bl.webp";
+import br from "../../assets/invite/hero/br.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.05);

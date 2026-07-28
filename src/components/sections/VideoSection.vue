@@ -2,28 +2,30 @@
   <div
     v-if="videoUrl"
     id="videoSectionContainer"
-    class="video-container"
+    class="video-section-wrapper"
     data-section="video"
   >
-    <iframe
-      v-if="embedUrl"
-      class="video-embed"
-      :src="embedUrl"
-      title="Wedding video"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; mute"
-      allowfullscreen
-    ></iframe>
-    <video
-      v-else
-      class="video-element"
-      :src="videoUrl"
-      loop
-      muted
-      controls
-      autoplay
-      playsinline
-    ></video>
+    <div class="video-container">
+      <iframe
+        v-if="embedUrl"
+        class="video-embed"
+        :src="embedUrl"
+        title="Wedding video"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; mute"
+        allowfullscreen
+      ></iframe>
+      <video
+        v-else
+        class="video-element"
+        :src="videoUrl"
+        loop
+        muted
+        controls
+        autoplay
+        playsinline
+      ></video>
+    </div>
   </div>
 </template>
 
@@ -31,9 +33,13 @@
 import { computed } from 'vue'
 import { useWedding } from '../../composables/useWedding'
 
+const props = defineProps<{
+  videoUrl?: string
+}>()
+
 const { wedding } = useWedding()
 
-const videoUrl = computed(() => wedding.value?.video_url || '')
+const videoUrl = computed(() => props.videoUrl || wedding.value?.video_url || '')
 
 const embedUrl = computed(() => {
   const url = videoUrl.value
@@ -50,12 +56,22 @@ const embedUrl = computed(() => {
 </script>
 
 <style scoped>
+.video-section-wrapper {
+  width: 100%;
+  padding: 16px 16px 0 16px;
+  box-sizing: border-box;
+  background: #efe6d3;
+}
+
 .video-container {
   width: 100%;
   aspect-ratio: 16 / 9;
   position: relative;
   background: #000;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(217, 191, 157, 0.4);
 }
 
 .video-embed,

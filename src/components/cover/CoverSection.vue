@@ -1,17 +1,17 @@
 <script setup lang="ts">
 // Corner-split layers from Figma ("Cover depan", 375×725) as full-frame transparent
 // PNGs. Each is placed at inset:0 (pixel-exact) and flies in from its own edge.
-import scenery from "../../assets/cover/scenery.png";
-import mist from "../../assets/cover/cl/mist.png";
-import tl from "../../assets/cover/cl/tl.png";
-import tr from "../../assets/cover/cl/tr.png";
-import ml from "../../assets/cover/cl/ml.png";
-import mr from "../../assets/cover/cl/mr.png";
-import bl from "../../assets/cover/cl/bl.png";
-import br from "../../assets/cover/cl/br.png";
-import bc from "../../assets/cover/cl/bc.png";
+import scenery from "../../assets/cover/scenery.webp";
+import mist from "../../assets/cover/cl/mist.webp";
+import tl from "../../assets/cover/cl/tl.webp";
+import tr from "../../assets/cover/cl/tr.webp";
+import ml from "../../assets/cover/cl/ml.webp";
+import mr from "../../assets/cover/cl/mr.webp";
+import bl from "../../assets/cover/cl/bl.webp";
+import br from "../../assets/cover/cl/br.webp";
+import bc from "../../assets/cover/cl/bc.webp";
 
-import { computed } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useWedding } from "../../composables/useWedding";
 
 const props = withDefaults(
@@ -29,6 +29,16 @@ const brideName = computed(() => props.bride || brideData.value?.name?.split(' '
 const groomName = computed(() => props.groom || groomData.value?.name?.split(' ')[0] || "Antonio");
 
 defineEmits<{ open: [] }>();
+
+const isReady = ref(false);
+
+onMounted(() => {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      isReady.value = true;
+    });
+  });
+});
 
 // each floral layer: image, css class, entrance delay (s)
 const layers = [
@@ -54,7 +64,7 @@ const sparkles = [
 
 <template>
   <div class="cover-viewport">
-    <section class="cover" aria-label="Undangan pernikahan">
+    <section class="cover" :class="{ 'is-ready': isReady }" aria-label="Undangan pernikahan">
       <img class="cover__scenery" :src="scenery" alt="" />
 
       <img
@@ -133,6 +143,8 @@ const sparkles = [
   z-index: 0;
   transform-origin: 50% 30%;
   opacity: 0;
+}
+.cover.is-ready .cover__scenery {
   animation: sceneIn 0.8s ease both, kenBurns 26s ease-in-out 0.8s infinite alternate;
 }
 
@@ -151,84 +163,100 @@ const sparkles = [
 .mist {
   z-index: 1;
   transform-origin: 50% 40%;
+}
+.tl {
+  z-index: 2;
+  transform-origin: 0% 0%;
+}
+.tr {
+  z-index: 3;
+  transform-origin: 100% 0%;
+}
+.ml {
+  z-index: 4;
+  transform-origin: 0% 50%;
+}
+.mr {
+  z-index: 5;
+  transform-origin: 100% 50%;
+}
+.bl {
+  z-index: 6;
+  transform-origin: 0% 100%;
+}
+.br {
+  z-index: 7;
+  transform-origin: 100% 100%;
+}
+.bc {
+  z-index: 8;
+  transform-origin: 50% 100%;
+}
+
+.cover.is-ready .mist {
   animation-name: inMist, ambMist;
   animation-duration: 1.2s, 22s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 0.2s, 1.4s;
 }
-.tl {
-  z-index: 2;
-  transform-origin: 0% 0%;
+.cover.is-ready .tl {
   animation-name: inTL, ambTL;
-  animation-duration: 0.8s, 18s;
+  animation-duration: 0.9s, 18s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 0.45s, 1.4s;
 }
-.tr {
-  z-index: 3;
-  transform-origin: 100% 0%;
+.cover.is-ready .tr {
   animation-name: inTR, ambTR;
-  animation-duration: 0.85s, 19s;
+  animation-duration: 0.9s, 19s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 0.7s, 1.6s;
 }
-.ml {
-  z-index: 4;
-  transform-origin: 0% 50%;
+.cover.is-ready .ml {
   animation-name: inML, ambML;
-  animation-duration: 0.85s, 20s;
+  animation-duration: 0.9s, 20s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 0.95s, 1.85s;
 }
-.mr {
-  z-index: 5;
-  transform-origin: 100% 50%;
+.cover.is-ready .mr {
   animation-name: inMR, ambMR;
   animation-duration: 0.9s, 21s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 1.2s, 2.1s;
 }
-.bl {
-  z-index: 6;
-  transform-origin: 0% 100%;
+.cover.is-ready .bl {
   animation-name: inBL, ambBL;
   animation-duration: 0.9s, 22s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 1.45s, 2.35s;
 }
-.br {
-  z-index: 7;
-  transform-origin: 100% 100%;
+.cover.is-ready .br {
   animation-name: inBR, ambBR;
-  animation-duration: 0.95s, 23s;
+  animation-duration: 0.9s, 23s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 1.7s, 2.6s;
 }
-.bc {
-  z-index: 8;
-  transform-origin: 50% 100%;
+.cover.is-ready .bc {
   animation-name: inBC, ambBC;
-  animation-duration: 0.95s, 24s;
+  animation-duration: 0.9s, 24s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
   animation-iteration-count: 1, infinite;
   animation-direction: normal, alternate;
+  animation-delay: 1.95s, 2.85s;
 }
-/* ambient loops start after the entrance settles */
-.mist { animation-delay: 0.05s, 1.2s; }
-.tl   { animation-delay: 0.1s, 0.9s; }
-.tr   { animation-delay: 0.15s, 1.0s; }
-.ml   { animation-delay: 0.2s, 1.1s; }
-.mr   { animation-delay: 0.25s, 1.15s; }
-.bl   { animation-delay: 0.3s, 1.2s; }
-.br   { animation-delay: 0.35s, 1.25s; }
-.bc   { animation-delay: 0.4s, 1.3s; }
 
 @keyframes sceneIn { to { opacity: 1; } }
 @keyframes kenBurns {
@@ -313,7 +341,9 @@ const sparkles = [
   background: radial-gradient(circle, #fff 0%, rgba(255, 245, 210, 0.9) 40%, transparent 70%);
   opacity: 0;
   pointer-events: none;
-  animation: twinkle var(--sd) ease-in-out var(--sdelay) infinite;
+}
+.cover.is-ready .cover__sparkle {
+  animation: twinkle var(--sd) ease-in-out calc(2.4s + var(--sdelay)) infinite;
 }
 @keyframes twinkle {
   0%, 100% { opacity: 0; transform: scale(0.4); }
@@ -340,8 +370,11 @@ const sparkles = [
   font-size: 5.33cqw;
   line-height: 10.13cqw;
   opacity: 0;
-  animation: swoopUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
 }
+.cover.is-ready .cover__prefix {
+  animation: swoopUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.25s both;
+}
+
 .cover__names {
   top: 22.9%;
   font-family: var(--font-script);
@@ -349,10 +382,13 @@ const sparkles = [
   font-size: 17.07cqw;
   line-height: 13.87cqw;
   opacity: 0;
-  animation:
-    nameBloom 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both,
-    nameGlow 4s ease-in-out 1.5s infinite alternate;
 }
+.cover.is-ready .cover__names {
+  animation:
+    nameBloom 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 2.55s both,
+    nameGlow 4s ease-in-out 3.5s infinite alternate;
+}
+
 /* the drifting mist alone left the greeting sitting on the dark joglo interior; a defined
    light plate behind just this block is what makes the guest name legible */
 .cover__plate {
@@ -371,7 +407,9 @@ const sparkles = [
   );
   pointer-events: none;
   opacity: 0;
-  animation: fadeUp 0.7s ease 0.55s both;
+}
+.cover.is-ready .cover__plate {
+  animation: fadeUp 0.7s ease 2.9s both;
 }
 
 .cover__dear {
@@ -380,15 +418,20 @@ const sparkles = [
   font-size: 3.73cqw;
   color: var(--maroon-text);
   opacity: 0;
-  animation: fadeUp 0.7s ease 0.6s both;
 }
+.cover.is-ready .cover__dear {
+  animation: fadeUp 0.7s ease 3.15s both;
+}
+
 .cover__guest {
   top: 70.3%;
   font-family: var(--font-hand);
   font-size: 5.33cqw;
   color: var(--maroon-text);
   opacity: 0;
-  animation: fadeUp 0.7s ease 0.7s both;
+}
+.cover.is-ready .cover__guest {
+  animation: fadeUp 0.7s ease 3.4s both;
 }
 
 @keyframes swoopUp {
@@ -421,16 +464,18 @@ const sparkles = [
   cursor: pointer;
   overflow: hidden;
   opacity: 0;
-  animation: fadeUp 0.7s ease 0.8s both, pulse 2.8s ease-in-out 1.8s infinite;
   transition: box-shadow 0.15s ease;
 }
-.cover__open::after {
+.cover.is-ready .cover__open {
+  animation: fadeUp 0.7s ease 3.75s both, pulse 2.8s ease-in-out 4.75s infinite;
+}
+.cover.is-ready .cover__open::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.6) 50%, transparent 70%);
   transform: translateX(-120%);
-  animation: shimmer 3.4s ease-in-out 1.8s infinite;
+  animation: shimmer 3.4s ease-in-out 4.75s infinite;
 }
 .cover__open:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28); }
 @keyframes pulse {

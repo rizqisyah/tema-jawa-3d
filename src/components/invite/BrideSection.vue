@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import bg from "../../assets/invite/bride/parts/bg.png";
-import flor from "../../assets/invite/bride/parts/flor.png";
-import front from "../../assets/invite/bride/parts/front.png";
-import portrait from "../../assets/invite/bride/parts/portrait.png";
-import amp from "../../assets/invite/bride/parts/amp.png";
-import divider from "../../assets/invite/bride/parts/divider.png";
+import bg from "../../assets/invite/bride/parts/bg.webp";
+import flor from "../../assets/invite/bride/parts/flor.webp";
+import front from "../../assets/invite/bride/parts/front.webp";
+import portrait from "../../assets/invite/bride/parts/portrait.webp";
+import amp from "../../assets/invite/bride/parts/amp.webp";
+import divider from "../../assets/invite/bride/parts/divider.webp";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
 // Every element is its own asset — nothing baked into a flat bg.
-import bg from "../../assets/invite/groom/parts/bg.png";
-import florL from "../../assets/invite/groom/parts/florL.png";
-import florR from "../../assets/invite/groom/parts/florR.png";
-import portrait from "../../assets/invite/groom/parts/portrait.png";
-import florC from "../../assets/invite/groom/parts/florC.png";
-import divider from "../../assets/invite/groom/parts/divider.png";
+import bg from "../../assets/invite/groom/parts/bg.webp";
+import florL from "../../assets/invite/groom/parts/florL.webp";
+import florR from "../../assets/invite/groom/parts/florR.webp";
+import portrait from "../../assets/invite/groom/parts/portrait.webp";
+import florC from "../../assets/invite/groom/parts/florC.webp";
+import divider from "../../assets/invite/groom/parts/divider.webp";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 

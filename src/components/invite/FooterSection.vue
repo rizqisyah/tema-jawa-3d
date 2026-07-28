@@ -1,12 +1,12 @@
 <script setup lang="ts">
 // Per-asset closing footer: thank-you note, credits, socials and the bottom nav bar.
-import bg from "../../assets/invite/footer/parts/bg.png";
+import bg from "../../assets/invite/footer/parts/bg.webp";
 import panel from "../../assets/invite/footer/parts/panel.png";
 import florL from "../../assets/invite/footer/parts/florL.png";
 import florR from "../../assets/invite/footer/parts/florR.png";
 import divider from "../../assets/invite/footer/parts/divider.png";
-import ig from "../../assets/invite/footer/parts/ig.png";
-import wa from "../../assets/invite/footer/parts/wa.png";
+import ig from "../../assets/invite/footer/parts/ig.webp";
+import wa from "../../assets/invite/footer/parts/wa.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);
@@ -14,9 +14,9 @@ defineExpose({ el });
 
 const layers = [
   { src: bg, cls: "f-bg" },
+  { src: panel, cls: "f-panel" },
   { src: florL, cls: "f-florL" },
   { src: florR, cls: "f-florR" },
-  { src: panel, cls: "f-panel" },
 ];
 </script>
 
@@ -72,17 +72,17 @@ const layers = [
 
 /* z-order back → front */
 .f-bg { z-index: 0; }
-.f-florL, .f-florR { z-index: 1; }
-/* panel.png is only the top 420px of the 1132px band — anchor it, don't stretch it */
 .f-panel {
-  z-index: 2;
+   z-index: 1;
   height: auto;
   bottom: auto;
-  object-fit: fill;
-  /* corners cut out: the coral sprays there belong in FRONT of the crimson, and bg.png
+  object-fit: cover;
+  /* corners cut out: the coral sprays there belong in FRONT of the crimson, and bg.webp
      still paints the same red underneath them, so nothing is lost */
-  clip-path: polygon(21% 0, 79% 0, 79% 60%, 100% 60%, 100% 100%, 0 100%, 0 60%, 21% 60%);
+  clip-path: polygon(21% 1px, 81% -6px, 80% 67%, 76% 42%, 99% 100%, 0px 100%, 0px 100%, 18.22% 70.29%);
 }
+
+
 
 /* --- live content, placed by Figma bounds within the 375×566 band --- */
 .f-div,

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 // Save the Date — sliced backdrop (sepia bg, red ornate frame, florals) + live countdown & calendar.
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import bg from "../../assets/invite/savedate/parts/bg.png";
-import florL from "../../assets/invite/savedate/parts/florL.png";
-import florR from "../../assets/invite/savedate/parts/florR.png";
-import frame from "../../assets/invite/savedate/parts/frame.png";
-import divider from "../../assets/invite/savedate/parts/divider.png";
+import bg from "../../assets/invite/savedate/parts/bg.webp";
+import florL from "../../assets/invite/savedate/parts/florL.webp";
+import florR from "../../assets/invite/savedate/parts/florR.webp";
+import frame from "../../assets/invite/savedate/parts/frame.webp";
+import divider from "../../assets/invite/savedate/parts/divider.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.12);
@@ -52,7 +52,7 @@ const units = [
 <template>
   <section ref="el" class="sd" :class="{ shown }" aria-label="Save the Date">
     <img class="sd-layer sd-bg" :src="bg" alt="" aria-hidden="true" />
-    <!-- the lake half of bg.png exported washed out against the original; a filtered
+    <!-- the lake half of bg.webp exported washed out against the original; a filtered
          second pass, masked to that half, puts the olive back without touching the canopy -->
     <img class="sd-layer sd-bg2" :src="bg" alt="" aria-hidden="true" />
     <img class="sd-layer sd-frame" :src="frame" alt="" aria-hidden="true" />
@@ -87,7 +87,7 @@ const units = [
   background: linear-gradient(180deg, #e6dfcb 0%, #e9e2cf 100%);
 }
 
-/* bg.png butts the orange canopy straight onto the lake scene at ~42% — that hard line
+/* bg.webp butts the orange canopy straight onto the lake scene at ~42% — that hard line
    is baked into the export, so soften it in place rather than re-cutting the asset */
 .sd::after {
   content: "";

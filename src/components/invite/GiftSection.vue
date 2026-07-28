@@ -1,12 +1,12 @@
 <script setup lang="ts">
 // Per-asset wedding gift section. Carved frame + gold panel are art; every account row is live DOM.
 import { ref } from "vue";
-import bg from "../../assets/invite/gift/parts/bg.png";
-import base from "../../assets/invite/gift/parts/base.png";
-import florL from "../../assets/invite/gift/parts/florL.png";
-import florR from "../../assets/invite/gift/parts/florR.png";
-import divider from "../../assets/invite/gift/parts/divider.png";
-import bca from "../../assets/invite/gift/parts/bca.png";
+import bg from "../../assets/invite/gift/parts/bg.webp";
+import base from "../../assets/invite/gift/parts/base.webp";
+import florL from "../../assets/invite/gift/parts/florL.webp";
+import florR from "../../assets/invite/gift/parts/florR.webp";
+import divider from "../../assets/invite/gift/parts/divider.webp";
+import bca from "../../assets/invite/gift/parts/bca.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);
@@ -19,7 +19,7 @@ const layers = [
   { src: florR, cls: "g-florR" },
 ];
 
-// bg.png stops at flat olive where the design still carries the carved frame's lower half —
+// bg.webp stops at flat olive where the design still carries the carved frame's lower half —
 // the mirrored crown, its finial and the fountain's top tier all live below y 5845 and were
 // lost when the band was cut. This strip restores that region verbatim from the design.
 
@@ -124,7 +124,7 @@ async function copy(index: number) {
 
 /* The strip already contains this region's florals, so it rides ABOVE g-florL/R rather than
    under them — that way the fly-in happens behind it and no duplicate blooms show through.
-   Its top 20% dissolves into what bg.png paints there; the two agree to ~6/255 across that
+   Its top 20% dissolves into what bg.webp paints there; the two agree to ~6/255 across that
    band, so the join is invisible. */
 .g-base {
   position: absolute;

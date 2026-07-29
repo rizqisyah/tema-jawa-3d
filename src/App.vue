@@ -5,11 +5,12 @@ import { usePreloadAssets } from './composables/usePreloadAssets'
 import CoverSection from './components/cover/CoverSection.vue'
 import InviteBody from './components/invite/InviteBody.vue'
 import BottomNav from './components/sections/BottomNav.vue'
+import scenery from './assets/cover/scenery.webp'
 
 const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
-const { wedding, coupleNickname, quoteText, quoteVerse, guest, error } = useWedding()
+const { wedding, coupleNickname, quoteText, quoteVerse, guest, error, bride, groom } = useWedding()
 const { preloadCover, preloadInviteBody } = usePreloadAssets()
 
 onMounted(async () => {
@@ -25,6 +26,19 @@ const guestName = computed(() => {
   return urlParam || 'Nama Tamu'
 })
 
+const leftTitle = computed(() => {
+  const brideName = bride.value?.nickname || (bride.value?.name ? bride.value.name.split(' ')[0] : '')
+  const groomName = groom.value?.nickname || (groom.value?.name ? groom.value.name.split(' ')[0] : '')
+  if (brideName && groomName) {
+    return `${brideName} & ${groomName}`
+  }
+  return coupleNickname.value
+})
+
+const leftSubtitle = computed(() => {
+  return wedding.value?.theme_override?.words?.the_wedding_of || 'THE WEDDING OF'
+})
+
 async function openInvitation() {
   isOpen.value = true
   await nextTick()
@@ -38,8 +52,8 @@ function onSplashLeave() {
 }
 
 const leftBackgroundStyle = computed(() => {
-  const img = wedding.value?.image_bg1 || wedding.value?.image_cover || ''
-  return img ? { backgroundImage: `url(${img})` } : {}
+  const img = wedding.value?.image_bg1 || wedding.value?.image_cover || scenery
+  return { backgroundImage: `url(${img})` }
 })
 </script>
 
@@ -50,8 +64,8 @@ const leftBackgroundStyle = computed(() => {
       <div class="left-overlay"></div>
       <div class="left-content">
         <div class="left-header">
-          <p class="left-subtitle">THE WEDDING OF</p>
-          <h1 class="left-title">{{ coupleNickname }}</h1>
+          <p class="left-subtitle">{{ leftSubtitle }}</p>
+          <h1 class="left-title">{{ leftTitle }}</h1>
         </div>
         <div class="left-quote-container">
           <p class="left-quote">“{{ quoteText }}”</p>

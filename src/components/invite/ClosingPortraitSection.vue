@@ -5,18 +5,25 @@ import portrait from "../../assets/invite/closing/parts/portrait.webp";
 import florL from "../../assets/invite/closing/parts/florL.webp";
 import florR from "../../assets/invite/closing/parts/florR.webp";
 import seal from "../../assets/invite/closing/parts/seal.webp";
+import { computed } from "vue";
 import { useReveal } from "../../composables/useReveal";
+import { useWedding } from "../../composables/useWedding";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-// full-frame layers (band 375×640, Figma rel 7470–8110) — inset:0, pixel-exact by construction
-const layers = [
+const { wedding } = useWedding();
+
+const couplePhoto = computed(() => {
+  return wedding.value?.image_cover || wedding.value?.image_bg1 || portrait;
+});
+
+const layers = computed(() => [
   { src: bg, cls: "c-bg" },
-  { src: portrait, cls: "c-portrait" },
+  { src: couplePhoto.value, cls: "c-portrait" },
   { src: florL, cls: "c-florL" },
   { src: florR, cls: "c-florR" },
-];
+]);
 </script>
 
 <template>

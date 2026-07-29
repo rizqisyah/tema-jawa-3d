@@ -1,18 +1,24 @@
 <script setup lang="ts">
 // Save the Date — sliced backdrop (sepia bg, red ornate frame, florals) + live countdown & calendar.
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import bg from "../../assets/invite/savedate/parts/bg.webp";
 import florL from "../../assets/invite/savedate/parts/florL.webp";
 import florR from "../../assets/invite/savedate/parts/florR.webp";
 import frame from "../../assets/invite/savedate/parts/frame.webp";
 import divider from "../../assets/invite/savedate/parts/divider.webp";
 import { useReveal } from "../../composables/useReveal";
+import { useWedding } from "../../composables/useWedding";
 
 const { el, shown } = useReveal(0.12);
 defineExpose({ el });
 
-// Akad Nikah — Saturday, 19 April 2029, 10.00 WIB (UTC+7)
-const TARGET = new Date("2029-04-19T10:00:00+07:00").getTime();
+const { acara, coupleNickname } = useWedding();
+
+const targetTimestamp = computed(() => {
+  const dateStr = acara.value[0]?.event_date || "2029-04-19T10:00:00+07:00";
+  const parsed = new Date(dateStr).getTime();
+  return isNaN(parsed) ? new Date("2029-04-19T10:00:00+07:00").getTime() : parsed;
+});
 
 const days = ref("00");
 const hours = ref("00");
@@ -22,7 +28,7 @@ let timer: number | undefined;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 function tick() {
-  let diff = Math.max(0, TARGET - Date.now());
+  let diff = Math.max(0, targetTimestamp.value - Date.now());
   const d = Math.floor(diff / 86400000); diff -= d * 86400000;
   const h = Math.floor(diff / 3600000); diff -= h * 3600000;
   const m = Math.floor(diff / 60000); diff -= m * 60000;
@@ -33,13 +39,16 @@ function tick() {
 onMounted(() => { tick(); timer = window.setInterval(tick, 1000); });
 onBeforeUnmount(() => { if (timer) clearInterval(timer); });
 
-// Google Calendar — 10.00–12.00 WIB = 03.00–05.00 UTC
-const calendarUrl =
-  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-  "&text=" + encodeURIComponent("Akad Nikah — Antonio & Allysa") +
-  "&dates=20290419T030000Z/20290419T050000Z" +
-  "&details=" + encodeURIComponent("Undangan pernikahan Antonio & Allysa") +
-  "&location=" + encodeURIComponent("Jakarta");
+const calendarUrl = computed(() => {
+  const title = `Undangan Pernikahan — ${coupleNickname.value}`;
+  const loc = acara.value[0]?.location_name || acara.value[0]?.address || "Jakarta";
+  return (
+    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    "&text=" + encodeURIComponent(title) +
+    "&details=" + encodeURIComponent(`Undangan pernikahan ${coupleNickname.value}`) +
+    "&location=" + encodeURIComponent(loc)
+  );
+});
 
 const units = [
   { key: "days", label: "Days", val: days },

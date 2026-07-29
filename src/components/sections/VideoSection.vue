@@ -57,21 +57,21 @@ const embedUrl = computed(() => {
 
 <style scoped>
 .video-section-wrapper {
+  position: relative;
   width: 100%;
-  padding: 16px 16px 0 16px;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #000;
   box-sizing: border-box;
-  background: #efe6d3;
 }
 
 .video-container {
-  width: 100%;
-  aspect-ratio: 16 / 9;
   position: relative;
+  width: 100%;
+  height: 100%;
   background: #000;
-  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(217, 191, 157, 0.4);
 }
 
 .video-embed,

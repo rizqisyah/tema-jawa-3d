@@ -23,8 +23,46 @@ import resFlorL from "../../assets/invite/resepsi/parts/florL.webp";
 import resFlorR from "../../assets/invite/resepsi/parts/florR.webp";
 import resPin from "../../assets/invite/resepsi/parts/pin.webp";
 
-const venue = "Rumah mempelai wanita";
-const address = "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330";
+import { computed } from "vue";
+import { useWedding } from "../../composables/useWedding";
+
+const { acara } = useWedding();
+
+function formatDate(dateStr?: string) {
+  if (!dateStr) return { day: "Saturday,", date: "19 April 2029" };
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return { day: "Saturday,", date: dateStr };
+    const dayName = d.toLocaleDateString("en-US", { weekday: "long" }) + ",";
+    const dateFormatted = d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+    return { day: dayName, date: dateFormatted };
+  } catch {
+    return { day: "Saturday,", date: dateStr };
+  }
+}
+
+const akadItem = computed(() => {
+  return acara.value.find((a: any) => a.type === 'akad' || a.title?.toLowerCase().includes('akad')) || acara.value[0] || null;
+});
+
+const resepsiItem = computed(() => {
+  return acara.value.find((a: any) => a.type === 'resepsi' || a.title?.toLowerCase().includes('resepsi')) || acara.value[1] || null;
+});
+
+const akadDateInfo = computed(() => formatDate(akadItem.value?.event_date));
+const resepsiDateInfo = computed(() => formatDate(resepsiItem.value?.event_date));
+
+const akadTitle = computed(() => akadItem.value?.title || "Akad Nikah");
+const akadTime = computed(() => akadItem.value?.event_time || "10.00 WIB - 12.00 WIB");
+const akadVenue = computed(() => akadItem.value?.location_name || "Rumah mempelai wanita");
+const akadAddress = computed(() => akadItem.value?.address || "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330");
+const akadMaps = computed(() => akadItem.value?.maps_url || "");
+
+const resepsiTitle = computed(() => resepsiItem.value?.title || "Resepsi");
+const resepsiTime = computed(() => resepsiItem.value?.event_time || "10.00 WIB - 12.00 WIB");
+const resepsiVenue = computed(() => resepsiItem.value?.location_name || "Rumah mempelai wanita");
+const resepsiAddress = computed(() => resepsiItem.value?.address || "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330");
+const resepsiMaps = computed(() => resepsiItem.value?.maps_url || "");
 </script>
 
 <template>
@@ -43,12 +81,13 @@ const address = "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecama
       :flor-l="akadFlorL"
       :flor-r="akadFlorR"
       :pin="akadPin"
-      title="Akad Nikah"
-      day="Saturday,"
-      date="19 April 2029"
-      time="10.00 WIB - 12.00 WIB"
-      :venue="venue"
-      :address="address"
+      :title="akadTitle"
+      :day="akadDateInfo.day"
+      :date="akadDateInfo.date"
+      :time="akadTime"
+      :venue="akadVenue"
+      :address="akadAddress"
+      :maps-url="akadMaps"
       overlap="-6.933%"
     />
     <div class="seam" aria-hidden="true" />
@@ -58,12 +97,13 @@ const address = "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecama
       :flor-l="resFlorL"
       :flor-r="resFlorR"
       :pin="resPin"
-      title="Resepsi"
-      day="Saturday,"
-      date="19 April 2029"
-      time="10.00 WIB - 12.00 WIB"
-      :venue="venue"
-      :address="address"
+      :title="resepsiTitle"
+      :day="resepsiDateInfo.day"
+      :date="resepsiDateInfo.date"
+      :time="resepsiTime"
+      :venue="resepsiVenue"
+      :address="resepsiAddress"
+      :maps-url="resepsiMaps"
       offset-x="1.333%"
     />
     <div class="seam" aria-hidden="true" />

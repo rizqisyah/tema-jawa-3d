@@ -33,8 +33,18 @@ const fullName = computed(() => {
   return bride.value?.name || 'Ayu Shella Pratni';
 });
 
-const fatherName = computed(() => props.fatherName || bride.value?.father_name || 'Heri');
-const motherName = computed(() => props.motherName || bride.value?.mother_name || 'Sofie');
+const parentText = computed(() => {
+  const b = bride.value;
+  if (b?.father_name && b?.mother_name) {
+    return `Putri dari Bapak ${b.father_name}\n& Ibu ${b.mother_name}`;
+  }
+  if (b?.father_name) return `Putri dari Bapak ${b.father_name}`;
+  if (b?.mother_name) return `Putri dari Ibu ${b.mother_name}`;
+  if (b?.child_of) return b.child_of;
+  const f = props.fatherName || 'Heri';
+  const m = props.motherName || 'Sofie';
+  return `Putri dari Bapak ${f}\n& Ibu ${m}`;
+});
 
 const layers = computed(() => [
   { src: bg, cls: "b-bg" },
@@ -64,7 +74,7 @@ const layers = computed(() => [
       <p class="b-script">{{ nickname }}</p>
       <img class="b-div" :src="divider" alt="" aria-hidden="true" />
       <p class="b-full">{{ fullName }}</p>
-      <p class="b-parents">Putri dari Bapak {{ fatherName }}<br />&amp; Ibu {{ motherName }}</p>
+      <p class="b-parents" style="white-space: pre-line;">{{ parentText }}</p>
     </div>
   </section>
 </template>

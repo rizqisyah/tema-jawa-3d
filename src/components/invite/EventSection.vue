@@ -15,6 +15,7 @@ const props = defineProps<{
   time: string;
   venue: string;
   address: string;
+  mapsUrl?: string;
   /** horizontal offset of this band's art vs the akad band, in % of section width */
   offsetX?: string;
   /** negative top margin when the band overlaps the section above */
@@ -31,8 +32,8 @@ const layers = () => [
   { src: props.florR, cls: "e-florR" },
 ];
 
-const mapsUrl = () =>
-  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(props.address)}`;
+const computedMapsUrl = () =>
+  props.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(props.address)}`;
 </script>
 
 <template>
@@ -59,7 +60,7 @@ const mapsUrl = () =>
     <img class="e-pin" :src="pin" alt="" aria-hidden="true" />
     <p class="e-venue">{{ venue }}</p>
     <p class="e-addr">{{ address }}</p>
-    <a class="e-maps" :href="mapsUrl()" target="_blank" rel="noopener noreferrer">Maps</a>
+    <a class="e-maps" :href="computedMapsUrl()" target="_blank" rel="noopener noreferrer">Maps</a>
   </section>
 </template>
 

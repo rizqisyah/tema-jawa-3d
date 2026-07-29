@@ -34,8 +34,18 @@ const fullName = computed(() => {
   return groom.value?.name || 'Antonio Josua Setiyadi';
 });
 
-const fatherName = computed(() => props.fatherName || groom.value?.father_name || 'Tono');
-const motherName = computed(() => props.motherName || groom.value?.mother_name || 'Ratna');
+const parentText = computed(() => {
+  const g = groom.value;
+  if (g?.father_name && g?.mother_name) {
+    return `Putra dari Bapak ${g.father_name}\n& Ibu ${g.mother_name}`;
+  }
+  if (g?.father_name) return `Putra dari Bapak ${g.father_name}`;
+  if (g?.mother_name) return `Putra dari Ibu ${g.mother_name}`;
+  if (g?.child_of) return g.child_of;
+  const f = props.fatherName || 'Tono';
+  const m = props.motherName || 'Ratna';
+  return `Putra dari Bapak ${f}\n& Ibu ${m}`;
+});
 
 // full-frame layers (band 375×730) — placed at inset:0, pixel-exact by construction
 const layers = computed(() => [
@@ -65,7 +75,7 @@ const layers = computed(() => [
       <p class="g-script">{{ nickname }}</p>
       <img class="g-div" :src="divider" alt="" aria-hidden="true" />
       <p class="g-full">{{ fullName }}</p>
-      <p class="g-parents">Putra dari Bapak {{ fatherName }}<br />&amp; Ibu {{ motherName }}</p>
+      <p class="g-parents" style="white-space: pre-line;">{{ parentText }}</p>
     </div>
   </section>
 </template>

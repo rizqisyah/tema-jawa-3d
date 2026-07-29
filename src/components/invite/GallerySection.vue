@@ -26,13 +26,22 @@ const layers = [
 // upper wood tone. This strip restores them, continuing the gift band's g-base downward.
 
 
-// the template ships the same shot in every slot; swap these for the real set
-const photos = [main, t1, t2, t3, t4];
+import { useWedding } from "../../composables/useWedding";
+
+const { gallery: apiGallery } = useWedding();
+
+const photos = computed(() => {
+  if (apiGallery.value && apiGallery.value.length > 0) {
+    return apiGallery.value.map((g: any) => g.file_path || g.url || g.image_url || g);
+  }
+  return [main, t1, t2, t3, t4];
+});
+
 const active = ref(0);
-const current = computed(() => photos[active.value]);
+const current = computed(() => photos.value[active.value % photos.value.length]);
 
 const step = (delta: number) => {
-  active.value = (active.value + delta + photos.length) % photos.length;
+  active.value = (active.value + delta + photos.value.length) % photos.value.length;
 };
 
 // --- lightbox: the in-band photo is only a preview, tapping it opens the full-size viewer ---
@@ -99,11 +108,11 @@ onBeforeUnmount(() => {
         v-for="(p, i) in photos.slice(1)"
         :key="i"
         class="gl-thumb"
-        :class="{ on: active === i + 1 }"
+        :class="{ on: active === Number(i) + 1 }"
         type="button"
-        :aria-label="`Lihat foto ${i + 2}`"
-        :aria-pressed="active === i + 1"
-        @click="active = i + 1"
+        :aria-label="`Lihat foto ${Number(i) + 2}`"
+        :aria-pressed="active === Number(i) + 1"
+        @click="active = Number(i) + 1"
       >
         <img :src="p" alt="" aria-hidden="true" />
       </button>

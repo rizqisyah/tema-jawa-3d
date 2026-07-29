@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Per-asset wedding gift section. Carved frame + gold panel are art; every account row is live DOM.
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import bg from "../../assets/invite/gift/parts/bg.webp";
 import base from "../../assets/invite/gift/parts/base.webp";
 import florL from "../../assets/invite/gift/parts/florL.webp";
@@ -8,33 +8,38 @@ import florR from "../../assets/invite/gift/parts/florR.webp";
 import divider from "../../assets/invite/gift/parts/divider.webp";
 import bca from "../../assets/invite/gift/parts/bca.webp";
 import { useReveal } from "../../composables/useReveal";
+import { useWedding } from "../../composables/useWedding";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-// full-frame layers (band 375×861, Figma rel 5209–6070) — inset:0, pixel-exact by construction
+const { gift: apiGift } = useWedding();
+
 const layers = [
   { src: bg, cls: "g-bg" },
   { src: florL, cls: "g-florL" },
   { src: florR, cls: "g-florR" },
 ];
 
-// bg.webp stops at flat olive where the design still carries the carved frame's lower half —
-// the mirrored crown, its finial and the fountain's top tier all live below y 5845 and were
-// lost when the band was cut. This strip restores that region verbatim from the design.
-
-
-// the template ships two identical BCA rows; each keeps its own copy state
-const accounts = [
-  { bank: "BCA", number: "8715154435", holder: "Muhammad Arif" },
-  { bank: "BCA", number: "8715154435", holder: "Muhammad Arif" },
-];
+const accounts = computed(() => {
+  if (apiGift.value && apiGift.value.length > 0) {
+    return apiGift.value.map((g: any) => ({
+      bank: g.bank_name || g.bank || 'BCA',
+      number: g.account_number || g.no_rekening || g.number || '',
+      holder: g.account_name || g.nama_rekening || g.holder || ''
+    }));
+  }
+  return [
+    { bank: "BCA", number: "8715154435", holder: "Muhammad Arif" },
+    { bank: "BCA", number: "8715154435", holder: "Muhammad Arif" },
+  ];
+});
 
 const copied = ref<number | null>(null);
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 async function copy(index: number) {
-  const text = accounts[index].number;
+  const text = accounts.value[index]?.number || '';
   try {
     await navigator.clipboard.writeText(text);
   } catch {
@@ -78,7 +83,7 @@ async function copy(index: number) {
       <img class="g-bca" :src="bca" :alt="a.bank" />
       <p class="g-no">No. Rekening : {{ a.number }}</p>
       <p class="g-holder">A/n {{ a.holder }}</p>
-      <button class="g-copy" type="button" @click="copy(i)">
+      <button class="g-copy" type="button" @click="copy(Number(i))">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path
             d="M9 9V5.25A2.25 2.25 0 0 1 11.25 3h7.5A2.25 2.25 0 0 1 21 5.25v7.5A2.25 2.25 0 0 1 18.75 15H15M5.25 9h7.5A2.25 2.25 0 0 1 15 11.25v7.5A2.25 2.25 0 0 1 12.75 21h-7.5A2.25 2.25 0 0 1 3 18.75v-7.5A2.25 2.25 0 0 1 5.25 9Z"

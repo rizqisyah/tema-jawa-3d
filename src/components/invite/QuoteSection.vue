@@ -27,14 +27,24 @@ const layers = [
   { src: mumR, cls: "q-mumR" },
 ];
 
-const arabic =
-  "وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ";
-const translation =
-  "“Di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri agar kamu merasa tenteram kepadanya. Dia menjadikan di antaramu rasa cinta dan kasih sayang. Sesungguhnya pada yang demikian itu benar-benar terdapat tanda-tanda kebesaran Allah bagi kaum yang berpikir.”";
+import { computed } from "vue";
+import { useWedding } from "../../composables/useWedding";
+
+const { quoteText, quoteVerse, wedding } = useWedding();
+
+const arabic = computed(() => {
+  return (
+    wedding.value?.theme_override?.quote?.arabic ||
+    "وَمِنْ اٰيٰتِهٖٓ اَنْ خَلَقَ لَكُمْ مِّنْ اَنْفُسِكُمْ اَزْوَاجًا لِّتَسْكُنُوْٓا اِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَّوَدَّةً وَّرَحْمَةًۗ اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ"
+  );
+});
+
+const verseTitle = computed(() => quoteVerse.value || "QS Ar-Rum 21");
+const translation = computed(() => quoteText.value);
 </script>
 
 <template>
-  <section ref="el" class="quote" :class="{ shown }" aria-label="Kutipan QS Ar-Rum 21">
+  <section ref="el" class="quote" :class="{ shown }" :aria-label="'Kutipan ' + verseTitle">
     <img
       v-for="l in layers"
       :key="l.cls"
@@ -50,7 +60,7 @@ const translation =
     <img class="q-seal" :src="seal" alt="" aria-hidden="true" />
 
     <div class="quote__text">
-      <h2 class="q-title">QS Ar-Rum 21</h2>
+      <h2 class="q-title">{{ verseTitle }}</h2>
       <p class="q-arabic" dir="rtl" lang="ar">{{ arabic }}</p>
       <p class="q-transl">{{ translation }}</p>
     </div>

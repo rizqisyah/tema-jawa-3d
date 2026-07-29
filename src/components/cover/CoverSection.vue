@@ -25,8 +25,8 @@ const props = withDefaults(
 
 const { bride: brideData, groom: groomData } = useWedding();
 
-const brideName = computed(() => props.bride || brideData.value?.name?.split(' ')[0] || "Allysa");
-const groomName = computed(() => props.groom || groomData.value?.name?.split(' ')[0] || "Antonio");
+const brideName = computed(() => props.bride || brideData.value?.nickname || brideData.value?.name?.split(' ')[0] || "Allysa");
+const groomName = computed(() => props.groom || groomData.value?.nickname || groomData.value?.name?.split(' ')[0] || "Antonio");
 
 defineEmits<{ open: [] }>();
 

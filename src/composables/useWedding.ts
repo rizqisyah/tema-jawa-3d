@@ -79,20 +79,33 @@ export function useWedding() {
   const wedding = computed(() => state.value.data?.wedding ?? null)
   const theme = computed(() => state.value.data?.theme ?? null)
   const guest = computed(() => state.value.data?.guest ?? null)
-  const pengantin = computed(() => state.value.data?.pengantin ?? [])
-  const acara = computed(() => state.value.data?.acara ?? [])
-  const gallery = computed(() => state.value.data?.gallery ?? [])
-  const gift = computed(() => state.value.data?.gift ?? [])
-  const wishes = computed(() => state.value.data?.wishes ?? [])
+  const content = computed(() => state.value.data?.content ?? null)
 
-  const groom = computed(() => pengantin.value.find((p: any) => p.type === 'groom') || null)
-  const bride = computed(() => pengantin.value.find((p: any) => p.type === 'bride') || null)
+  const pengantin = computed(() => content.value?.pengantin ?? state.value.data?.pengantin ?? [])
+  const acara = computed(() => content.value?.acara ?? state.value.data?.acara ?? [])
+  const gallery = computed(() => content.value?.gallery ?? state.value.data?.gallery ?? [])
+  const gift = computed(() => content.value?.gift ?? content.value?.rekening ?? state.value.data?.gift ?? state.value.data?.rekening ?? [])
+  const wishes = computed(() => content.value?.wishes ?? content.value?.ucapan ?? state.value.data?.wishes ?? state.value.data?.ucapan ?? [])
+
+  const groom = computed(() => {
+    return pengantin.value.find((p: any) => 
+      p.type?.toLowerCase() === 'groom' || p.type?.toLowerCase() === 'pria'
+    ) ?? pengantin.value[0] ?? null
+  })
+
+  const bride = computed(() => {
+    return pengantin.value.find((p: any) => 
+      p.type?.toLowerCase() === 'bride' || p.type?.toLowerCase() === 'wanita'
+    ) ?? pengantin.value[1] ?? null
+  })
 
   const coupleNickname = computed(() => {
-    if (wedding.value?.title) return wedding.value.title
-    if (groom.value?.name && bride.value?.name) {
-      return `${groom.value.name.split(' ')[0]} & ${bride.value.name.split(' ')[0]}`
+    const groomNick = groom.value?.nickname?.trim() || (groom.value?.name ? groom.value.name.split(' ')[0] : '')
+    const brideNick = bride.value?.nickname?.trim() || (bride.value?.name ? bride.value.name.split(' ')[0] : '')
+    if (groomNick && brideNick) {
+      return `${groomNick} & ${brideNick}`
     }
+    if (wedding.value?.title) return wedding.value.title
     return 'Pengantin'
   })
 

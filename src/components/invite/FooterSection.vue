@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // Per-asset closing footer: thank-you note, credits, socials and the bottom nav bar.
 import bg from "../../assets/invite/footer/parts/bg.webp";
-import panel from "../../assets/invite/footer/parts/panel.png";
 import florL from "../../assets/invite/footer/parts/florL.png";
 import florR from "../../assets/invite/footer/parts/florR.png";
 import divider from "../../assets/invite/footer/parts/divider.png";
@@ -14,7 +13,6 @@ defineExpose({ el });
 
 const layers = [
   { src: bg, cls: "f-bg" },
-  { src: panel, cls: "f-panel" },
   { src: florL, cls: "f-florL" },
   { src: florR, cls: "f-florR" },
 ];
@@ -70,17 +68,12 @@ const layers = [
   will-change: transform, opacity;
 }
 
-/* z-order back → front */
+/* z-order back → front. bg.webp is the full band re-sliced from Figma with the
+   bouquets hidden, so the crimson already sits over the moss the way the design
+   layers it; the sprays are the only thing that has to ride on top. */
 .f-bg { z-index: 0; }
-.f-panel {
-   z-index: 1;
-  height: auto;
-  bottom: auto;
-  object-fit: cover;
-  /* corners cut out: the coral sprays there belong in FRONT of the crimson, and bg.webp
-     still paints the same red underneath them, so nothing is lost */
-  clip-path: polygon(21% 1px, 81% -6px, 80% 67%, 76% 42%, 99% 100%, 0px 100%, 0px 100%, 18.22% 70.29%);
-}
+.f-florL,
+.f-florR { z-index: 1; }
 
 
 
@@ -180,8 +173,7 @@ const layers = [
 }
 
 /* ===== per-asset entrances, gated on scroll-in ===== */
-.f-bg,
-.f-panel { opacity: 1; } /* base stays painted — no rectangle pop */
+.f-bg { opacity: 1; } /* base stays painted — no rectangle pop */
 .foot.shown .f-florL { transform-origin: 0 0; animation: ftDropL 1.25s cubic-bezier(0.16,1,0.3,1) 0.14s both; }
 .foot.shown .f-florR { transform-origin: 100% 0; animation: ftDropR 1.25s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .foot.shown .f-div { transform-origin: 50% 50%; animation: ftDiv 0.62s ease 0.2s both; }

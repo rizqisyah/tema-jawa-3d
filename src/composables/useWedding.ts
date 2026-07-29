@@ -45,6 +45,12 @@ export function useWedding() {
     state.value.error = null
     try {
       const data = await getHome(slug.value, guestCode.value)
+      if (!data || !data.wedding) {
+        throw new Error('Undangan ini bersifat privat dan hanya dapat diakses melalui link resmi.')
+      }
+      if (guestCode.value && !data.guest) {
+        throw new Error('Undangan ini bersifat privat dan hanya dapat diakses melalui link resmi.')
+      }
       state.value.data = data
       if (data?.theme || data?.wedding) {
         applyTheme(data.theme, data.wedding)
@@ -54,7 +60,11 @@ export function useWedding() {
       }
     } catch (err: any) {
       console.error('Failed to load wedding data:', err)
-      state.value.error = err.message
+      let msg = err instanceof Error ? err.message : 'Undangan ini bersifat privat dan hanya dapat diakses melalui link resmi.'
+      if (msg.includes('404') || msg.includes('not found') || msg.includes('Request failed')) {
+        msg = 'Undangan ini bersifat privat dan hanya dapat diakses melalui link resmi.'
+      }
+      state.value.error = msg
     } finally {
       state.value.loading = false
     }

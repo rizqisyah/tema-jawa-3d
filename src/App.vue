@@ -9,7 +9,7 @@ import BottomNav from './components/sections/BottomNav.vue'
 const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
-const { wedding, coupleNickname, quoteText, quoteVerse } = useWedding()
+const { wedding, coupleNickname, quoteText, quoteVerse, guest, error } = useWedding()
 const { preloadCover, preloadInviteBody } = usePreloadAssets()
 
 onMounted(async () => {
@@ -18,6 +18,9 @@ onMounted(async () => {
 })
 
 const guestName = computed(() => {
+  if (guest.value?.guest_name) {
+    return guest.value.guest_name
+  }
   const urlParam = new URLSearchParams(location.search).get('to')
   return urlParam || 'Nama Tamu'
 })
@@ -58,21 +61,32 @@ const leftBackgroundStyle = computed(() => {
     </div>
 
     <!-- Right Column / Invitation Canvas -->
-    <div class="desktop-right-column" :class="{ 'is-locked': isLocked }">
-      <Transition name="splash" @after-leave="onSplashLeave">
-        <CoverSection v-if="!isOpen" :guest-name="guestName" @open="openInvitation" />
-      </Transition>
-
-      <div
-        v-show="isOpen"
-        id="invite"
-        class="invitation-content"
-        :class="{ 'is-visible': contentVisible }"
-      >
-        <InviteBody />
+    <div class="desktop-right-column" :class="{ 'is-locked': isLocked || error }">
+      <!-- Error / Restricted State Overlay -->
+      <div v-if="error" class="restricted-overlay">
+        <div class="restricted-box">
+          <div class="restricted-icon">🔒</div>
+          <h2 class="restricted-title">Akses Terbatas</h2>
+          <p class="restricted-message">{{ error }}</p>
+        </div>
       </div>
 
-      <BottomNav v-if="isOpen" />
+      <template v-else>
+        <Transition name="splash" @after-leave="onSplashLeave">
+          <CoverSection v-if="!isOpen" :guest-name="guestName" @open="openInvitation" />
+        </Transition>
+
+        <div
+          v-show="isOpen"
+          id="invite"
+          class="invitation-content"
+          :class="{ 'is-visible': contentVisible }"
+        >
+          <InviteBody />
+        </div>
+
+        <BottomNav v-if="isOpen" />
+      </template>
     </div>
   </main>
 </template>
@@ -224,5 +238,74 @@ const leftBackgroundStyle = computed(() => {
     overflow: hidden !important;
     height: 100vh;
   }
+}
+
+/* Restricted access overlay */
+.restricted-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: var(--bg-body, #efe7dc);
+  padding: 24px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.restricted-box {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(144, 2, 2, 0.2);
+  border-radius: 24px;
+  padding: 40px 24px;
+  max-width: 320px;
+  box-shadow: 0 8px 32px rgba(144, 2, 2, 0.1);
+  animation: restrict-fade-in 0.6s ease-out forwards;
+}
+
+@keyframes restrict-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.restricted-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: lock-bounce 2s ease-in-out infinite alternate;
+}
+
+@keyframes lock-bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+.restricted-title {
+  font-family: var(--font-hand, "Playball", serif);
+  font-size: 24px;
+  color: var(--maroon-title, #900202);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.restricted-message {
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--maroon-text, #961a1a);
+  line-height: 1.6;
+  margin: 0;
 }
 </style>

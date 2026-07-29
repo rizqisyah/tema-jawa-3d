@@ -379,7 +379,7 @@ const sparkles = [
   top: 22.9%;
   font-family: var(--font-script);
   font-weight: 400;
-  font-size: 17.07cqw;
+  font-size: 13.07cqw;
   line-height: 13.87cqw;
   opacity: 0;
 }

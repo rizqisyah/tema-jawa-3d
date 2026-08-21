@@ -27,7 +27,7 @@ const couplePhoto = computed(() => wedding.value?.image_cover || wedding.value?.
 // hero band reference = 375 × 780 (Figma render units). Each asset placed by its bounds.
 type Part = { src: string; cls: string; l: number; t: number; w: number };
 const parts = computed<Part[]>(() => [
-  { src: landscape1, cls: "p-land", l: -5.07, t: 2.18, w: 110.4 },
+  { src: landscape1, cls: "p-land", l: 0, t: 0, w: 110.4 },
   { src: landscape2, cls: "p-land", l: -5.07, t: 84.1, w: 110.4 },
   { src: joglo, cls: "p-joglo", l: 0.4, t: 61.15, w: 100.0 },
   { src: frame, cls: "p-frame", l: 9.07, t: 10.0, w: 82.1 },

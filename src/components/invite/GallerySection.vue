@@ -38,9 +38,13 @@ const photos = computed(() => {
 });
 
 const active = ref(0);
-const current = computed(() => photos.value[active.value % photos.value.length]);
+const current = computed(() => {
+  if (!photos.value || photos.value.length === 0) return '';
+  return photos.value[active.value % photos.value.length];
+});
 
 const step = (delta: number) => {
+  if (!photos.value || photos.value.length === 0) return;
   active.value = (active.value + delta + photos.value.length) % photos.value.length;
 };
 

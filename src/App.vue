@@ -10,8 +10,13 @@ import scenery from './assets/cover/scenery.webp'
 const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
-const { wedding, coupleNickname, quoteText, quoteVerse, guest, error, bride, groom } = useWedding()
+const { wedding, coupleNickname, quoteText, quoteVerse, guest, error, bride, groom, refetch } = useWedding()
 const { preloadCover, preloadInviteBody } = usePreloadAssets()
+
+const isAccessDenied = computed(() => {
+  const err = error.value?.toLowerCase() || ''
+  return err.includes('privat') || err.includes('akses') || err.includes('terdaftar')
+})
 
 onMounted(async () => {
   await preloadCover()
@@ -79,9 +84,12 @@ const leftBackgroundStyle = computed(() => {
       <!-- Error / Restricted State Overlay -->
       <div v-if="error" class="restricted-overlay">
         <div class="restricted-box">
-          <div class="restricted-icon">🔒</div>
-          <h2 class="restricted-title">Akses Terbatas</h2>
+          <div class="restricted-icon">{{ isAccessDenied ? '🔒' : '⚠️' }}</div>
+          <h2 class="restricted-title">{{ isAccessDenied ? 'Akses Terbatas' : 'Gagal Memuat' }}</h2>
           <p class="restricted-message">{{ error }}</p>
+          <button v-if="!isAccessDenied" type="button" class="retry-button" @click="refetch">
+            Coba Lagi
+          </button>
         </div>
       </div>
 
@@ -321,5 +329,29 @@ const leftBackgroundStyle = computed(() => {
   color: var(--maroon-text, #961a1a);
   line-height: 1.6;
   margin: 0;
+}
+
+.retry-button {
+  margin-top: 20px;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  border: none;
+  background: var(--maroon-title, #900202);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(144, 2, 2, 0.25);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.retry-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.retry-button:active {
+  transform: translateY(0);
 }
 </style>

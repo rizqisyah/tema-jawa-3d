@@ -19,7 +19,7 @@ const props = defineProps<{
   motherName?: string;
 }>();
 
-const { bride } = useWedding();
+const { bride, parsedOverride } = useWedding();
 
 const nickname = computed(() => {
   if (props.nickname) return props.nickname;
@@ -46,17 +46,35 @@ const parentText = computed(() => {
   return `Putri dari Bapak ${f}\n& Ibu ${m}`;
 });
 
-const layers = computed(() => [
+const customPhoto = computed(() => {
+  return (
+    bride.value?.photo_url ||
+    parsedOverride.value?.images?.foto_mempelai_wanita ||
+    parsedOverride.value?.images?.foto_wanita ||
+    parsedOverride.value?.images?.bride ||
+    ''
+  );
+});
+
+const isCustomPhoto = computed(() => Boolean(customPhoto.value));
+
+const customImageStyle = computed(() => ({
+  objectPosition: `${parsedOverride.value?.foto_wanita_transform?.x ?? 50}% ${parsedOverride.value?.foto_wanita_transform?.y ?? 20}%`,
+  transform: parsedOverride.value?.foto_wanita_transform?.scale && parsedOverride.value.foto_wanita_transform.scale !== 1
+    ? `scale(${parsedOverride.value.foto_wanita_transform.scale})`
+    : undefined,
+}));
+
+const backgroundLayers = [
   { src: bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
-  { src: bride.value?.photo_url || portrait, cls: "b-portrait" },
-]);
+];
 </script>
 
 <template>
   <section ref="el" class="bride" :class="{ shown }" :aria-label="'Mempelai wanita — ' + nickname">
     <img
-      v-for="l in layers"
+      v-for="l in backgroundLayers"
       :key="l.cls"
       class="bride__layer"
       :class="l.cls"
@@ -64,6 +82,30 @@ const layers = computed(() => [
       alt=""
       aria-hidden="true"
     />
+
+    <!-- Fallback default sample portrait (full-bleed band) -->
+    <img
+      v-if="!isCustomPhoto"
+      class="bride__layer b-portrait"
+      :src="portrait"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <!-- Custom Dynamic Photo with Adaptive Arch Slot -->
+    <div
+      v-else
+      class="b-portrait-slot"
+      aria-label="Foto Mempelai Wanita"
+    >
+      <img
+        class="b-custom-img"
+        :src="customPhoto"
+        :style="customImageStyle"
+        alt="Mempelai Wanita"
+      />
+    </div>
+
     <img class="bride__layer b-front" :src="front" alt="" aria-hidden="true" />
 
     <div class="bride__amp">
@@ -105,6 +147,35 @@ const layers = computed(() => [
 .b-bg { z-index: 0; }
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
+
+/* Dynamic custom photo slot with classic Javanese arch frame */
+.b-portrait-slot {
+  position: absolute;
+  z-index: 2;
+  left: 46%;
+  top: 28%;
+  width: 50%;
+  aspect-ratio: 429 / 677;
+  border-radius: 999px 999px 16px 16px;
+  overflow: hidden;
+  border: 2px solid rgba(217, 191, 157, 0.45);
+  box-shadow: 0 8px 24px rgba(70, 45, 20, 0.18);
+  background-color: #dfd7c2;
+  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.b-custom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center center;
+}
+
 .b-front {
   z-index: 3;
   inset: auto;
@@ -173,7 +244,8 @@ const layers = computed(() => [
 .b-bg { opacity: 1; }
 .bride.shown .b-flor,
 .bride.shown .b-front { transform-origin: 50% 100%; animation: bBloom 1.4s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
-.bride.shown .b-portrait { transform-origin: 50% 100%; animation: bRisePortrait 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.bride.shown .b-portrait,
+.bride.shown .b-portrait-slot { transform-origin: 50% 100%; animation: bRisePortrait 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 
 .bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
 
@@ -190,7 +262,7 @@ const layers = computed(() => [
 @keyframes bDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes bRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .bride__layer, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
+  .bride__layer, .b-portrait-slot, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
   .bride__name { transform: translateX(-50%); }

@@ -5,11 +5,6 @@ import bg from "../../assets/invite/gallery/parts/bg.webp";
 import base from "../../assets/invite/gallery/parts/base.webp";
 import florL from "../../assets/invite/gallery/parts/florL.webp";
 import florR from "../../assets/invite/gallery/parts/florR.webp";
-import main from "../../assets/invite/gallery/parts/main.webp";
-import t1 from "../../assets/invite/gallery/parts/t1.webp";
-import t2 from "../../assets/invite/gallery/parts/t2.webp";
-import t3 from "../../assets/invite/gallery/parts/t3.webp";
-import t4 from "../../assets/invite/gallery/parts/t4.webp";
 import { useReveal } from "../../composables/useReveal";
 
 const { el, shown } = useReveal(0.08);
@@ -31,10 +26,17 @@ import { useWedding } from "../../composables/useWedding";
 const { gallery: apiGallery } = useWedding();
 
 const photos = computed(() => {
-  if (apiGallery.value && apiGallery.value.length > 0) {
-    return apiGallery.value.map((g: any) => g.file_path || g.url || g.image_url || g);
+  const list = apiGallery.value;
+  if (Array.isArray(list) && list.length > 0) {
+    const urls = list
+      .map((g: any) => {
+        if (typeof g === 'string') return g;
+        return g.image_url || g.url || g.file_path || '';
+      })
+      .filter(Boolean);
+    if (urls.length > 0) return urls;
   }
-  return [main, t1, t2, t3, t4];
+  return [];
 });
 
 const active = ref(0);
@@ -70,7 +72,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="el" class="gallery" :class="{ shown }" aria-labelledby="gallery-title">
+  <section
+    v-if="photos.length > 0"
+    ref="el"
+    class="gallery"
+    :class="{ shown }"
+    aria-labelledby="gallery-title"
+  >
     <img
       v-for="l in layers"
       :key="l.cls"
@@ -100,23 +108,23 @@ onBeforeUnmount(() => {
       </span>
     </button>
 
-    <button class="gl-nav gl-prev" type="button" aria-label="Foto sebelumnya" @click="step(-1)">
+    <button v-if="photos.length > 1" class="gl-nav gl-prev" type="button" aria-label="Foto sebelumnya" @click="step(-1)">
       <span aria-hidden="true">‹</span>
     </button>
-    <button class="gl-nav gl-next" type="button" aria-label="Foto berikutnya" @click="step(1)">
+    <button v-if="photos.length > 1" class="gl-nav gl-next" type="button" aria-label="Foto berikutnya" @click="step(1)">
       <span aria-hidden="true">›</span>
     </button>
 
-    <div class="gl-thumbs">
+    <div v-if="photos.length > 1" class="gl-thumbs">
       <button
-        v-for="(p, i) in photos.slice(1)"
+        v-for="(p, i) in photos"
         :key="i"
         class="gl-thumb"
-        :class="{ on: active === Number(i) + 1 }"
+        :class="{ on: active === i }"
         type="button"
-        :aria-label="`Lihat foto ${Number(i) + 2}`"
-        :aria-pressed="active === Number(i) + 1"
-        @click="active = Number(i) + 1"
+        :aria-label="`Lihat foto ${i + 1}`"
+        :aria-pressed="active === i"
+        @click="active = i"
       >
         <img :src="p" alt="" aria-hidden="true" />
       </button>
@@ -127,7 +135,7 @@ onBeforeUnmount(() => {
   <Teleport to="body">
     <Transition name="lb">
       <div
-        v-if="zoomed"
+        v-if="zoomed && photos.length > 0"
         class="lb"
         role="dialog"
         aria-modal="true"
@@ -291,15 +299,27 @@ onBeforeUnmount(() => {
 .gl-nav:active { transform: scale(0.95); }
 
 .gl-thumbs {
-  left: 10.13%;
+  position: absolute;
+  left: 6%;
   top: 76.65%;
-  width: 77.07%;
+  width: 88%;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5cqw;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 6px;
+  box-sizing: border-box;
+}
+.gl-thumbs::-webkit-scrollbar {
+  display: none;
 }
 .gl-thumb {
-  width: 23.9%; /* 69/288 of the strip */
-  aspect-ratio: 69 / 71;
+  flex: 0 0 19%;
+  max-width: 68px;
+  aspect-ratio: 1;
   padding: 0;
   border: 0;
   border-radius: 50%;

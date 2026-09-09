@@ -178,9 +178,13 @@ export function useWedding() {
 
   const pengantin = computed(() => content.value?.pengantin ?? state.value.data?.pengantin ?? [])
   const acara = computed(() => content.value?.acara ?? state.value.data?.acara ?? [])
-  const gallery = computed(() => content.value?.gallery ?? state.value.data?.gallery ?? [])
   const gift = computed(() => content.value?.gift ?? content.value?.rekening ?? state.value.data?.gift ?? state.value.data?.rekening ?? [])
   const wishes = computed(() => content.value?.wishes ?? content.value?.ucapan ?? state.value.data?.wishes ?? state.value.data?.ucapan ?? [])
+
+  const isGroomFirst = computed(() => {
+    if (!wedding.value) return true
+    return wedding.value.order_groom_first !== false
+  })
 
   const groom = computed(() => {
     return pengantin.value.find((p: any) => 
@@ -198,7 +202,7 @@ export function useWedding() {
     const groomNick = groom.value?.nickname?.trim() || (groom.value?.name ? groom.value.name.split(' ')[0] : '')
     const brideNick = bride.value?.nickname?.trim() || (bride.value?.name ? bride.value.name.split(' ')[0] : '')
     if (groomNick && brideNick) {
-      return `${groomNick} & ${brideNick}`
+      return isGroomFirst.value ? `${groomNick} & ${brideNick}` : `${brideNick} & ${groomNick}`
     }
     if (wedding.value?.title) return wedding.value.title
     return 'Pengantin'
@@ -210,6 +214,28 @@ export function useWedding() {
       try { ov = JSON.parse(ov) } catch { ov = {} }
     }
     return ov || {}
+  })
+
+  const gallery = computed(() => {
+    const list = content.value?.gallery ?? state.value.data?.gallery ?? parsedOverride.value?.gallery ?? []
+    return Array.isArray(list) ? list : []
+  })
+
+  const couplePhoto = computed(() => {
+    let ov = parsedOverride.value
+    return (
+      wedding.value?.image_spouse ||
+      wedding.value?.['image-spouse'] ||
+      content.value?.image_spouse ||
+      ov?.images?.image_spouse ||
+      ov?.images?.['image-spouse'] ||
+      ov?.images?.foto_pasangan ||
+      ov?.images?.foto_mempelai_setelah_buka ||
+      theme.value?.theme_config?.images?.image_spouse ||
+      wedding.value?.image_cover ||
+      wedding.value?.image_bg1 ||
+      ''
+    )
   })
 
   const quoteText = computed(() => 
@@ -239,7 +265,9 @@ export function useWedding() {
     wishes,
     groom,
     bride,
+    isGroomFirst,
     coupleNickname,
+    couplePhoto,
     parsedOverride,
     quoteText,
     quoteVerse,

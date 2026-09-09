@@ -26,7 +26,11 @@ import resPin from "../../assets/invite/resepsi/parts/pin.webp";
 import { computed } from "vue";
 import { useWedding } from "../../composables/useWedding";
 
-const { acara } = useWedding();
+const { acara, gallery } = useWedding();
+
+const hasGallery = computed(() => {
+  return Array.isArray(gallery.value) && gallery.value.length > 0;
+});
 
 function formatDate(dateStr?: string) {
   if (!dateStr) return { day: "Saturday,", date: "19 April 2029" };
@@ -41,28 +45,70 @@ function formatDate(dateStr?: string) {
   }
 }
 
-const akadItem = computed(() => {
-  return acara.value.find((a: any) => a.type === 'akad' || a.title?.toLowerCase().includes('akad')) || acara.value[0] || null;
+const events = computed(() => {
+  if (acara.value && acara.value.length > 0) {
+    return acara.value.map((item: any, idx: number) => {
+      const isEven = idx % 2 === 1;
+      const dateInfo = formatDate(item.event_date);
+      return {
+        id: item.id || `event-${idx}`,
+        title: item.title || (isEven ? "Resepsi" : "Akad Nikah"),
+        day: dateInfo.day,
+        date: dateInfo.date,
+        time: item.event_time || (isEven ? "13.00 WIB - 17.00 WIB" : "09.00 WIB - 11.00 WIB"),
+        venue: item.location_name || "Lokasi Acara",
+        address: item.address || "",
+        mapsUrl: item.maps_url || "",
+        bg: isEven ? resBg : akadBg,
+        frame: isEven ? resFrame : akadFrame,
+        florL: isEven ? resFlorL : akadFlorL,
+        florR: isEven ? resFlorR : akadFlorR,
+        pin: isEven ? resPin : akadPin,
+        overlap: idx === 0 ? "-6.933%" : undefined,
+        offsetX: isEven ? "1.333%" : undefined,
+      };
+    });
+  }
+
+  const defAkad = formatDate("2029-04-19");
+  const defRes = formatDate("2029-04-19");
+  return [
+    {
+      id: "default-akad",
+      title: "Akad Nikah",
+      day: defAkad.day,
+      date: defAkad.date,
+      time: "10.00 WIB - 12.00 WIB",
+      venue: "Rumah mempelai wanita",
+      address: "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330",
+      mapsUrl: "",
+      bg: akadBg,
+      frame: akadFrame,
+      florL: akadFlorL,
+      florR: akadFlorR,
+      pin: akadPin,
+      overlap: "-6.933%",
+      offsetX: undefined,
+    },
+    {
+      id: "default-resepsi",
+      title: "Resepsi",
+      day: defRes.day,
+      date: defRes.date,
+      time: "10.00 WIB - 12.00 WIB",
+      venue: "Rumah mempelai wanita",
+      address: "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330",
+      mapsUrl: "",
+      bg: resBg,
+      frame: resFrame,
+      florL: resFlorL,
+      florR: resFlorR,
+      pin: resPin,
+      overlap: undefined,
+      offsetX: "1.333%",
+    },
+  ];
 });
-
-const resepsiItem = computed(() => {
-  return acara.value.find((a: any) => a.type === 'resepsi' || a.title?.toLowerCase().includes('resepsi')) || acara.value[1] || null;
-});
-
-const akadDateInfo = computed(() => formatDate(akadItem.value?.event_date));
-const resepsiDateInfo = computed(() => formatDate(resepsiItem.value?.event_date));
-
-const akadTitle = computed(() => akadItem.value?.title || "Akad Nikah");
-const akadTime = computed(() => akadItem.value?.event_time || "10.00 WIB - 12.00 WIB");
-const akadVenue = computed(() => akadItem.value?.location_name || "Rumah mempelai wanita");
-const akadAddress = computed(() => akadItem.value?.address || "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330");
-const akadMaps = computed(() => akadItem.value?.maps_url || "");
-
-const resepsiTitle = computed(() => resepsiItem.value?.title || "Resepsi");
-const resepsiTime = computed(() => resepsiItem.value?.event_time || "10.00 WIB - 12.00 WIB");
-const resepsiVenue = computed(() => resepsiItem.value?.location_name || "Rumah mempelai wanita");
-const resepsiAddress = computed(() => resepsiItem.value?.address || "Jl. Melati Raya No. 27, RT 004/RW 006, Kelurahan Cikini, Kecamatan Menteng, Jakarta Pusat, DKI Jakarta 10330");
-const resepsiMaps = computed(() => resepsiItem.value?.maps_url || "");
 </script>
 
 <template>
@@ -75,40 +121,28 @@ const resepsiMaps = computed(() => resepsiItem.value?.maps_url || "");
     <div class="seam" aria-hidden="true" />
     <SaveDateSection />
     <div class="seam" aria-hidden="true" />
-    <EventSection
-      :bg="akadBg"
-      :frame="akadFrame"
-      :flor-l="akadFlorL"
-      :flor-r="akadFlorR"
-      :pin="akadPin"
-      :title="akadTitle"
-      :day="akadDateInfo.day"
-      :date="akadDateInfo.date"
-      :time="akadTime"
-      :venue="akadVenue"
-      :address="akadAddress"
-      :maps-url="akadMaps"
-      overlap="-6.933%"
-    />
-    <div class="seam" aria-hidden="true" />
-    <EventSection
-      :bg="resBg"
-      :frame="resFrame"
-      :flor-l="resFlorL"
-      :flor-r="resFlorR"
-      :pin="resPin"
-      :title="resepsiTitle"
-      :day="resepsiDateInfo.day"
-      :date="resepsiDateInfo.date"
-      :time="resepsiTime"
-      :venue="resepsiVenue"
-      :address="resepsiAddress"
-      :maps-url="resepsiMaps"
-      offset-x="1.333%"
-    />
+    <template v-for="(ev, idx) in events" :key="ev.id">
+      <div v-if="Number(idx) > 0" class="seam" aria-hidden="true" />
+      <EventSection
+        :bg="ev.bg"
+        :frame="ev.frame"
+        :flor-l="ev.florL"
+        :flor-r="ev.florR"
+        :pin="ev.pin"
+        :title="ev.title"
+        :day="ev.day"
+        :date="ev.date"
+        :time="ev.time"
+        :venue="ev.venue"
+        :address="ev.address"
+        :maps-url="ev.mapsUrl"
+        :overlap="ev.overlap"
+        :offset-x="ev.offsetX"
+      />
+    </template>
     <div class="seam" aria-hidden="true" />
     <GiftSection />
-    <GallerySection />
+    <GallerySection v-if="hasGallery" />
     <RsvpSection />
     <ClosingPortraitSection />
     <WishSection />

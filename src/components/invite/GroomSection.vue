@@ -20,7 +20,20 @@ const props = defineProps<{
   motherName?: string;
 }>();
 
-const { groom } = useWedding();
+const { groom, wedding, coupleNickname, parsedOverride } = useWedding();
+
+const headerTitle = computed(() => {
+  const title = wedding.value?.title?.trim() || coupleNickname.value || 'Antonio & Allysa';
+  if (title.includes(' & ')) {
+    const parts = title.split(' & ');
+    return `${parts[0]} &<br />${parts.slice(1).join(' & ')}`;
+  }
+  if (title.includes(' and ')) {
+    const parts = title.split(' and ');
+    return `${parts[0]} &<br />${parts.slice(1).join(' and ')}`;
+  }
+  return title;
+});
 
 const nickname = computed(() => {
   if (props.nickname) return props.nickname;
@@ -47,20 +60,38 @@ const parentText = computed(() => {
   return `Putra dari Bapak ${f}\n& Ibu ${m}`;
 });
 
-// full-frame layers (band 375×730) — placed at inset:0, pixel-exact by construction
-const layers = computed(() => [
+const customPhoto = computed(() => {
+  return (
+    groom.value?.photo_url ||
+    parsedOverride.value?.images?.foto_mempelai_pria ||
+    parsedOverride.value?.images?.foto_pria ||
+    parsedOverride.value?.images?.groom ||
+    ''
+  );
+});
+
+const isCustomPhoto = computed(() => Boolean(customPhoto.value));
+
+const customImageStyle = computed(() => ({
+  objectPosition: `${parsedOverride.value?.foto_pria_transform?.x ?? 50}% ${parsedOverride.value?.foto_pria_transform?.y ?? 22}%`,
+  transform: parsedOverride.value?.foto_pria_transform?.scale && parsedOverride.value.foto_pria_transform.scale !== 1
+    ? `scale(${parsedOverride.value.foto_pria_transform.scale})`
+    : undefined,
+}));
+
+// background layers (band 375×730) — placed at inset:0
+const backgroundLayers = [
   { src: bg, cls: "g-bg" },
   { src: florL, cls: "g-florL" },
   { src: florR, cls: "g-florR" },
-  { src: groom.value?.photo_url || portrait, cls: "g-portrait" },
-  { src: florC, cls: "g-florC" },
-]);
+];
 </script>
 
 <template>
   <section ref="el" class="groom" :class="{ shown }" :aria-label="'Mempelai pria — ' + nickname">
+    <!-- Background & base floral layers -->
     <img
-      v-for="l in layers"
+      v-for="l in backgroundLayers"
       :key="l.cls"
       class="groom__layer"
       :class="l.cls"
@@ -69,7 +100,33 @@ const layers = computed(() => [
       aria-hidden="true"
     />
 
-    <h2 class="g-header">The Bride &amp;<br />The Groom</h2>
+    <!-- Fallback default sample portrait (full-bleed band) -->
+    <img
+      v-if="!isCustomPhoto"
+      class="groom__layer g-portrait"
+      :src="portrait"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <!-- Custom Dynamic Photo with Adaptive Arch Slot -->
+    <div
+      v-else
+      class="g-portrait-slot"
+      aria-label="Foto Mempelai Pria"
+    >
+      <img
+        class="g-custom-img"
+        :src="customPhoto"
+        :style="customImageStyle"
+        alt="Mempelai Pria"
+      />
+    </div>
+
+    <!-- Foreground floral (layer di atas potret) -->
+    <img class="groom__layer g-florC" :src="florC" alt="" aria-hidden="true" />
+
+    <h2 class="g-header" v-html="headerTitle"></h2>
 
     <div class="groom__name">
       <p class="g-script">{{ nickname }}</p>
@@ -114,11 +171,35 @@ const layers = computed(() => [
 .g-florL { z-index: 1; }
 .g-florR { z-index: 2; }
 .g-portrait { z-index: 3; }
-.g-florL2 {
-  z-index: 4;
-  -webkit-mask-image: radial-gradient(ellipse 14% 12% at 10% 68.5%, #000 62%, transparent 100%);
-  mask-image: radial-gradient(ellipse 14% 12% at 10% 68.5%, #000 62%, transparent 100%);
+
+/* Dynamic custom photo slot with classic Javanese arch frame */
+.g-portrait-slot {
+  position: absolute;
+  z-index: 3;
+  left: 4%;
+  top: 20%;
+  width: 50%;
+  aspect-ratio: 408 / 676;
+  border-radius: 999px 999px 16px 16px;
+  overflow: hidden;
+  border: 2px solid rgba(217, 191, 157, 0.45);
+  box-shadow: 0 8px 24px rgba(70, 45, 20, 0.18);
+  background-color: #dfd7c2;
+  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
 }
+
+.g-custom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform-origin: center center;
+}
+
 .g-florC { z-index: 5; }
 
 .g-header {
@@ -182,7 +263,8 @@ const layers = computed(() => [
 .g-bg { opacity: 1; }
 .groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
 .groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
-.groom.shown .g-portrait { transform-origin: 50% 100%; animation: gRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.groom.shown .g-portrait,
+.groom.shown .g-portrait-slot { transform-origin: 50% 100%; animation: gRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.25s cubic-bezier(0.16,1,0.3,1) 0.52s both; }
 
 .groom.shown .g-header { animation: gRiseHeader 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
@@ -200,7 +282,7 @@ const layers = computed(() => [
 @keyframes gDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes gRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .groom__layer, .g-header, .groom__name > *, .groom__name > :not(.g-div) {
+  .groom__layer, .g-portrait-slot, .g-header, .groom__name > *, .groom__name > :not(.g-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
 }

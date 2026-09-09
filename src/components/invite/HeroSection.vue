@@ -20,9 +20,9 @@ import { useWedding } from "../../composables/useWedding";
 const { el, shown } = useReveal(0.05);
 defineExpose({ el });
 
-const { wedding } = useWedding();
+const { couplePhoto: apiCouplePhoto } = useWedding();
 
-const couplePhoto = computed(() => wedding.value?.image_cover || wedding.value?.image_bg1 || couple);
+const couplePhoto = computed(() => apiCouplePhoto.value || couple);
 
 // hero band reference = 375 × 780 (Figma render units). Each asset placed by its bounds.
 type Part = { src: string; cls: string; l: number; t: number; w: number };
@@ -128,7 +128,12 @@ const florals = [
 .p-frame { z-index: 2; }
 .p-div { z-index: 2; }
 .t-l, .t-r { z-index: 3; }
-.p-couple { z-index: 4; }
+.p-couple {
+  z-index: 4;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .p-seal { z-index: 5; }
 .f-tl, .f-tr { z-index: 6; }
 .f-bl, .f-br { z-index: 7; }

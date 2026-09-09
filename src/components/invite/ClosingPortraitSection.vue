@@ -12,15 +12,17 @@ import { useWedding } from "../../composables/useWedding";
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-const { wedding } = useWedding();
+const { couplePhoto: apiCouplePhoto } = useWedding();
 
 const couplePhoto = computed(() => {
-  return wedding.value?.image_cover || wedding.value?.image_bg1 || portrait;
+  return apiCouplePhoto.value || portrait;
 });
+
+const isCustom = computed(() => Boolean(apiCouplePhoto.value));
 
 const layers = computed(() => [
   { src: bg, cls: "c-bg" },
-  { src: couplePhoto.value, cls: "c-portrait" },
+  { src: couplePhoto.value, cls: `c-portrait ${isCustom.value ? 'is-custom' : ''}` },
   { src: florL, cls: "c-florL" },
   { src: florR, cls: "c-florR" },
 ]);
@@ -68,6 +70,16 @@ const layers = computed(() => [
 /* z-order back → front */
 .c-bg { z-index: 0; opacity: 1; }
 .c-portrait { z-index: 1; }
+.c-portrait.is-custom {
+  inset: auto;
+  left: 50%;
+  top: 14%;
+  transform: translateX(-50%);
+  width: 66%;
+  aspect-ratio: 248 / 310;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .c-seal { z-index: 2; }
 .c-florL, .c-florR { z-index: 10; }
 

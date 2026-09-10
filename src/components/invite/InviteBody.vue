@@ -26,7 +26,7 @@ import resPin from "../../assets/invite/resepsi/parts/pin.webp";
 import { computed } from "vue";
 import { useWedding } from "../../composables/useWedding";
 
-const { acara, gallery } = useWedding();
+const { acara, gallery, isGroomFirst, hasGift } = useWedding();
 
 const hasGallery = computed(() => {
   return Array.isArray(gallery.value) && gallery.value.length > 0;
@@ -116,8 +116,14 @@ const events = computed(() => {
     <VideoSection />
     <HeroSection />
     <QuoteSection />
-    <GroomSection />
-    <BrideSection />
+    <template v-if="isGroomFirst">
+      <GroomSection id="couple" :is-first="true" />
+      <BrideSection :is-first="false" />
+    </template>
+    <template v-else>
+      <BrideSection id="couple" :is-first="true" />
+      <GroomSection :is-first="false" />
+    </template>
     <div class="seam" aria-hidden="true" />
     <SaveDateSection />
     <div class="seam" aria-hidden="true" />
@@ -140,8 +146,10 @@ const events = computed(() => {
         :offset-x="ev.offsetX"
       />
     </template>
-    <div class="seam" aria-hidden="true" />
-    <GiftSection />
+    <template v-if="hasGift">
+      <div class="seam" aria-hidden="true" />
+      <GiftSection />
+    </template>
     <GallerySection v-if="hasGallery" />
     <RsvpSection />
     <ClosingPortraitSection />

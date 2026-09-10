@@ -14,50 +14,48 @@ const message = ref("");
 const submitting = ref(false);
 const errorMsg = ref("");
 
+const localWishes = ref<Array<{ name: string; when: string; text: string }>>([]);
+
 const wishes = computed(() => {
+  const list: Array<{ name: string; when: string; text: string }> = [...localWishes.value];
   if (apiWishes.value && apiWishes.value.length > 0) {
-    return apiWishes.value.map((w: any) => ({
-      name: w.guest_name || 'Tamu',
-      when: w.created_at ? new Date(w.created_at).toLocaleDateString('id-ID') : 'Baru saja',
-      text: w.message || '',
-    }));
+    apiWishes.value.forEach((w: any) => {
+      const name = w.guest_name || 'Tamu';
+      const text = w.message || '';
+      const exists = list.some(item => item.name === name && item.text === text);
+      if (!exists) {
+        list.push({
+          name,
+          when: w.created_at ? new Date(w.created_at).toLocaleDateString('id-ID') : 'Baru saja',
+          text,
+        });
+      }
+    });
   }
-  return [
-    {
-      name: "Anggun",
-      when: "2 hari lalu",
-      text: "Happy wedding 🎉 Semoga keluarga kecil kalian senantiasa diberahi kebahagiaan, kecukupan, dan kesehatan✨ Selamat beribadah bersama sampai jannah ya🙏",
-    },
-    {
-      name: "Amri",
-      when: "3 hari lalu",
-      text: "Happy wedding yaaa, semoga samawa, bahagia dunia akhirat ❤️",
-    },
-    {
-      name: "Amanda",
-      when: "3 hari lalu",
-      text: "Alhamdulillah, terharu banget, samawa yak",
-    },
-    {
-      name: "Gilang",
-      when: "3 hari lalu",
-      text: "Happy wedding broo...",
-    },
-  ];
+  return list;
 });
 
 async function submit() {
   if (!name.value.trim() || !message.value.trim()) return;
+  const guestName = name.value.trim();
+  const guestMessage = message.value.trim();
   submitting.value = true;
   errorMsg.value = "";
   try {
     await submitUcapan(slug.value, {
-      guest_name: name.value.trim(),
-      message: message.value.trim(),
+      guest_name: guestName,
+      message: guestMessage,
+    });
+    localWishes.value.unshift({
+      name: guestName,
+      when: "Baru saja",
+      text: guestMessage,
     });
     name.value = "";
     message.value = "";
-    await refetch();
+    if (refetch) {
+      await refetch();
+    }
   } catch (err: any) {
     errorMsg.value = err.message || "Gagal mengirim ucapan";
   } finally {
@@ -69,6 +67,7 @@ async function submit() {
 <template>
   <section ref="el" class="wish" :class="{ shown }" aria-labelledby="wish-title">
     <div class="w-arch" aria-hidden="true" />
+    <div class="w-body-bg" aria-hidden="true" />
 
     <div class="w-content">
       <!-- Header Title & Intro -->
@@ -105,12 +104,22 @@ async function submit() {
 
       <!-- White Wishes Card List -->
       <div class="w-card">
-        <div class="w-list">
+        <div
+          v-if="wishes.length > 0"
+          class="w-list"
+          tabindex="0"
+          role="region"
+          aria-label="Daftar Ucapan"
+        >
           <div v-for="(w, i) in wishes" :key="i" class="w-item">
             <span class="w-author">{{ w.name }}</span>
             <span class="w-when">{{ w.when }}</span>
             <p class="w-text">{{ w.text }}</p>
           </div>
+        </div>
+        <div v-else class="w-empty">
+          <p class="w-empty-text">Belum ada ucapan</p>
+          <p class="w-empty-sub">Kirimkan doa dan ucapan selamat pertama untuk kami di atas.</p>
         </div>
       </div>
     </div>
@@ -124,13 +133,14 @@ async function submit() {
   position: relative;
   z-index: 3;
   width: 100%;
-  aspect-ratio: 375 / 891;
+  min-height: calc(100cqw * (891 / 375));
   /* the dome's shoulders sit 13.77% of the width below its apex — overlap the
      flower band above by that much so no cream sliver shows at the edges */
   margin-top: -14%;
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;
+  padding-bottom: 36px;
 }
 
 /* Ellipse 7: 876 x 1067 at x -250, flat #900202. Drawn rather than sliced —
@@ -147,12 +157,22 @@ async function submit() {
   pointer-events: none;
 }
 
-.w-content {
+.w-body-bg {
   position: absolute;
+  z-index: 0;
+  top: 13.8cqw;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #900202;
+  pointer-events: none;
+}
+
+.w-content {
+  position: relative;
   z-index: 6;
-  top: 17.33cqw; /* Figma: title at apex + 65 */
-  left: 50%;
-  transform: translateX(-50%);
+  padding-top: 17.33cqw; /* Figma: title at apex + 65 */
+  margin: 0 auto;
   width: 86%;
   display: flex;
   flex-direction: column;
@@ -278,24 +298,54 @@ async function submit() {
 
 .w-list {
   width: 100%;
-  max-height: 320px;
+  max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #880000 #f5ede6;
+  padding-right: 4px;
 }
 
 .w-list::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
 }
 .w-list::-webkit-scrollbar-track {
-  background: #f5f0eb;
+  background: #f5ede6;
   border-radius: 4px;
 }
 .w-list::-webkit-scrollbar-thumb {
-  background: #c2b2a3;
+  background: #880000;
   border-radius: 4px;
+}
+.w-list::-webkit-scrollbar-thumb:hover {
+  background: #620000;
+}
+
+.w-empty {
+  text-align: center;
+  padding: 16px 10px;
+}
+
+.w-empty-text {
+  margin: 0 0 4px 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.8cqw;
+  font-weight: bold;
+  color: #55391c;
+}
+
+.w-empty-sub {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3.2cqw;
+  color: #8c827a;
+  line-height: 1.4;
 }
 
 .w-item {

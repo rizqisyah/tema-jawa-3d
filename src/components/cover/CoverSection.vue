@@ -23,10 +23,13 @@ const props = withDefaults(
   { guestName: "Nama Tamu" }
 );
 
-const { bride: brideData, groom: groomData } = useWedding();
+const { bride: brideData, groom: groomData, isGroomFirst } = useWedding();
 
 const brideName = computed(() => props.bride || brideData.value?.nickname || brideData.value?.name?.split(' ')[0] || "Allysa");
 const groomName = computed(() => props.groom || groomData.value?.nickname || groomData.value?.name?.split(' ')[0] || "Antonio");
+
+const firstName = computed(() => isGroomFirst.value ? groomName.value : brideName.value);
+const secondName = computed(() => isGroomFirst.value ? brideName.value : groomName.value);
 
 defineEmits<{ open: [] }>();
 
@@ -89,7 +92,7 @@ const sparkles = [
       />
 
       <p class="cover__prefix">The Wedding Of</p>
-      <h1 class="cover__names">{{ brideName }}<br />&amp; {{ groomName }}</h1>
+      <h1 class="cover__names">{{ firstName }}<br />&amp; {{ secondName }}</h1>
 
       <span class="cover__plate" aria-hidden="true" />
       <p class="cover__dear">Dear Mr / Mrs / Ms</p>

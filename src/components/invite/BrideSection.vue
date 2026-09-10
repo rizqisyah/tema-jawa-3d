@@ -12,14 +12,31 @@ import { useWedding } from "../../composables/useWedding";
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-const props = defineProps<{
-  nickname?: string;
-  fullName?: string;
-  fatherName?: string;
-  motherName?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    isFirst?: boolean;
+    nickname?: string;
+    fullName?: string;
+    fatherName?: string;
+    motherName?: string;
+  }>(),
+  { isFirst: false }
+);
 
-const { bride, parsedOverride } = useWedding();
+const { bride, wedding, coupleNickname, isGroomFirst, parsedOverride } = useWedding();
+
+const headerTitle = computed(() => {
+  const title = coupleNickname.value || wedding.value?.title?.trim() || (isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio');
+  if (title.includes(' & ')) {
+    const parts = title.split(' & ');
+    return `${parts[0]} &<br />${parts.slice(1).join(' & ')}`;
+  }
+  if (title.includes(' and ')) {
+    const parts = title.split(' and ');
+    return `${parts[0]} &<br />${parts.slice(1).join(' and ')}`;
+  }
+  return title;
+});
 
 const nickname = computed(() => {
   if (props.nickname) return props.nickname;
@@ -58,12 +75,20 @@ const customPhoto = computed(() => {
 
 const isCustomPhoto = computed(() => Boolean(customPhoto.value));
 
-const customImageStyle = computed(() => ({
-  objectPosition: `${parsedOverride.value?.foto_wanita_transform?.x ?? 50}% ${parsedOverride.value?.foto_wanita_transform?.y ?? 20}%`,
-  transform: parsedOverride.value?.foto_wanita_transform?.scale && parsedOverride.value.foto_wanita_transform.scale !== 1
-    ? `scale(${parsedOverride.value.foto_wanita_transform.scale})`
-    : undefined,
-}));
+const customImageStyle = computed(() => {
+  const t = parsedOverride.value?.foto_wanita_transform || parsedOverride.value?.spouse_photo_transform;
+  const x = typeof t?.x === 'number' ? t.x : (t?.x !== undefined ? parseFloat(t.x) : 50);
+  const y = typeof t?.y === 'number' ? t.y : (t?.y !== undefined ? parseFloat(t.y) : 50);
+  const scale = typeof t?.scale === 'number' ? t.scale : (t?.scale !== undefined ? parseFloat(t.scale) : 1);
+
+  const shiftX = (x - 50) * 1.5;
+  const shiftY = (y - 50) * 1.5;
+
+  return {
+    transform: `translate(${shiftX}%, ${shiftY}%) scale(${scale})`,
+    transformOrigin: 'right bottom',
+  };
+});
 
 const backgroundLayers = [
   { src: bg, cls: "b-bg" },
@@ -72,7 +97,13 @@ const backgroundLayers = [
 </script>
 
 <template>
-  <section ref="el" class="bride" :class="{ shown }" :aria-label="'Mempelai wanita — ' + nickname">
+  <section
+    ref="el"
+    class="bride"
+    :class="{ shown, 'is-first': props.isFirst }"
+    :aria-label="'Mempelai wanita — ' + nickname"
+  >
+    <!-- Background & floral layers -->
     <img
       v-for="l in backgroundLayers"
       :key="l.cls"
@@ -92,7 +123,7 @@ const backgroundLayers = [
       aria-hidden="true"
     />
 
-    <!-- Custom Dynamic Photo with Adaptive Arch Slot -->
+    <!-- Custom Uploaded Photo with Hardcoded Architecture Slot -->
     <div
       v-else
       class="b-portrait-slot"
@@ -106,9 +137,14 @@ const backgroundLayers = [
       />
     </div>
 
+    <!-- Foreground balustrade/floral layer -->
     <img class="bride__layer b-front" :src="front" alt="" aria-hidden="true" />
 
-    <div class="bride__amp">
+    <!-- Header title shown when Bride is first -->
+    <h2 v-if="props.isFirst" class="b-header" v-html="headerTitle"></h2>
+
+    <!-- Ampersand divider shown when Bride is second -->
+    <div v-else class="bride__amp">
       <img class="b-amp" :src="amp" alt="dan" />
     </div>
 
@@ -132,6 +168,17 @@ const backgroundLayers = [
   background: linear-gradient(180deg, #e8e1cd 0%, #ddd5c1 42%, #e1dac7 100%);
 }
 
+.bride.is-first {
+  background: linear-gradient(
+    180deg,
+    #b5a279 0%,
+    #c1b183 16%,
+    #d3c79c 34%,
+    #e5ddc8 56%,
+    #e8e1cd 100%
+  );
+}
+
 .bride__layer {
   position: absolute;
   inset: 0;
@@ -148,42 +195,61 @@ const backgroundLayers = [
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
 
-/* Dynamic custom photo slot with classic Javanese arch frame */
+/* Hardcoded slot for uploaded custom photo (exact match to default Figma portrait: top 28%, right 0, width 57%, aspect-ratio 429/677, behind b-front) */
 .b-portrait-slot {
   position: absolute;
   z-index: 2;
-  left: 46%;
-  top: 28%;
-  width: 50%;
-  aspect-ratio: 429 / 677;
-  border-radius: 999px 999px 16px 16px;
-  overflow: hidden;
-  border: 2px solid rgba(217, 191, 157, 0.45);
-  box-shadow: 0 8px 24px rgba(70, 45, 20, 0.18);
-  background-color: #dfd7c2;
-  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  left: auto;
+  right: 0;
+  top: 18%;
+  width: 60%;
+  height: 52%;
+  border-radius: 0;
+  overflow: visible;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
   opacity: 0;
   will-change: transform, opacity;
   pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 
 .b-custom-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: right bottom;
   display: block;
-  transform-origin: center center;
+  transform-origin: right bottom;
+  mix-blend-mode: multiply;
+  background-color: transparent;
 }
 
 .b-front {
   z-index: 3;
-  inset: auto;
-  left: 0;
-  top: 58.05%;
-  width: 100%;
-  height: 17.08%;
-  object-fit: fill;
+}
+
+.b-header {
+  position: absolute;
+  z-index: 6;
+  top: 3.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-script, "Pinyon Script"), cursive;
+  font-weight: 400;
+  font-size: 11cqw;
+  line-height: 0.95;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
 }
 
 .bride__amp {
@@ -247,6 +313,7 @@ const backgroundLayers = [
 .bride.shown .b-portrait,
 .bride.shown .b-portrait-slot { transform-origin: 50% 100%; animation: bRisePortrait 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 
+.bride.shown .b-header { animation: bRiseHeader 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .bride.shown .b-amp { animation: bAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
 
 .bride.shown .b-script { animation: bName 1.4s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
@@ -255,6 +322,7 @@ const backgroundLayers = [
 .bride.shown .b-parents { animation: bRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
 .bride__name > :not(.b-div) { opacity: 0; }
 
+@keyframes bRiseHeader { 0% { opacity: 0; transform: translate(-50%, 24px); filter: blur(8px); } 100% { opacity: 1; transform: translate(-50%, 0); filter: blur(0); } }
 @keyframes bRisePortrait { 0% { opacity: 0; transform: translateY(20px) scale(0.96); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes bBloom { 0% { opacity: 0; transform: translateY(4%) scale(1.02); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes bAmp { 0% { opacity: 0; filter: blur(4px); transform: scale(0.88); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
@@ -262,7 +330,7 @@ const backgroundLayers = [
 @keyframes bDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes bRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .bride__layer, .b-portrait-slot, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
+  .bride__layer, .b-portrait-slot, .b-header, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
   .bride__name { transform: translateX(-50%); }

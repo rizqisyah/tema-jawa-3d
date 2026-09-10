@@ -104,7 +104,7 @@ const active = ref('hero')
 
 const ITEMS = [
   { section: 'hero', target: '#invite', label: 'Home' },
-  { section: 'couple', target: '.groom', label: 'Mempelai' },
+  { section: 'couple', target: '#couple, .groom, .bride', label: 'Mempelai' },
   { section: 'events', target: '.event', label: 'Acara' },
   { section: 'wish', target: '.wish', label: 'Ucapan' },
 ]

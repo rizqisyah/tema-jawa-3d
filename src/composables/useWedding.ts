@@ -179,23 +179,33 @@ export function useWedding() {
   const pengantin = computed(() => content.value?.pengantin ?? state.value.data?.pengantin ?? [])
   const acara = computed(() => content.value?.acara ?? state.value.data?.acara ?? [])
   const gift = computed(() => content.value?.gift ?? content.value?.rekening ?? state.value.data?.gift ?? state.value.data?.rekening ?? [])
+  const hasGift = computed(() => {
+    if (!Array.isArray(gift.value)) return false
+    return gift.value.some((g: any) => Boolean(
+      (g?.account_number || g?.no_rekening || g?.number || '').toString().trim() ||
+      (g?.account_name || g?.nama_rekening || g?.holder || '').toString().trim()
+    ))
+  })
   const wishes = computed(() => content.value?.wishes ?? content.value?.ucapan ?? state.value.data?.wishes ?? state.value.data?.ucapan ?? [])
 
   const isGroomFirst = computed(() => {
     if (!wedding.value) return true
+    if (parsedOverride.value?.order_groom_first !== undefined) {
+      return Boolean(parsedOverride.value.order_groom_first)
+    }
     return wedding.value.order_groom_first !== false
   })
 
   const groom = computed(() => {
     return pengantin.value.find((p: any) => 
       p.type?.toLowerCase() === 'groom' || p.type?.toLowerCase() === 'pria'
-    ) ?? pengantin.value[0] ?? null
+    ) ?? (isGroomFirst.value ? pengantin.value[0] : pengantin.value[1]) ?? null
   })
 
   const bride = computed(() => {
     return pengantin.value.find((p: any) => 
       p.type?.toLowerCase() === 'bride' || p.type?.toLowerCase() === 'wanita'
-    ) ?? pengantin.value[1] ?? null
+    ) ?? (isGroomFirst.value ? pengantin.value[1] : pengantin.value[0]) ?? null
   })
 
   const coupleNickname = computed(() => {
@@ -205,7 +215,7 @@ export function useWedding() {
       return isGroomFirst.value ? `${groomNick} & ${brideNick}` : `${brideNick} & ${groomNick}`
     }
     if (wedding.value?.title) return wedding.value.title
-    return 'Pengantin'
+    return isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio'
   })
 
   const parsedOverride = computed(() => {
@@ -262,6 +272,7 @@ export function useWedding() {
     acara,
     gallery,
     gift,
+    hasGift,
     wishes,
     groom,
     bride,

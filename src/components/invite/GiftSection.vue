@@ -22,17 +22,16 @@ const layers = [
 ];
 
 const accounts = computed(() => {
-  if (apiGift.value && apiGift.value.length > 0) {
-    return apiGift.value.map((g: any) => ({
-      bank: g.bank_name || g.bank || 'BCA',
-      number: g.account_number || g.no_rekening || g.number || '',
-      holder: g.account_name || g.nama_rekening || g.holder || ''
-    }));
+  if (apiGift.value && Array.isArray(apiGift.value) && apiGift.value.length > 0) {
+    return apiGift.value
+      .map((g: any) => ({
+        bank: (g.bank_name || g.bank || 'BCA').trim(),
+        number: (g.account_number || g.no_rekening || g.number || '').trim(),
+        holder: (g.account_name || g.nama_rekening || g.holder || '').trim()
+      }))
+      .filter((a: any) => Boolean(a.number || a.holder));
   }
-  return [
-    { bank: "BCA", number: "8715154435", holder: "Muhammad Arif" },
-    { bank: "BCA", number: "8715154435", holder: "Muhammad Arif" },
-  ];
+  return [];
 });
 
 const copied = ref<number | null>(null);
@@ -61,7 +60,7 @@ async function copy(index: number) {
 </script>
 
 <template>
-  <section ref="el" class="gift" :class="{ shown }" aria-labelledby="gift-title">
+  <section v-if="accounts.length > 0" ref="el" class="gift" :class="{ shown }" aria-labelledby="gift-title">
     <img
       v-for="l in layers"
       :key="l.cls"

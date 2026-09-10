@@ -7,23 +7,28 @@ import florR from "../../assets/invite/groom/parts/florR.webp";
 import portrait from "../../assets/invite/groom/parts/portrait.webp";
 import florC from "../../assets/invite/groom/parts/florC.webp";
 import divider from "../../assets/invite/groom/parts/divider.webp";
+import amp from "../../assets/invite/bride/parts/amp.webp";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
 
-const props = defineProps<{
-  nickname?: string;
-  fullName?: string;
-  fatherName?: string;
-  motherName?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    isFirst?: boolean;
+    nickname?: string;
+    fullName?: string;
+    fatherName?: string;
+    motherName?: string;
+  }>(),
+  { isFirst: true }
+);
 
-const { groom, wedding, coupleNickname, parsedOverride } = useWedding();
+const { groom, wedding, coupleNickname, isGroomFirst, parsedOverride } = useWedding();
 
 const headerTitle = computed(() => {
-  const title = wedding.value?.title?.trim() || coupleNickname.value || 'Antonio & Allysa';
+  const title = coupleNickname.value || wedding.value?.title?.trim() || (isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio');
   if (title.includes(' & ')) {
     const parts = title.split(' & ');
     return `${parts[0]} &<br />${parts.slice(1).join(' & ')}`;
@@ -72,12 +77,20 @@ const customPhoto = computed(() => {
 
 const isCustomPhoto = computed(() => Boolean(customPhoto.value));
 
-const customImageStyle = computed(() => ({
-  objectPosition: `${parsedOverride.value?.foto_pria_transform?.x ?? 50}% ${parsedOverride.value?.foto_pria_transform?.y ?? 22}%`,
-  transform: parsedOverride.value?.foto_pria_transform?.scale && parsedOverride.value.foto_pria_transform.scale !== 1
-    ? `scale(${parsedOverride.value.foto_pria_transform.scale})`
-    : undefined,
-}));
+const customImageStyle = computed(() => {
+  const t = parsedOverride.value?.foto_pria_transform || parsedOverride.value?.foto_mempelai_transform;
+  const x = typeof t?.x === 'number' ? t.x : (t?.x !== undefined ? parseFloat(t.x) : 50);
+  const y = typeof t?.y === 'number' ? t.y : (t?.y !== undefined ? parseFloat(t.y) : 50);
+  const scale = typeof t?.scale === 'number' ? t.scale : (t?.scale !== undefined ? parseFloat(t.scale) : 1);
+
+  const shiftX = (x - 50) * 1.5;
+  const shiftY = (y - 50) * 1.5;
+
+  return {
+    transform: `translate(${shiftX}%, ${shiftY}%) scale(${scale})`,
+    transformOrigin: 'left bottom',
+  };
+});
 
 // background layers (band 375×730) — placed at inset:0
 const backgroundLayers = [
@@ -88,7 +101,12 @@ const backgroundLayers = [
 </script>
 
 <template>
-  <section ref="el" class="groom" :class="{ shown }" :aria-label="'Mempelai pria — ' + nickname">
+  <section
+    ref="el"
+    class="groom"
+    :class="{ shown, 'is-second': !props.isFirst }"
+    :aria-label="'Mempelai pria — ' + nickname"
+  >
     <!-- Background & base floral layers -->
     <img
       v-for="l in backgroundLayers"
@@ -109,7 +127,7 @@ const backgroundLayers = [
       aria-hidden="true"
     />
 
-    <!-- Custom Dynamic Photo with Adaptive Arch Slot -->
+    <!-- Custom Uploaded Photo with Hardcoded Architecture Slot -->
     <div
       v-else
       class="g-portrait-slot"
@@ -123,10 +141,19 @@ const backgroundLayers = [
       />
     </div>
 
+    <!-- florL clipped to rose cluster on jacket -->
+    <img class="groom__layer g-florL2" :src="florL" alt="" aria-hidden="true" />
+
     <!-- Foreground floral (layer di atas potret) -->
     <img class="groom__layer g-florC" :src="florC" alt="" aria-hidden="true" />
 
-    <h2 class="g-header" v-html="headerTitle"></h2>
+    <!-- Header title shown when Groom is first -->
+    <h2 v-if="props.isFirst" class="g-header" v-html="headerTitle"></h2>
+
+    <!-- Ampersand divider shown when Groom is second -->
+    <div v-else class="groom__amp">
+      <img class="g-amp" :src="amp" alt="dan" />
+    </div>
 
     <div class="groom__name">
       <p class="g-script">{{ nickname }}</p>
@@ -155,6 +182,10 @@ const backgroundLayers = [
   );
 }
 
+.groom.is-second {
+  background: linear-gradient(180deg, #e8e1cd 0%, #ddd5c1 42%, #e1dac7 100%);
+}
+
 .groom__layer {
   position: absolute;
   inset: 0;
@@ -172,32 +203,44 @@ const backgroundLayers = [
 .g-florR { z-index: 2; }
 .g-portrait { z-index: 3; }
 
-/* Dynamic custom photo slot with classic Javanese arch frame */
+/* Hardcoded slot for uploaded custom photo (flush to left edge, no crop, no background box) */
 .g-portrait-slot {
   position: absolute;
   z-index: 3;
-  left: 4%;
-  top: 20%;
-  width: 50%;
-  aspect-ratio: 408 / 676;
-  border-radius: 999px 999px 16px 16px;
-  overflow: hidden;
-  border: 2px solid rgba(217, 191, 157, 0.45);
-  box-shadow: 0 8px 24px rgba(70, 45, 20, 0.18);
-  background-color: #dfd7c2;
-  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  left: 0;
+  top: 18%;
+  width: 58%;
+  height: 54%;
+  border-radius: 0;
+  overflow: visible;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
   opacity: 0;
   will-change: transform, opacity;
   pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
 }
 
 .g-custom-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: left bottom;
   display: block;
-  transform-origin: center center;
+  transform-origin: left bottom;
+  mix-blend-mode: multiply;
+  background-color: transparent;
+}
+
+.g-florL2 {
+  z-index: 4;
+  -webkit-mask-image: radial-gradient(ellipse 14% 12% at 10% 68.5%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 14% 12% at 10% 68.5%, #000 62%, transparent 100%);
 }
 
 .g-florC { z-index: 5; }
@@ -218,6 +261,21 @@ const backgroundLayers = [
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   pointer-events: none;
+}
+
+.groom__amp {
+  position: absolute;
+  z-index: 5;
+  top: 6.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22%;
+}
+.g-amp {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
 }
 
 .groom__name {
@@ -261,13 +319,15 @@ const backgroundLayers = [
 }
 
 .g-bg { opacity: 1; }
-.groom.shown .g-florL { transform-origin: 0 45%; animation: gFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
+.groom.shown .g-florL,
+.groom.shown .g-florL2 { transform-origin: 0 45%; animation: gFlyL 1.25s cubic-bezier(0.16,1,0.3,1) 0.36s both; }
 .groom.shown .g-florR { transform-origin: 100% 45%; animation: gFlyR 1.25s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
 .groom.shown .g-portrait,
 .groom.shown .g-portrait-slot { transform-origin: 50% 100%; animation: gRisePortrait 0.99s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .groom.shown .g-florC { transform-origin: 50% 100%; animation: gBloom 1.25s cubic-bezier(0.16,1,0.3,1) 0.52s both; }
 
 .groom.shown .g-header { animation: gRiseHeader 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
+.groom.shown .g-amp { animation: gAmp 1.2s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
 .groom.shown .g-script { animation: gRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
 .groom.shown .g-div { animation: gDiv 0.7s ease 0.6s both; }
 .groom.shown .g-full { animation: gRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.7s both; }
@@ -275,6 +335,7 @@ const backgroundLayers = [
 .groom__name > :not(.g-div) { opacity: 0; }
 
 @keyframes gRiseHeader { 0% { opacity: 0; transform: translate(-50%, 24px); filter: blur(8px); } 100% { opacity: 1; transform: translate(-50%, 0); filter: blur(0); } }
+@keyframes gAmp { 0% { opacity: 0; filter: blur(4px); transform: scale(0.88); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
 @keyframes gRisePortrait { 0% { opacity: 0; transform: translateY(20px) scale(0.96); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
 @keyframes gFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg) scale(1.02); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0) scale(1); } }
 @keyframes gFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg) scale(1.02); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0) scale(1); } }
@@ -282,7 +343,7 @@ const backgroundLayers = [
 @keyframes gDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
 @keyframes gRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .groom__layer, .g-portrait-slot, .g-header, .groom__name > *, .groom__name > :not(.g-div) {
+  .groom__layer, .g-portrait-slot, .g-header, .g-amp, .groom__name > *, .groom__name > :not(.g-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
 }

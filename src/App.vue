@@ -10,7 +10,7 @@ import scenery from './assets/cover/scenery.webp'
 const isOpen = ref(false)
 const isLocked = ref(true)
 const contentVisible = ref(false)
-const { wedding, coupleNickname, quoteText, quoteVerse, guest, error, bride, groom, refetch } = useWedding()
+const { wedding, coupleNickname, quoteText, quoteVerse, guest, error, bride, groom, isGroomFirst, refetch } = useWedding()
 const { preloadCover, preloadInviteBody } = usePreloadAssets()
 
 const isAccessDenied = computed(() => {
@@ -35,7 +35,7 @@ const leftTitle = computed(() => {
   const brideName = bride.value?.nickname || (bride.value?.name ? bride.value.name.split(' ')[0] : '')
   const groomName = groom.value?.nickname || (groom.value?.name ? groom.value.name.split(' ')[0] : '')
   if (brideName && groomName) {
-    return `${brideName} & ${groomName}`
+    return isGroomFirst.value ? `${groomName} & ${brideName}` : `${brideName} & ${groomName}`
   }
   return coupleNickname.value
 })

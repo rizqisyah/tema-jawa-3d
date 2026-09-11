@@ -104,6 +104,7 @@ async function copy(index: number) {
   position: relative;
   width: 100%;
   aspect-ratio: 375 / 861;
+  margin-top: -3.5cqw;
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;

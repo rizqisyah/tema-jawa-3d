@@ -147,7 +147,6 @@ const events = computed(() => {
       />
     </template>
     <template v-if="hasGift">
-      <div class="seam" aria-hidden="true" />
       <GiftSection />
     </template>
     <GallerySection v-if="hasGallery" />

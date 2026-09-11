@@ -259,6 +259,21 @@ export function useWedding() {
     'QS. Ar-Rum: 21'
   )
 
+  const countdownDate = computed(() => {
+    if (wedding.value?.countdown_date) return wedding.value.countdown_date
+    const ov = parsedOverride.value as any
+    const overrideDate =
+      ov?.TanggalCountdown ||
+      ov?.words?.TanggalCountdown ||
+      ov?.countdown_date ||
+      ov?.words?.countdown_date ||
+      wedding.value?.TanggalCountdown
+    if (overrideDate) return overrideDate
+    const firstEvent = acara.value?.[0]
+    if (firstEvent?.event_date) return firstEvent.event_date
+    return null
+  })
+
   return {
     slug,
     guestCode,
@@ -282,6 +297,7 @@ export function useWedding() {
     parsedOverride,
     quoteText,
     quoteVerse,
+    countdownDate,
     refetch: async () => {
       inflight = null
       return fetchWeddingData()

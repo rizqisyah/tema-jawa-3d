@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Save the Date — sliced backdrop (sepia bg, red ornate frame, florals) + live countdown & calendar.
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import bg from "../../assets/invite/savedate/parts/bg.webp";
 import florL from "../../assets/invite/savedate/parts/florL.webp";
 import florR from "../../assets/invite/savedate/parts/florR.webp";
@@ -12,12 +12,101 @@ import { useWedding } from "../../composables/useWedding";
 const { el, shown } = useReveal(0.12);
 defineExpose({ el });
 
-const { acara, coupleNickname } = useWedding();
+const { acara, coupleNickname, wedding, parsedOverride, countdownDate } = useWedding();
+
+function parseDate(raw: any, eventTime?: string | null): Date | null {
+  if (!raw) return null;
+  if (raw instanceof Date) return isNaN(raw.getTime()) ? null : raw;
+
+  if (typeof raw === "string") {
+    const str = raw.trim();
+    if (!str) return null;
+
+    // Format DD/MM/YYYY atau DD-MM-YYYY (opsional jam)
+    const customMatch = str.match(/^(\d{1,2})[/|-](\d{1,2})[/|-](\d{4})(?:\s*[,|-]?\s*(\d{1,2})[.:](\d{1,2})(?:[.:](\d{1,2}))?)?/);
+    if (customMatch) {
+      const [, d, mo, y, h, mi, s] = customMatch;
+      const parsed = new Date(
+        Number(y),
+        Number(mo) - 1,
+        Number(d),
+        h ? Number(h) : 0,
+        mi ? Number(mi) : 0,
+        s ? Number(s) : 0
+      );
+      if (!isNaN(parsed.getTime())) return parsed;
+    }
+
+    // Format YYYY-MM-DD
+    const ymdMatch = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (ymdMatch) {
+      const [, y, mo, d] = ymdMatch;
+      let hours = 0;
+      let minutes = 0;
+
+      const timeMatch = str.match(/[T\s](\d{1,2})[.:](\d{2})(?:[.:](\d{2}))?/);
+      if (timeMatch) {
+        hours = Number(timeMatch[1]);
+        minutes = Number(timeMatch[2]);
+      } else if (eventTime) {
+        const sep = ['|', 's/d', ' - ', '-', '–'].find((s) => eventTime.includes(s));
+        const start = sep ? eventTime.split(sep)[0] : eventTime;
+        const t = (start || '').trim().match(/^(\d{1,2})[.:](\d{2})/);
+        if (t) {
+          hours = Number(t[1]);
+          minutes = Number(t[2]);
+        }
+      }
+
+      const parsed = new Date(Number(y), Number(mo) - 1, Number(d), hours, minutes);
+      if (!isNaN(parsed.getTime())) return parsed;
+    }
+
+    // Fallback ISO / string
+    const loose = new Date(str.includes(" ") && !str.includes("T") ? str.replace(" ", "T") : str);
+    if (!isNaN(loose.getTime())) return loose;
+  }
+
+  return null;
+}
 
 const targetTimestamp = computed(() => {
-  const dateStr = acara.value[0]?.event_date || "2029-04-19T10:00:00+07:00";
-  const parsed = new Date(dateStr).getTime();
-  return isNaN(parsed) ? new Date("2029-04-19T10:00:00+07:00").getTime() : parsed;
+  const w = wedding.value as any;
+  const ov = parsedOverride.value as any;
+
+  // 1. wedding.countdown_date
+  if (w?.countdown_date) {
+    const d = parseDate(w.countdown_date);
+    if (d) return d.getTime();
+  }
+
+  // 2. theme_override (TanggalCountdown / countdown_date)
+  const overrideRaw =
+    ov?.TanggalCountdown ||
+    ov?.words?.TanggalCountdown ||
+    ov?.countdown_date ||
+    ov?.words?.countdown_date ||
+    w?.TanggalCountdown;
+  if (overrideRaw) {
+    const d = parseDate(overrideRaw);
+    if (d) return d.getTime();
+  }
+
+  // 3. countdownDate dari useWedding
+  if (countdownDate.value) {
+    const d = parseDate(countdownDate.value);
+    if (d) return d.getTime();
+  }
+
+  // 4. Acara pertama
+  const firstAcara = acara.value?.[0];
+  if (firstAcara?.event_date) {
+    const d = parseDate(firstAcara.event_date, firstAcara.event_time);
+    if (d) return d.getTime();
+  }
+
+  // 5. Default fallback
+  return new Date("2029-04-19T10:00:00+07:00").getTime();
 });
 
 const days = ref("00");
@@ -36,15 +125,26 @@ function tick() {
   days.value = pad(d); hours.value = pad(h); minutes.value = pad(m); seconds.value = pad(s);
 }
 
+watch(targetTimestamp, () => {
+  tick();
+});
+
 onMounted(() => { tick(); timer = window.setInterval(tick, 1000); });
 onBeforeUnmount(() => { if (timer) clearInterval(timer); });
 
 const calendarUrl = computed(() => {
   const title = `Undangan Pernikahan — ${coupleNickname.value}`;
   const loc = acara.value[0]?.location_name || acara.value[0]?.address || "Jakarta";
+  const start = new Date(targetTimestamp.value);
+  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+
+  const toUtcIso = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const datesParam = !isNaN(start.getTime()) ? `&dates=${toUtcIso(start)}/${toUtcIso(end)}` : "";
+
   return (
     "https://calendar.google.com/calendar/render?action=TEMPLATE" +
     "&text=" + encodeURIComponent(title) +
+    datesParam +
     "&details=" + encodeURIComponent(`Undangan pernikahan ${coupleNickname.value}`) +
     "&location=" + encodeURIComponent(loc)
   );

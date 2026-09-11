@@ -55,14 +55,14 @@ const fullName = computed(() => {
 const parentText = computed(() => {
   const g = groom.value;
   if (g?.father_name && g?.mother_name) {
-    return `Putra dari Bapak ${g.father_name}\n& Ibu ${g.mother_name}`;
+    return `Putra dari  ${g.father_name}\n&  ${g.mother_name}`;
   }
-  if (g?.father_name) return `Putra dari Bapak ${g.father_name}`;
-  if (g?.mother_name) return `Putra dari Ibu ${g.mother_name}`;
+  if (g?.father_name) return `Putra dari  ${g.father_name}`;
+  if (g?.mother_name) return `Putra dari  ${g.mother_name}`;
   if (g?.child_of) return g.child_of;
   const f = props.fatherName || 'Tono';
   const m = props.motherName || 'Ratna';
-  return `Putra dari Bapak ${f}\n& Ibu ${m}`;
+  return `Putra dari  ${f}\n&  ${m}`;
 });
 
 const customPhoto = computed(() => {

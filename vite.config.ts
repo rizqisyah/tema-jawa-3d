@@ -4,12 +4,12 @@ import vue from '@vitejs/plugin-vue'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  base: './',
+  base: process.env.VITE_BASE_PATH || '/TemaJawa/',
   server: {
     port: 5174,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'https://api.qinvi.id',
         changeOrigin: true,
       },
     },

@@ -1,5 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
-const DEFAULT_SLUG = import.meta.env.VITE_DEFAULT_SLUG || 'tema-jawa'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.qinvi.id/api'
+const DEFAULT_SLUG = import.meta.env.VITE_DEFAULT_SLUG || 'demo-3d-jawa'
 
 export function resolveSlug(): string {
   if (typeof window === 'undefined') return DEFAULT_SLUG

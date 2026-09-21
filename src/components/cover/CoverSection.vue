@@ -268,36 +268,36 @@ const sparkles = [
 }
 
 @keyframes inMist {
-  from { opacity: 0; filter: blur(10px); transform: scale(1.04); }
-  to { opacity: 0.62; filter: blur(0); transform: scale(1); }
+  from { opacity: 0; transform: scale(1.04); }
+  to { opacity: 0.62; transform: scale(1); }
 }
 @keyframes inTL {
-  from { opacity: 0; filter: blur(4px); transform: translate(-8%, -8%) rotate(-3deg) scale(1.02); }
-  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0) scale(1); }
+  from { opacity: 0; transform: translate(-8%, -8%) rotate(-3deg) scale(1.02); }
+  to { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
 }
 @keyframes inTR {
-  from { opacity: 0; filter: blur(4px); transform: translate(8%, -8%) rotate(3deg) scale(1.02); }
-  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0) scale(1); }
+  from { opacity: 0; transform: translate(8%, -8%) rotate(3deg) scale(1.02); }
+  to { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
 }
 @keyframes inML {
-  from { opacity: 0; filter: blur(4px); transform: translateX(-10%) rotate(-2deg); }
-  to { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); }
+  from { opacity: 0; transform: translateX(-10%) rotate(-2deg); }
+  to { opacity: 1; transform: translateX(0) rotate(0); }
 }
 @keyframes inMR {
-  from { opacity: 0; filter: blur(4px); transform: translateX(10%) rotate(2deg); }
-  to { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); }
+  from { opacity: 0; transform: translateX(10%) rotate(2deg); }
+  to { opacity: 1; transform: translateX(0) rotate(0); }
 }
 @keyframes inBL {
-  from { opacity: 0; filter: blur(4px); transform: translate(-8%, 10%) rotate(2deg); }
-  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0); }
+  from { opacity: 0; transform: translate(-8%, 10%) rotate(2deg); }
+  to { opacity: 1; transform: translate(0, 0) rotate(0); }
 }
 @keyframes inBR {
-  from { opacity: 0; filter: blur(4px); transform: translate(8%, 10%) rotate(-2deg); }
-  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0); }
+  from { opacity: 0; transform: translate(8%, 10%) rotate(-2deg); }
+  to { opacity: 1; transform: translate(0, 0) rotate(0); }
 }
 @keyframes inBC {
-  from { opacity: 0; filter: blur(4px); transform: translateY(12%) scale(1.02); }
-  to { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(12%) scale(1.02); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ambient wind floating */
@@ -442,8 +442,8 @@ const sparkles = [
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 @keyframes nameBloom {
-  from { opacity: 0; transform: translateX(-50%) scale(0.7); filter: blur(4px); }
-  to { opacity: 1; transform: translateX(-50%) scale(1); filter: blur(0); }
+  from { opacity: 0; transform: translateX(-50%) scale(0.7); }
+  to { opacity: 1; transform: translateX(-50%) scale(1); }
 }
 @keyframes nameGlow {
   from { text-shadow: 0 0 0 rgba(144, 2, 2, 0); }

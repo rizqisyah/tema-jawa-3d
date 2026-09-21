@@ -130,18 +130,14 @@ const leftBackgroundStyle = computed(() => {
 .invitation-content {
   opacity: 0;
   transform: translateY(16px);
-  filter: blur(4px);
   transition:
-    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform, filter;
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .invitation-content.is-visible {
   opacity: 1;
   transform: translateY(0);
-  filter: blur(0);
 }
 
 @media (min-width: 768px) {

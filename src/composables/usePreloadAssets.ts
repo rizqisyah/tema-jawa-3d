@@ -1,17 +1,9 @@
 import { ref } from 'vue'
 
-// Import cover images
+// Import cover scenery for fast, lightweight first render
 import scenery from '../assets/cover/scenery.webp'
-import mist from '../assets/cover/cl/mist.webp'
-import tl from '../assets/cover/cl/tl.webp'
-import tr from '../assets/cover/cl/tr.webp'
-import ml from '../assets/cover/cl/ml.webp'
-import mr from '../assets/cover/cl/mr.webp'
-import bl from '../assets/cover/cl/bl.webp'
-import br from '../assets/cover/cl/br.webp'
-import bc from '../assets/cover/cl/bc.webp'
 
-// Import critical invite images for background preloading
+// Import critical invite images for sequential preloading
 import heroBg1 from '../assets/invite/hero/parts/landscape1.webp'
 import heroBg2 from '../assets/invite/hero/parts/landscape2.webp'
 import heroJoglo from '../assets/invite/hero/parts/joglo.webp'
@@ -26,7 +18,6 @@ import resBg from '../assets/invite/resepsi/parts/bg.webp'
 import resFrame from '../assets/invite/resepsi/parts/frame.webp'
 import galleryBase from '../assets/invite/gallery/parts/base.webp'
 
-const coverImages = [scenery, mist, tl, tr, ml, mr, bl, br, bc]
 const bodyImages = [
   heroBg1,
   heroBg2,
@@ -54,7 +45,7 @@ function preloadImage(url: string): Promise<void> {
       resolve()
     } else {
       img.onload = () => resolve()
-      img.onerror = () => resolve() // resolve even on error so app won't stall
+      img.onerror = () => resolve()
     }
   })
 }
@@ -62,22 +53,24 @@ function preloadImage(url: string): Promise<void> {
 export function usePreloadAssets() {
   async function preloadCover() {
     if (coverLoaded.value) return
-    await Promise.all(coverImages.map(preloadImage))
+    // Only preload the base scenery; cover layers will stream naturally without memory spike
+    await preloadImage(scenery)
     coverLoaded.value = true
   }
 
   function preloadInviteBody() {
     if (bodyLoaded.value) return
-    // Preload invite body images asynchronously during idle time
-    const loadBody = () => {
-      Promise.all(bodyImages.map(preloadImage)).then(() => {
-        bodyLoaded.value = true
-      })
+    const loadBody = async () => {
+      // Preload sequentially to avoid memory spikes on iOS WebKit
+      for (const img of bodyImages) {
+        await preloadImage(img)
+      }
+      bodyLoaded.value = true
     }
     if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(loadBody, { timeout: 2000 })
+      window.requestIdleCallback(() => { loadBody() }, { timeout: 3000 })
     } else {
-      setTimeout(loadBody, 200)
+      setTimeout(loadBody, 1000)
     }
   }
 

@@ -185,8 +185,7 @@ onBeforeUnmount(() => {
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 /* z-order back → front */
 .gl-bg { z-index: 0; }
@@ -351,7 +350,7 @@ onBeforeUnmount(() => {
 
 @keyframes glFlyL { 0% { opacity: 0; transform: translate(-18%,-16%) rotate(-5deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes glFlyR { 0% { opacity: 0; transform: translate(18%,-16%) rotate(5deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
-@keyframes glTitle { 0% { opacity: 0; transform: translateY(28%) scale(0.9); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+@keyframes glTitle { 0% { opacity: 0; transform: translateY(28%) scale(0.9); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes glFrame { 0% { opacity: 0; transform: scale(0.82) rotate(-2deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes glDiscL { 0% { opacity: 0; transform: translateX(-140%) scale(0.5); } 100% { opacity: 1; transform: translateX(0) scale(1); } }
 @keyframes glDiscR { 0% { opacity: 0; transform: translateX(140%) scale(0.5); } 100% { opacity: 1; transform: translateX(0) scale(1); } }
@@ -366,8 +365,7 @@ onBeforeUnmount(() => {
   place-items: center;
   padding: 4vmin;
   background: rgba(24, 16, 6, 0.92);
-  backdrop-filter: blur(6px);
-  cursor: zoom-out;
+  backdrop-cursor: zoom-out;
 }
 .lb__img {
   max-width: min(100%, 900px);

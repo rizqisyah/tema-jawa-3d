@@ -114,8 +114,7 @@ const florals = [
   max-width: none;
   height: auto;
   opacity: 0;
-  will-change: transform, opacity;
-}
+  }
 .hero__fl {
   inset: 0;
   width: 100%;
@@ -154,15 +153,15 @@ const florals = [
 .hero.shown .f-br { transform-origin: 100% 100%; animation: flBR 1.4s cubic-bezier(0.16,1,0.3,1) 0.94s both; }
 
 @keyframes fadeIn { to { opacity: 1; } }
-@keyframes riseIn { from { opacity: 0; transform: translateY(20px); filter: blur(6px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
-@keyframes growIn { from { opacity: 0; transform: scale(0.94); filter: blur(6px); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
-@keyframes bloomIn { from { opacity: 0; transform: scale(0.96) translateY(12px); filter: blur(6px); } to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
-@keyframes swingL { from { opacity: 0; filter: blur(4px); transform: translateY(-8%) rotate(-8deg); } to { opacity: 1; filter: blur(0); transform: translateY(0) rotate(0); } }
-@keyframes swingR { from { opacity: 0; filter: blur(4px); transform: translateY(-8%) rotate(8deg); } to { opacity: 1; filter: blur(0); transform: translateY(0) rotate(0); } }
-@keyframes flTL { from { opacity: 0; filter: blur(4px); transform: translate(-8%,-8%) rotate(-3deg); } to { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
-@keyframes flTR { from { opacity: 0; filter: blur(4px); transform: translate(8%,-8%) rotate(3deg); } to { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
-@keyframes flBL { from { opacity: 0; filter: blur(4px); transform: translate(-8%,8%) rotate(3deg); } to { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
-@keyframes flBR { from { opacity: 0; filter: blur(4px); transform: translate(8%,8%) rotate(-3deg); } to { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
+@keyframes riseIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes growIn { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+@keyframes bloomIn { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes swingL { from { opacity: 0; transform: translateY(-8%) rotate(-8deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+@keyframes swingR { from { opacity: 0; transform: translateY(-8%) rotate(8deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+@keyframes flTL { from { opacity: 0; transform: translate(-8%,-8%) rotate(-3deg); } to { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes flTR { from { opacity: 0; transform: translate(8%,-8%) rotate(3deg); } to { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes flBL { from { opacity: 0; transform: translate(-8%,8%) rotate(3deg); } to { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes flBR { from { opacity: 0; transform: translate(8%,8%) rotate(-3deg); } to { opacity: 1; transform: translate(0,0) rotate(0); } }
 @media (prefers-reduced-motion: reduce) {
   .hero__part, .hero__fl { animation: none !important; opacity: 1; transform: none; filter: none; }
 }

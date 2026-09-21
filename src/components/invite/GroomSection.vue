@@ -195,8 +195,7 @@ const backgroundLayers = [
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 .g-bg { z-index: 0; }
 .g-florL { z-index: 1; }
@@ -217,7 +216,6 @@ const backgroundLayers = [
   box-shadow: none;
   background-color: transparent;
   opacity: 0;
-  will-change: transform, opacity;
   pointer-events: none;
   display: flex;
   align-items: flex-end;
@@ -334,14 +332,14 @@ const backgroundLayers = [
 .groom.shown .g-parents { animation: gRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
 .groom__name > :not(.g-div) { opacity: 0; }
 
-@keyframes gRiseHeader { 0% { opacity: 0; transform: translate(-50%, 24px); filter: blur(8px); } 100% { opacity: 1; transform: translate(-50%, 0); filter: blur(0); } }
-@keyframes gAmp { 0% { opacity: 0; filter: blur(4px); transform: scale(0.88); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
-@keyframes gRisePortrait { 0% { opacity: 0; transform: translateY(20px) scale(0.96); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes gFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg) scale(1.02); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0) scale(1); } }
-@keyframes gFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg) scale(1.02); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0) scale(1); } }
-@keyframes gBloom { 0% { opacity: 0; filter: blur(3px); transform: translateY(6%) scale(0.96); } 100% { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); } }
+@keyframes gRiseHeader { 0% { opacity: 0; transform: translate(-50%, 24px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes gAmp { 0% { opacity: 0; transform: scale(0.88); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes gRisePortrait { 0% { opacity: 0; transform: translateY(20px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes gFlyL { 0% { opacity: 0; transform: translateX(-8%) rotate(-3deg) scale(1.02); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gFlyR { 0% { opacity: 0; transform: translateX(8%) rotate(3deg) scale(1.02); } 100% { opacity: 1; transform: translateX(0) rotate(0) scale(1); } }
+@keyframes gBloom { 0% { opacity: 0; transform: translateY(6%) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes gDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes gRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes gRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .groom__layer, .g-portrait-slot, .g-header, .g-amp, .groom__name > *, .groom__name > :not(.g-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;

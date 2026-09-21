@@ -120,8 +120,7 @@ async function copy(index: number) {
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 /* z-order back → front */
 .g-bg { z-index: 0; }
@@ -246,10 +245,10 @@ async function copy(index: number) {
 .gift.shown .g-acct0 { animation: gfRiseText 1.55s cubic-bezier(0.16,1,0.3,1) 0.65s both; }
 .gift.shown .g-acct1 { animation: gfRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.8s both; }
 
-@keyframes gfFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
-@keyframes gfFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
+@keyframes gfFlyL { 0% { opacity: 0; transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes gfFlyR { 0% { opacity: 0; transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
 @keyframes gfDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes gfRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes gfRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {
   .gift__layer, .gift > :where(img.g-div, h2, p), .g-acct {

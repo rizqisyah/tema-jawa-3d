@@ -65,8 +65,7 @@ const layers = [
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 /* z-order back → front. bg.webp is the full band re-sliced from Figma with the
    bouquets hidden, so the crimson already sits over the moss the way the design
@@ -184,10 +183,10 @@ const layers = [
 .foot.shown .f-wa { animation: ftRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
 .foot.shown .f-rule { animation: ftDiv 0.7s ease 0.9s both; }
 
-@keyframes ftDropL { 0% { opacity: 0; filter: blur(3px); transform: translate(-8%,-12%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
-@keyframes ftDropR { 0% { opacity: 0; filter: blur(3px); transform: translate(8%,-12%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translate(0,0) rotate(0); } }
+@keyframes ftDropL { 0% { opacity: 0; transform: translate(-8%,-12%) rotate(-3deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
+@keyframes ftDropR { 0% { opacity: 0; transform: translate(8%,-12%) rotate(3deg); } 100% { opacity: 1; transform: translate(0,0) rotate(0); } }
 @keyframes ftDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes ftRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes ftRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {
   .foot__layer, .f-div, .f-thanks, .f-credit, .f-by, .f-ig, .f-wa, .f-rule, .f-nav {

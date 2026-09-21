@@ -390,5 +390,5 @@ async function submit() {
 .wish.shown .w-form { animation: wRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
 .wish.shown .w-card { animation: wRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.7s both; }
 
-@keyframes wRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes wRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 </style>

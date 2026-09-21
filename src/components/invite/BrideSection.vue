@@ -188,8 +188,7 @@ const backgroundLayers = [
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 .b-bg { z-index: 0; }
 .b-flor { z-index: 1; }
@@ -210,7 +209,6 @@ const backgroundLayers = [
   box-shadow: none;
   background-color: transparent;
   opacity: 0;
-  will-change: transform, opacity;
   pointer-events: none;
   display: flex;
   align-items: flex-end;
@@ -322,13 +320,13 @@ const backgroundLayers = [
 .bride.shown .b-parents { animation: bRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.85s both; }
 .bride__name > :not(.b-div) { opacity: 0; }
 
-@keyframes bRiseHeader { 0% { opacity: 0; transform: translate(-50%, 24px); filter: blur(8px); } 100% { opacity: 1; transform: translate(-50%, 0); filter: blur(0); } }
-@keyframes bRisePortrait { 0% { opacity: 0; transform: translateY(20px) scale(0.96); filter: blur(6px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes bBloom { 0% { opacity: 0; transform: translateY(4%) scale(1.02); filter: blur(4px); } 100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
-@keyframes bAmp { 0% { opacity: 0; filter: blur(4px); transform: scale(0.88); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
-@keyframes bName { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes bRiseHeader { 0% { opacity: 0; transform: translate(-50%, 24px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes bRisePortrait { 0% { opacity: 0; transform: translateY(20px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes bBloom { 0% { opacity: 0; transform: translateY(4%) scale(1.02); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes bAmp { 0% { opacity: 0; transform: scale(0.88); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes bName { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes bDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes bRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes bRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .bride__layer, .b-portrait-slot, .b-header, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;

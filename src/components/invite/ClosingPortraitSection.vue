@@ -120,8 +120,7 @@ const customImageStyle = computed(() => {
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 /* z-order back → front */
 .c-bg { z-index: 0; opacity: 1; }
@@ -144,8 +143,7 @@ const customImageStyle = computed(() => {
   justify-content: center;
   pointer-events: none;
   opacity: 0;
-  will-change: transform, opacity;
-}
+  }
 
 .c-portrait.is-custom {
   position: relative;
@@ -173,8 +171,7 @@ const customImageStyle = computed(() => {
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 /* ===== Sequential 1-by-1 Slow Elegant Entrance Animations ===== */
 .closing.shown .c-portrait {
@@ -200,65 +197,55 @@ const customImageStyle = computed(() => {
   0% {
     opacity: 0;
     transform: translateY(24px) scale(0.96);
-    filter: blur(6px);
-  }
+    }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
+    }
 }
 
 @keyframes clPortraitSlotSlow {
   0% {
     opacity: 0;
     transform: translateX(-50%) translateY(24px) scale(0.96);
-    filter: blur(6px);
-  }
+    }
   100% {
     opacity: 1;
     transform: translateX(-50%) translateY(0) scale(1);
-    filter: blur(0);
-  }
+    }
 }
 
 @keyframes clSealSlow {
   0% {
     opacity: 0;
     transform: translateY(-28px) scale(0.7) rotate(-10deg);
-    filter: blur(4px);
-  }
+    }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1) rotate(0deg);
-    filter: blur(0);
-  }
+    }
 }
 
 @keyframes clFlyLSlow {
   0% {
     opacity: 0;
     transform: translateX(-15%) translateY(12px) rotate(-3deg);
-    filter: blur(6px);
-  }
+    }
   100% {
     opacity: 1;
     transform: translateX(0) translateY(0) rotate(0deg);
-    filter: blur(0);
-  }
+    }
 }
 
 @keyframes clFlyRSlow {
   0% {
     opacity: 0;
     transform: translateX(15%) translateY(12px) rotate(3deg);
-    filter: blur(6px);
-  }
+    }
   100% {
     opacity: 1;
     transform: translateX(0) translateY(0) rotate(0deg);
-    filter: blur(0);
-  }
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

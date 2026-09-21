@@ -143,8 +143,7 @@ async function submit() {
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 .r-bg { z-index: 0; }
 .r-florL { z-index: 1; }
@@ -226,8 +225,7 @@ async function submit() {
   font-size: 3.4cqw;
   font-family: Georgia, "Times New Roman", serif;
   box-sizing: border-box;
-  backdrop-filter: blur(4px);
-  transition: border-color 0.2s, background 0.2s;
+  backdrop-transition: border-color 0.2s, background 0.2s;
 }
 
 .r-input::placeholder {
@@ -287,7 +285,7 @@ async function submit() {
 .rsvp.shown .r-header-block { animation: rRiseText 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
 .rsvp.shown .r-form { animation: rRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
 
-@keyframes rFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
-@keyframes rFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(10%); } 100% { opacity: 1; filter: blur(0); transform: translateX(0); } }
-@keyframes rRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes rFlyL { 0% { opacity: 0; transform: translateX(-10%); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes rFlyR { 0% { opacity: 0; transform: translateX(10%); } 100% { opacity: 1; transform: translateX(0); } }
+@keyframes rRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 </style>

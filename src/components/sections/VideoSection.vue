@@ -22,7 +22,7 @@
         loop
         muted
         controls
-        autoplay
+        preload="metadata"
         playsinline
       ></video>
     </div>

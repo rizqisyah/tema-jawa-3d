@@ -206,9 +206,7 @@ const units = [
   top: 38.5%;
   height: 7%;
   z-index: 1;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+  -webkit-backdrop-backdrop--webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
   pointer-events: none;
 }
@@ -222,8 +220,7 @@ const units = [
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 .sd-bg { z-index: 0; }
 .sd-bg2 {
   z-index: 0;
@@ -324,12 +321,12 @@ const units = [
 .sd-title, .sd-btn { opacity: 0; }
 .sd-box { opacity: 0; }
 
-@keyframes sdFrame { 0% { opacity: 0; transform: scale(0.92) translateY(4%); filter: blur(6px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
-@keyframes sdFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
-@keyframes sdFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
-@keyframes sdRise { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes sdFrame { 0% { opacity: 0; transform: scale(0.92) translateY(4%); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes sdFlyL { 0% { opacity: 0; transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes sdFlyR { 0% { opacity: 0; transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes sdRise { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes sdDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes sdPop { 0% { opacity: 0; transform: translateY(20px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes sdPop { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .sd-layer, .sd-title, .sd-div, .sd-box, .sd-btn {
     animation: none !important; opacity: 1; transform: none;

@@ -133,8 +133,7 @@ const sparkles = [
   position: absolute;
   max-width: none;
   transform: translateZ(0);
-  will-change: transform, opacity;
-}
+  }
 
 /* scenery: fade + perpetual ken-burns */
 .cover__scenery {
@@ -148,7 +147,7 @@ const sparkles = [
   opacity: 0;
 }
 .cover.is-ready .cover__scenery {
-  animation: sceneIn 0.8s ease both, kenBurns 26s ease-in-out 0.8s infinite alternate;
+  animation: sceneIn 0.8s ease both, kenBurns 30s ease-in-out 0.8s infinite alternate;
 }
 
 .cover__layer {
@@ -157,7 +156,6 @@ const sparkles = [
   height: 100%;
   pointer-events: none;
   opacity: 0;
-  will-change: transform, opacity, filter;
   animation-fill-mode: both;
 }
 
@@ -200,64 +198,64 @@ const sparkles = [
   animation-name: inMist, ambMist;
   animation-duration: 1.2s, 22s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 0.2s, 1.4s;
 }
 .cover.is-ready .tl {
-  animation-name: inTL, ambTL;
+  animation-name: inTL;
   animation-duration: 0.9s, 18s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 0.45s, 1.4s;
 }
 .cover.is-ready .tr {
-  animation-name: inTR, ambTR;
+  animation-name: inTR;
   animation-duration: 0.9s, 19s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 0.7s, 1.6s;
 }
 .cover.is-ready .ml {
-  animation-name: inML, ambML;
+  animation-name: inML;
   animation-duration: 0.9s, 20s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 0.95s, 1.85s;
 }
 .cover.is-ready .mr {
-  animation-name: inMR, ambMR;
+  animation-name: inMR;
   animation-duration: 0.9s, 21s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 1.2s, 2.1s;
 }
 .cover.is-ready .bl {
-  animation-name: inBL, ambBL;
+  animation-name: inBL;
   animation-duration: 0.9s, 22s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 1.45s, 2.35s;
 }
 .cover.is-ready .br {
-  animation-name: inBR, ambBR;
+  animation-name: inBR;
   animation-duration: 0.9s, 23s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 1.7s, 2.6s;
 }
 .cover.is-ready .bc {
-  animation-name: inBC, ambBC;
+  animation-name: inBC;
   animation-duration: 0.9s, 24s;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1), cubic-bezier(0.37, 0, 0.63, 1);
-  animation-iteration-count: 1, infinite;
-  animation-direction: normal, alternate;
+  animation-iteration-count: 1;
+  animation-direction: normal;
   animation-delay: 1.95s, 2.85s;
 }
 
@@ -387,9 +385,8 @@ const sparkles = [
   opacity: 0;
 }
 .cover.is-ready .cover__names {
-  animation:
-    nameBloom 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 2.55s both,
-    nameGlow 4s ease-in-out 3.5s infinite alternate;
+  animation: nameBloom 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 2.55s both;
+  text-shadow: 0 2px 14px rgba(144, 2, 2, 0.3);
 }
 
 /* the drifting mist alone left the greeting sitting on the dark joglo interior; a defined
@@ -470,7 +467,8 @@ const sparkles = [
   transition: box-shadow 0.15s ease;
 }
 .cover.is-ready .cover__open {
-  animation: fadeUp 0.7s ease 3.75s both, pulse 2.8s ease-in-out 4.75s infinite;
+  animation: fadeUp 0.7s ease 3.75s both;
+  box-shadow: 0 4px 14px rgba(144, 2, 2, 0.2);
 }
 .cover.is-ready .cover__open::after {
   content: "";

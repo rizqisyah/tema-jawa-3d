@@ -20,7 +20,6 @@ const isAccessDenied = computed(() => {
 
 onMounted(async () => {
   await preloadCover()
-  preloadInviteBody()
 })
 
 const guestName = computed(() => {
@@ -45,6 +44,7 @@ const leftSubtitle = computed(() => {
 })
 
 async function openInvitation() {
+  preloadInviteBody()
   isOpen.value = true
   await nextTick()
   requestAnimationFrame(() => {
@@ -274,9 +274,7 @@ const leftBackgroundStyle = computed(() => {
 
 .restricted-box {
   background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(144, 2, 2, 0.2);
+  backdrop--webkit-backdrop-border: 1px solid rgba(144, 2, 2, 0.2);
   border-radius: 24px;
   padding: 40px 24px;
   max-width: 320px;

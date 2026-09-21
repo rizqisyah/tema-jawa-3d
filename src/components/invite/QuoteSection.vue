@@ -87,8 +87,7 @@ const translation = computed(() => quoteText.value);
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 .q-bg, .q-trees { top: 0; bottom: 0; height: 100%; z-index: 0; }
 .q-trees { z-index: 1; }
@@ -128,8 +127,7 @@ const translation = computed(() => quoteText.value);
   max-width: none;
   opacity: 0;
   pointer-events: none;
-  will-change: transform, opacity;
-}
+  }
 
 .quote__text {
   position: absolute;
@@ -177,17 +175,17 @@ const translation = computed(() => quoteText.value);
 .quote.shown .q-arabic { animation: qRiseText 1.5s cubic-bezier(0.16,1,0.3,1) 0.45s both; }
 .quote.shown .q-transl { animation: qRiseText 1.6s cubic-bezier(0.16,1,0.3,1) 0.7s both; }
 .quote__text > * { opacity: 0; }
-.quote.shown .quote__text > * { will-change: transform, opacity, filter; }
+.quote.shown .quote__text > * { }
 
 @keyframes qDropTop { from { opacity: 0; transform: translateY(-30%) scale(1.04); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes qOval { 0% { opacity: 0; transform: scale(0.72) rotate(-6deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @keyframes qSeal { 0% { opacity: 0; transform: translateY(-140%) rotate(-18deg) scale(0.7); } 60% { opacity: 1; transform: translateY(8%) rotate(4deg) scale(1.08); } 100% { opacity: 1; transform: translateY(0) rotate(0) scale(1); } }
 @keyframes qDiv { from { opacity: 0; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
-@keyframes qFlyL { 0% { opacity: 0; filter: blur(3px); transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
-@keyframes qFlyR { 0% { opacity: 0; filter: blur(3px); transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; filter: blur(0); transform: translateX(0) rotate(0); } }
-@keyframes qMumL { 0% { opacity: 0; filter: blur(3px); transform: translate(-8%,8%); } 100% { opacity: 1; filter: blur(0); transform: translate(0,0); } }
-@keyframes qMumR { 0% { opacity: 0; filter: blur(3px); transform: translate(8%,8%); } 100% { opacity: 1; filter: blur(0); transform: translate(0,0); } }
-@keyframes qRiseText { 0% { opacity: 0; transform: translateY(24px); filter: blur(8px); } 100% { opacity: 1; transform: translateY(0); filter: blur(0); } }
+@keyframes qFlyL { 0% { opacity: 0; transform: translateX(-8%) rotate(-3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes qFlyR { 0% { opacity: 0; transform: translateX(8%) rotate(3deg); } 100% { opacity: 1; transform: translateX(0) rotate(0); } }
+@keyframes qMumL { 0% { opacity: 0; transform: translate(-8%,8%); } 100% { opacity: 1; transform: translate(0,0); } }
+@keyframes qMumR { 0% { opacity: 0; transform: translate(8%,8%); } 100% { opacity: 1; transform: translate(0,0); } }
+@keyframes qRiseText { 0% { opacity: 0; transform: translateY(24px); } 100% { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) {
   .quote__layer, .q-seal, .quote__text > * { animation: none !important; opacity: 1; transform: none; filter: none; }
 }

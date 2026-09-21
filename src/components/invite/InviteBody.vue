@@ -178,10 +178,7 @@ const events = computed(() => {
   right: 0;
   top: -3.2cqw;
   height: 6.4cqw;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 50%, transparent);
+  background: linear-gradient(to bottom, transparent, rgba(239, 230, 211, 0.6) 50%, transparent);
   pointer-events: none;
 }
 </style>

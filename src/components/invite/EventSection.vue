@@ -55,7 +55,7 @@ const computedMapsUrl = () =>
     />
 
     <h2 class="e-title">{{ title }}</h2>
-    <p class="e-date">{{ day }}<br />{{ date }}</p>
+    <p class="e-date"><template v-if="day">{{ day }}<br /></template>{{ date }}</p>
     <p class="e-time">{{ time }}</p>
     <img class="e-pin" :src="pin" alt="" aria-hidden="true" />
     <p class="e-venue">{{ venue }}</p>

@@ -32,17 +32,25 @@ const hasGallery = computed(() => {
   return Array.isArray(gallery.value) && gallery.value.length > 0;
 });
 
+// "YYYY-MM-DD" / "DD-MM-YYYY" / "DD/MM/YYYY" dibangun sebagai tanggal lokal:
+// new Date("YYYY-MM-DD") dibaca UTC, jadi di zona barat Greenwich harinya mundur satu.
+function parseEventDate(raw: string): Date | null {
+  const str = raw.trim();
+  const iso = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (iso) return new Date(Number(iso[1]), Number(iso[2]) - 1, Number(iso[3]));
+  const dmy = str.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})/);
+  if (dmy) return new Date(Number(dmy[3]), Number(dmy[2]) - 1, Number(dmy[1]));
+  const d = new Date(str);
+  return isNaN(d.getTime()) ? null : d;
+}
+
 function formatDate(dateStr?: string) {
-  if (!dateStr) return { day: "Saturday,", date: "19 April 2029" };
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return { day: "Saturday,", date: dateStr };
-    const dayName = d.toLocaleDateString("en-US", { weekday: "long" }) + ",";
-    const dateFormatted = d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
-    return { day: dayName, date: dateFormatted };
-  } catch {
-    return { day: "Saturday,", date: dateStr };
-  }
+  const d = parseEventDate(dateStr || "2029-04-19");
+  if (!d) return { day: "", date: dateStr || "" };
+  return {
+    day: d.toLocaleDateString("id-ID", { weekday: "long" }) + ",",
+    date: d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }),
+  };
 }
 
 const events = computed(() => {

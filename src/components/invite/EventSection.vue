@@ -58,9 +58,13 @@ const computedMapsUrl = () =>
     <p class="e-date"><template v-if="day">{{ day }}<br /></template>{{ date }}</p>
     <p class="e-time">{{ time }}</p>
     <img class="e-pin" :src="pin" alt="" aria-hidden="true" />
-    <p class="e-venue">{{ venue }}</p>
-    <p class="e-addr">{{ address }}</p>
-    <a class="e-maps" :href="computedMapsUrl()" target="_blank" rel="noopener noreferrer">Maps</a>
+    <!-- one flowing column: a venue that wraps pushes the address and Maps down
+         instead of running into them -->
+    <div class="e-place">
+      <p class="e-venue">{{ venue }}</p>
+      <p class="e-addr">{{ address }}</p>
+      <a class="e-maps" :href="computedMapsUrl()" target="_blank" rel="noopener noreferrer">Maps</a>
+    </div>
   </section>
 </template>
 
@@ -140,29 +144,46 @@ const computedMapsUrl = () =>
   max-width: none;
   pointer-events: none;
 }
-.e-venue {
+/* starts where the venue sits in Figma; the gaps below reproduce the design's spacing
+   for a one-line venue and a three-line address */
+.e-place {
+  position: absolute;
+  z-index: 2;
   left: calc(15.2% + var(--dx));
   top: 42.2%;
   width: 69.87%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.e-place > * {
+  margin: 0;
+  text-align: center;
+  color: #8f1b1b;
+  opacity: 0;
+}
+.e-venue {
+  width: 100%;
+  overflow-wrap: anywhere;
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 700;
   font-size: 3.8cqw;
-  line-height: 1;
+  line-height: 1.2;
 }
 .e-addr {
-  left: calc(17% + var(--dx));
-  top: 46.2%;
-  width: 66%;
+  width: 94.46%; /* 66% of the band */
+  margin-top: 3.2cqw;
+  overflow-wrap: anywhere;
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-size: 3.3cqw;
   line-height: 1.55;
 }
 .e-maps {
-  left: calc(38.67% + var(--dx));
-  top: 54.41%;
-  width: 24.27%;
+  display: block;
+  width: 34.74%; /* 24.27% of the band */
+  margin-top: 2cqw;
   padding: 1.9cqw 0;
   border-radius: 1.1cqw;
   background: #f6dd95;
@@ -204,7 +225,7 @@ const computedMapsUrl = () =>
 @keyframes eDrop { 0% { opacity: 0; transform: translateY(-160%) scale(0.6); } 65% { opacity: 1; transform: translateY(9%) scale(1.14); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes ePop { 0% { opacity: 0; transform: scale(0.5) rotate(-5deg); } 60% { opacity: 1; transform: scale(1.12) rotate(2deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
 @media (prefers-reduced-motion: reduce) {
-  .event__layer, .event > :where(h2, p, a, .e-pin) {
+  .event__layer, .event > :where(h2, p, a, .e-pin), .e-place > * {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
 }

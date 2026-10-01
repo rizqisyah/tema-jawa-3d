@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Shared per-asset event block (akad / resepsi). Both bands are the same layout in Figma,
 // 726 units apart — only the assets, copy and a 5u horizontal offset differ.
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useReveal } from "../../composables/useReveal";
 
 const props = defineProps<{
@@ -34,6 +35,41 @@ const layers = () => [
 
 const computedMapsUrl = () =>
   props.mapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(props.address)}`;
+
+// The venue column may only grow down to just above the frame's bottom moulding (~73% of
+// the band). A long venue/address that would run past it is scaled down until it fits,
+// so it never slides under the bottom flowers or out of the frame.
+const PLACE_TOP = 0.422;
+const PLACE_BOTTOM = 0.71;
+const MIN_FIT = 0.62;
+const place = ref<HTMLElement | null>(null);
+const fit = ref(1);
+
+function fitPlace() {
+  const box = place.value;
+  const band = el.value;
+  if (!box || !band) return;
+  const maxH = band.clientHeight * (PLACE_BOTTOM - PLACE_TOP);
+  let s = 1;
+  box.style.setProperty("--fit", "1");
+  while (box.offsetHeight > maxH && s > MIN_FIT) {
+    s = Math.max(MIN_FIT, s - 0.04);
+    box.style.setProperty("--fit", String(s));
+  }
+  fit.value = s;
+}
+
+let ro: ResizeObserver | null = null;
+onMounted(() => {
+  fitPlace();
+  document.fonts?.ready.then(fitPlace);
+  if (el.value && "ResizeObserver" in window) {
+    ro = new ResizeObserver(() => fitPlace());
+    ro.observe(el.value);
+  }
+});
+onBeforeUnmount(() => ro?.disconnect());
+watch(() => [props.venue, props.address], () => nextTick(fitPlace));
 </script>
 
 <template>
@@ -60,7 +96,7 @@ const computedMapsUrl = () =>
     <img class="e-pin" :src="pin" alt="" aria-hidden="true" />
     <!-- one flowing column: a venue that wraps pushes the address and Maps down
          instead of running into them -->
-    <div class="e-place">
+    <div ref="place" class="e-place" :style="{ '--fit': fit }">
       <p class="e-venue">{{ venue }}</p>
       <p class="e-addr">{{ address }}</p>
       <a class="e-maps" :href="computedMapsUrl()" target="_blank" rel="noopener noreferrer">Maps</a>
@@ -144,14 +180,16 @@ const computedMapsUrl = () =>
   max-width: none;
   pointer-events: none;
 }
-/* starts where the venue sits in Figma; the gaps below reproduce the design's spacing
-   for a one-line venue and a three-line address */
+/* starts where the venue sits in Figma. Width is held to the gap between the left and
+   right flower clusters (they reach ~28.3% / ~74.5% of the band below the pin), so a
+   long venue or address wraps inside the frame instead of running under the flowers */
 .e-place {
+  --fit: 1;
   position: absolute;
   z-index: 2;
-  left: calc(15.2% + var(--dx));
+  left: calc(29% + var(--dx));
   top: 42.2%;
-  width: 69.87%;
+  width: 45%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -168,22 +206,22 @@ const computedMapsUrl = () =>
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 700;
-  font-size: 3.8cqw;
+  font-size: calc(3.8cqw * var(--fit));
   line-height: 1.2;
 }
 .e-addr {
-  width: 94.46%; /* 66% of the band */
-  margin-top: 3.2cqw;
+  width: 100%;
+  margin-top: calc(3.2cqw * var(--fit));
   overflow-wrap: anywhere;
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
-  font-size: 3.3cqw;
+  font-size: calc(3.3cqw * var(--fit));
   line-height: 1.55;
 }
 .e-maps {
   display: block;
-  width: 34.74%; /* 24.27% of the band */
-  margin-top: 2cqw;
+  width: 24.27cqw;
+  margin-top: calc(2cqw * var(--fit));
   padding: 1.9cqw 0;
   border-radius: 1.1cqw;
   background: #f6dd95;

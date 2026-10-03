@@ -6,7 +6,6 @@ import base from "../../assets/invite/gift/parts/base.webp";
 import florL from "../../assets/invite/gift/parts/florL.webp";
 import florR from "../../assets/invite/gift/parts/florR.webp";
 import divider from "../../assets/invite/gift/parts/divider.webp";
-import bca from "../../assets/invite/gift/parts/bca.webp";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
 
@@ -79,7 +78,7 @@ async function copy(index: number) {
     </p>
 
     <div v-for="(a, i) in accounts" :key="i" class="g-acct" :class="'g-acct' + i">
-      <img class="g-bca" :src="bca" :alt="a.bank" />
+      <p class="g-bank">{{ a.bank }}</p>
       <p class="g-no">No. Rekening : {{ a.number }}</p>
       <p class="g-holder">A/n {{ a.holder }}</p>
       <button class="g-copy" type="button" @click="copy(Number(i))">
@@ -192,10 +191,15 @@ async function copy(index: number) {
 .g-acct0 { top: 43.09%; }
 .g-acct1 { top: 59.35%; }
 
-.g-bca {
-  width: 18.93%; /* 60/317 of the block */
-  height: auto;
-  max-width: none;
+.g-bank {
+  margin: 0;
+  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 4.6cqw;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: #844711;
+  overflow-wrap: anywhere;
 }
 .g-no,
 .g-holder {

@@ -290,9 +290,8 @@ const backgroundLayers = [
 }
 .b-full {
   margin: 0 0 1.6cqw;
-  font-family: Georgia, "Times New Roman", serif;
-  font-variant: small-caps;
-  letter-spacing: 0.06em;
+  font-family: "Times New Roman", Times, serif;
+  letter-spacing: 0.02em;
   font-size: 5.4cqw;
   line-height: 1;
   color: #8a5a28;

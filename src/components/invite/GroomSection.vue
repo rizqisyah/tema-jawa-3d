@@ -343,5 +343,6 @@ const backgroundLayers = [
   .groom__layer, .g-portrait-slot, .g-header, .g-amp, .groom__name > *, .groom__name > :not(.g-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
+  .g-header { transform: translateX(-50%); }
 }
 </style>

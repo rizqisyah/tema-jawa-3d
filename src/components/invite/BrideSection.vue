@@ -330,6 +330,6 @@ const backgroundLayers = [
   .bride__layer, .b-portrait-slot, .b-header, .b-amp, .bride__name > *, .bride__name > :not(.b-div) {
     animation: none !important; opacity: 1; transform: none; filter: none;
   }
-  .bride__name { transform: translateX(-50%); }
+  .bride__name, .b-header { transform: translateX(-50%); }
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, toRef } from "vue";
 // Every element is its own asset — nothing baked into a flat bg.
 import bg from "../../assets/invite/groom/parts/bg.webp";
 import florL from "../../assets/invite/groom/parts/florL.webp";
@@ -10,6 +10,7 @@ import divider from "../../assets/invite/groom/parts/divider.webp";
 import amp from "../../assets/invite/bride/parts/amp.webp";
 import { useReveal } from "../../composables/useReveal";
 import { useWedding } from "../../composables/useWedding";
+import { useMempelai, type Person } from "../../composables/useMempelai";
 
 const { el, shown } = useReveal(0.08);
 defineExpose({ el });
@@ -17,15 +18,16 @@ defineExpose({ el });
 const props = withDefaults(
   defineProps<{
     isFirst?: boolean;
+    /** Who this band shows; the band's art stays put either way (see useMempelai). */
+    person?: Person;
     nickname?: string;
     fullName?: string;
-    fatherName?: string;
-    motherName?: string;
   }>(),
-  { isFirst: true }
+  { isFirst: true, person: "groom" }
 );
 
-const { groom, wedding, coupleNickname, isGroomFirst, parsedOverride } = useWedding();
+const { wedding, coupleNickname, isGroomFirst } = useWedding();
+const mempelai = useMempelai(toRef(props, "person"));
 
 const headerTitle = computed(() => {
   const title = coupleNickname.value || wedding.value?.title?.trim() || (isGroomFirst.value ? 'Antonio & Allysa' : 'Allysa & Antonio');
@@ -40,49 +42,16 @@ const headerTitle = computed(() => {
   return title;
 });
 
-const nickname = computed(() => {
-  if (props.nickname) return props.nickname;
-  if (groom.value?.nickname) return groom.value.nickname;
-  if (groom.value?.name) return groom.value.name.split(' ')[0];
-  return 'Antonio';
-});
-
-const fullName = computed(() => {
-  if (props.fullName) return props.fullName;
-  return groom.value?.name || 'Antonio Josua Setiyadi';
-});
-
-const parentText = computed(() => {
-  const g = groom.value;
-  if (g?.father_name && g?.mother_name) {
-    return `Putra dari  ${g.father_name}\n&  ${g.mother_name}`;
-  }
-  if (g?.father_name) return `Putra dari  ${g.father_name}`;
-  if (g?.mother_name) return `Putra dari  ${g.mother_name}`;
-  if (g?.child_of) return g.child_of;
-  const f = props.fatherName || 'Tono';
-  const m = props.motherName || 'Ratna';
-  return `Putra dari  ${f}\n&  ${m}`;
-});
-
-const customPhoto = computed(() => {
-  return (
-    groom.value?.photo_url ||
-    parsedOverride.value?.images?.foto_mempelai_pria ||
-    parsedOverride.value?.images?.foto_pria ||
-    parsedOverride.value?.images?.groom ||
-    ''
-  );
-});
+const isGroom = mempelai.isGroom;
+const nickname = computed(() => props.nickname || mempelai.nickname.value);
+const fullName = computed(() => props.fullName || mempelai.fullName.value);
+const parentText = mempelai.parentText;
+const customPhoto = mempelai.customPhoto;
 
 const isCustomPhoto = computed(() => Boolean(customPhoto.value));
 
 const customImageStyle = computed(() => {
-  const t = parsedOverride.value?.foto_pria_transform || parsedOverride.value?.foto_mempelai_transform;
-  const x = typeof t?.x === 'number' ? t.x : (t?.x !== undefined ? parseFloat(t.x) : 50);
-  const y = typeof t?.y === 'number' ? t.y : (t?.y !== undefined ? parseFloat(t.y) : 50);
-  const scale = typeof t?.scale === 'number' ? t.scale : (t?.scale !== undefined ? parseFloat(t.scale) : 1);
-
+  const { x, y, scale } = mempelai.photoTransform.value;
   const shiftX = (x - 50) * 1.5;
   const shiftY = (y - 50) * 1.5;
 
@@ -105,7 +74,7 @@ const backgroundLayers = [
     ref="el"
     class="groom"
     :class="{ shown, 'is-second': !props.isFirst }"
-    :aria-label="'Mempelai pria — ' + nickname"
+    :aria-label="(isGroom ? 'Mempelai pria — ' : 'Mempelai wanita — ') + nickname"
   >
     <!-- Background & base floral layers -->
     <img
@@ -131,13 +100,13 @@ const backgroundLayers = [
     <div
       v-else
       class="g-portrait-slot"
-      aria-label="Foto Mempelai Pria"
+      :aria-label="isGroom ? 'Foto Mempelai Pria' : 'Foto Mempelai Wanita'"
     >
       <img
         class="g-custom-img"
         :src="customPhoto"
         :style="customImageStyle"
-        alt="Mempelai Pria"
+        :alt="isGroom ? 'Mempelai Pria' : 'Mempelai Wanita'"
       />
     </div>
 

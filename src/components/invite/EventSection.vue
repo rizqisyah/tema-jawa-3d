@@ -59,17 +59,43 @@ function fitPlace() {
   fit.value = s;
 }
 
+// The title sits at a fixed top with the date fixed below it, so a name that wraps
+// ("Siraman & Midodareni") printed its second line over the date. Its CSS height is the
+// gap down to the date; the title shrinks until it fits there — usually back onto one line.
+const MIN_TITLE_FIT = 0.55;
+const titleEl = ref<HTMLElement | null>(null);
+const titleFit = ref(1);
+
+function fitTitle() {
+  const t = titleEl.value;
+  if (!t || !t.clientHeight) return;
+  let s = 1;
+  t.style.setProperty("--tfit", "1");
+  while (t.scrollHeight > t.clientHeight + 1 && s > MIN_TITLE_FIT) {
+    s = Math.max(MIN_TITLE_FIT, s - 0.03);
+    t.style.setProperty("--tfit", String(s));
+  }
+  titleFit.value = s;
+}
+
+function fitAll() {
+  fitTitle();
+  fitPlace();
+}
+
 let ro: ResizeObserver | null = null;
 onMounted(() => {
-  fitPlace();
-  document.fonts?.ready.then(fitPlace);
+  fitAll();
+  document.fonts?.ready.then(fitAll);
   if (el.value && "ResizeObserver" in window) {
-    ro = new ResizeObserver(() => fitPlace());
+    ro = new ResizeObserver(() => fitAll());
     ro.observe(el.value);
+    if (titleEl.value) ro.observe(titleEl.value);
   }
 });
 onBeforeUnmount(() => ro?.disconnect());
 watch(() => [props.venue, props.address], () => nextTick(fitPlace));
+watch(() => props.title, () => nextTick(fitTitle));
 </script>
 
 <template>
@@ -90,7 +116,7 @@ watch(() => [props.venue, props.address], () => nextTick(fitPlace));
       aria-hidden="true"
     />
 
-    <h2 class="e-title">{{ title }}</h2>
+    <h2 ref="titleEl" class="e-title" :style="{ '--tfit': titleFit }">{{ title }}</h2>
     <p class="e-date"><template v-if="day">{{ day }}<br /></template>{{ date }}</p>
     <p class="e-time">{{ time }}</p>
     <img class="e-pin" :src="pin" alt="" aria-hidden="true" />
@@ -143,13 +169,19 @@ watch(() => [props.venue, props.address], () => nextTick(fitPlace));
   color: #8f1b1b;
   opacity: 0;
 }
+/* `height` is only fitTitle's constraint (overflow stays visible): from 15.7% down to the
+   date at 23.6% of the 375x726 band = 15.3cqw, less a hair. Width is the gap between the
+   top flower clusters (~17% / ~82% at this height), narrower than Figma's 13..87% box —
+   at full width a shrunk title went onto one line and ran under the flowers */
 .e-title {
-  left: calc(13.07% + var(--dx));
+  --tfit: 1;
+  left: calc(19% + var(--dx));
   top: 15.7%;
-  width: 73.87%;
+  width: 62%;
+  height: 14.8cqw;
   font-family: "Pinyon Script", cursive;
   font-weight: 400;
-  font-size: 10.4cqw;
+  font-size: calc(10.4cqw * var(--tfit));
   line-height: 1;
   color: #8a1717;
 }

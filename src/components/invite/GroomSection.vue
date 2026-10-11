@@ -2,7 +2,6 @@
 import { computed, toRef } from "vue";
 // Every element is its own asset — nothing baked into a flat bg.
 import bg from "../../assets/invite/groom/parts/bg.webp";
-import brideBg from "../../assets/invite/bride/parts/bg.webp";
 import florL from "../../assets/invite/groom/parts/florL.webp";
 import florR from "../../assets/invite/groom/parts/florR.webp";
 import portrait from "../../assets/invite/groom/parts/portrait.webp";
@@ -19,7 +18,7 @@ defineExpose({ el });
 const props = withDefaults(
   defineProps<{
     isFirst?: boolean;
-    /** Who this band shows — the groom unless a caller says otherwise. */
+    /** Who this band shows; InviteBody swaps it with the couple's order, the band stays put. */
     person?: Person;
     nickname?: string;
     fullName?: string;
@@ -62,16 +61,12 @@ const customImageStyle = computed(() => {
   };
 });
 
-// background layers (band 375×730) — placed at inset:0.
-// The backdrop belongs to the SLOT, not the person: slot 1 (under the quote) is this
-// band's own dark-topped sky, slot 2 is the bride band's pale one. Out of its slot the
-// band borrows the bride backdrop (mirrored, see `.groom.is-second .g-bg`) so both seams
-// still meet, while its florals, photo slot and names stay the groom's.
-const backgroundLayers = computed(() => [
-  { src: props.isFirst ? bg : brideBg, cls: "g-bg" },
+// background layers (band 375×730) — placed at inset:0
+const backgroundLayers = [
+  { src: bg, cls: "g-bg" },
   { src: florL, cls: "g-florL" },
   { src: florR, cls: "g-florR" },
-]);
+];
 </script>
 
 <template>
@@ -172,14 +167,6 @@ const backgroundLayers = computed(() => [
   }
 
 .g-bg { z-index: 0; }
-/* Slot 2: the bride backdrop (375×925 art in this 375×730 band). Bottom-aligned so its
-   lower edge meets the section below exactly as in the bride band; the 195 cropped off
-   the top is pale cloud either way. Mirrored so the joglo lands on the right, opposite
-   this band's photo on the left — the groom backdrop's own composition. */
-.groom.is-second .g-bg {
-  object-position: center bottom;
-  transform: scaleX(-1);
-}
 .g-florL { z-index: 1; }
 .g-florR { z-index: 2; }
 .g-portrait { z-index: 3; }

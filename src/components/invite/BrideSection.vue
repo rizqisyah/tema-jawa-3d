@@ -160,6 +160,13 @@ const backgroundLayers = [
   }
 
 .b-bg { z-index: 0; }
+/* Out of its designed slot (straight under the quote, whose bottom is #b5a279), this
+   band's pale sky meets a dark edge. Fade the top of the art so the gradient above shows
+   through and carries the quote's colour down into it. */
+.bride.is-first .b-bg {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 24%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 24%);
+}
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
 

@@ -124,10 +124,16 @@ const events = computed(() => {
     <VideoSection />
     <HeroSection />
     <QuoteSection />
-    <!-- The bands keep their slots — each one's art is cut to meet its neighbours — and
-         the couple's order swaps the people inside them (see useMempelai) -->
-    <GroomSection id="couple" :is-first="true" :person="isGroomFirst ? 'groom' : 'bride'" />
-    <BrideSection :is-first="false" :person="isGroomFirst ? 'bride' : 'groom'" />
+    <!-- Each person keeps their own band art; the couple's order swaps the bands, and
+         the band out of its designed slot fades its top edge (`.is-first` / `.is-second`) -->
+    <template v-if="isGroomFirst">
+      <GroomSection id="couple" :is-first="true" />
+      <BrideSection :is-first="false" />
+    </template>
+    <template v-else>
+      <BrideSection id="couple" :is-first="true" />
+      <GroomSection :is-first="false" />
+    </template>
     <div class="seam" aria-hidden="true" />
     <SaveDateSection />
     <div class="seam" aria-hidden="true" />

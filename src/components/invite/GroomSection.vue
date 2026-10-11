@@ -167,6 +167,12 @@ const backgroundLayers = [
   }
 
 .g-bg { z-index: 0; }
+/* Out of its designed slot (under the bride band's pale bottom), this band's dark sky
+   would start on a hard line. Fade the top of the art into the pale gradient above. */
+.groom.is-second .g-bg {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+}
 .g-florL { z-index: 1; }
 .g-florR { z-index: 2; }
 .g-portrait { z-index: 3; }

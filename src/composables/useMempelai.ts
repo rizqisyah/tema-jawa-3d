@@ -4,12 +4,8 @@ import { useWedding } from "./useWedding";
 export type Person = "groom" | "bride";
 
 /**
- * The person a mempelai band shows.
- *
- * The two bands never trade places on the page: each one's art (sky gradient, florals,
- * the edge it meets) is cut for its own slot — the groom band right under the quote, the
- * bride band under it. Swapping the bands with the couple's order left both seams
- * mismatched, so the order now swaps the PEOPLE inside the bands instead.
+ * The person a mempelai band shows: names, parents' line, photo and its zoom/position.
+ * Shared by GroomSection and BrideSection, each of which shows its own person by default.
  */
 export function useMempelai(person: Ref<Person>) {
   const { groom, bride, parsedOverride } = useWedding();

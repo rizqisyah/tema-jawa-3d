@@ -124,8 +124,9 @@ const events = computed(() => {
     <VideoSection />
     <HeroSection />
     <QuoteSection />
-    <!-- Each person keeps their own band art; the couple's order swaps the bands, and
-         the band out of its designed slot fades its top edge (`.is-first` / `.is-second`) -->
+    <!-- Each person keeps their own band (florals, photo slot, names); the couple's order
+         swaps the bands, and each band takes the backdrop of the slot it lands in so the
+         seams always meet (`.is-first` / `.is-second`) -->
     <template v-if="isGroomFirst">
       <GroomSection id="couple" :is-first="true" />
       <BrideSection :is-first="false" />

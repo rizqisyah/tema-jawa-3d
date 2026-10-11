@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, toRef } from 'vue';
 import bg from "../../assets/invite/bride/parts/bg.webp";
+import groomBg from "../../assets/invite/groom/parts/bg.webp";
 import flor from "../../assets/invite/bride/parts/flor.webp";
 import front from "../../assets/invite/bride/parts/front.webp";
 import portrait from "../../assets/invite/bride/parts/portrait.webp";
@@ -16,7 +17,7 @@ defineExpose({ el });
 const props = withDefaults(
   defineProps<{
     isFirst?: boolean;
-    /** Who this band shows; the band's art stays put either way (see useMempelai). */
+    /** Who this band shows — the bride unless a caller says otherwise. */
     person?: Person;
     nickname?: string;
     fullName?: string;
@@ -59,10 +60,12 @@ const customImageStyle = computed(() => {
   };
 });
 
-const backgroundLayers = [
-  { src: bg, cls: "b-bg" },
+// The backdrop belongs to the SLOT, not the person (see GroomSection): in slot 1, under
+// the quote, this band borrows the groom backdrop's dark-topped sky, mirrored.
+const backgroundLayers = computed(() => [
+  { src: props.isFirst ? groomBg : bg, cls: "b-bg" },
   { src: flor, cls: "b-flor" },
-];
+]);
 </script>
 
 <template>
@@ -160,12 +163,13 @@ const backgroundLayers = [
   }
 
 .b-bg { z-index: 0; }
-/* Out of its designed slot (straight under the quote, whose bottom is #b5a279), this
-   band's pale sky meets a dark edge. Fade the top of the art so the gradient above shows
-   through and carries the quote's colour down into it. */
+/* Slot 1: the groom backdrop (375×730 art in this 375×925 band) — its dark top meets the
+   quote's #b5a279 bottom as designed. Cover scales it to the band's height, trimming the
+   sides; it ends on the same pale cream the band below opens with, and the names here sit
+   on that cream. Mirrored so the joglo lands on the left, opposite this band's photo on
+   the right — the bride backdrop's own composition. */
 .bride.is-first .b-bg {
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 24%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 24%);
+  transform: scaleX(-1);
 }
 .b-flor { z-index: 1; }
 .b-portrait { z-index: 2; }
